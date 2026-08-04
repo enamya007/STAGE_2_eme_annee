@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapid Response - Authentification</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        /* ==================================================
+           1. VARIABLES DE LA PALETTE MOON
+           ================================================== */
+        :root {
+            --rose-pale: #F5D5E0;
+            --bleu-lavande: #6667AB;
+            --violet-moyen: #7B337E;
+            --violet-fonce: #420D4B;
+            --violet-sombre: #210635;
+            
+            --transition-speed: 0.6s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--violet-sombre);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--violet-sombre);
+        }
+
+        /* ==================================================
+           2. STRUCTURE PRINCIPALE (CARTE)
+           ================================================== */
+        .container {
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            width: 900px;
+            max-width: 100%;
+            min-height: 600px;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all var(--transition-speed) ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 50px;
+        }
+
+        /* ==================================================
+           3. FORMULAIRES (CONNEXION & INSCRIPTION)
+           ================================================== */
+        /* Formulaire de connexion (à droite initialement) */
+        .sign-in-container {
+            left: 40%;
+            width: 60%;
+            z-index: 2;
+        }
+
+        /* Formulaire d'inscription (à gauche initialement, caché) */
+        .sign-up-container {
+            left: 0;
+            width: 60%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--violet-fonce);
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 28px;
+        }
+
+        p.subtitle {
+            color: var(--bleu-lavande);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            background-color: #f9f9fc;
+            border: 1px solid rgba(102, 103, 171, 0.2);
+            padding: 14px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            color: var(--violet-fonce);
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--bleu-lavande);
+            box-shadow: 0 0 0 3px rgba(102, 103, 171, 0.1);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        .options a {
+            color: var(--violet-moyen);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .options a:hover {
+            color: var(--violet-fonce);
+        }
+
+        button.primary {
+            background-color: var(--violet-fonce);
+            color: var(--rose-pale);
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button.primary:hover {
+            background-color: var(--violet-moyen);
+        }
+
+        button.primary:active {
+            transform: scale(0.98);
+        }
+
+        /* ==================================================
+           4. PANNEAU PROMOTIONNEL ET ANIMATION
+           ================================================== */
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform var(--transition-speed) ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(150%);
+        }
+
+        .overlay {
+            background: linear-gradient(135deg, var(--bleu-lavande), var(--violet-moyen), var(--violet-fonce));
+            background-size: 200% 200%;
+            position: relative;
+            height: 100%;
+            width: 250%; /* Permet au fond de couvrir tout l'espace pendant le mouvement */
+            left: 0;
+            transform: translateX(0);
+            transition: transform var(--transition-speed) ease-in-out;
+            color: var(--rose-pale);
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(-60%);
+        }
+
+        /* Éléments décoratifs (Lune, Cercles) */
+        .overlay::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245,213,224,0.1) 0%, rgba(245,213,224,0) 70%);
+        }
+
+        .overlay::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            right: 40%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 1px solid rgba(245,213,224,0.1);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 40%; 
+            padding: 0 40px;
+            transition: transform var(--transition-speed) ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(-150%);
+            left: 60%;
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .overlay-right {
+            right: 60%;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(150%);
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--rose-pale);
+            text-shadow: 0 4px 10px rgba(33, 6, 53, 0.3);
+        }
+
+        .overlay-panel h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .overlay-panel p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            color: var(--rose-pale);
+            opacity: 0.9;
+        }
+
+        button.ghost {
+            background-color: transparent;
+            border: 2px solid var(--rose-pale);
+            color: var(--rose-pale);
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.ghost:hover {
+            background-color: var(--rose-pale);
+            color: var(--violet-fonce);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="container">
+        
+        <!-- ÉTAT 2 : FORMULAIRE INSCRIPTION (Gauche) -->
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Créer un compte</h1>
+                <p class="subtitle">Inscrivez-vous pour commencer</p>
+                
+                <div class="input-group"><input type="text" placeholder="Nom complet" /></div>
+                <div class="input-group"><input type="email" placeholder="Adresse e-mail" /></div>
+                <div class="input-group"><input type="password" placeholder="Mot de passe" /></div>
+                <div class="input-group"><input type="password" placeholder="Confirmation du mot de passe" /></div>
+                
+                <button type="button" class="primary">S'inscrire</button>
+            </form>
+        </div>
+
+        <!-- ÉTAT 1 : FORMULAIRE CONNEXION (Droite) -->
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Connexion</h1>
+                <p class="subtitle">Connectez-vous à votre espace</p>
+                
+                <div class="input-group"><input type="email" placeholder="Adresse e-mail" /></div>
+                <div class="input-group"><input type="password" placeholder="Mot de passe" /></div>
+                
+                <div class="options">
+                    <label><input type="checkbox"> Se souvenir de moi</label>
+                    <a href="#">Mot de passe oublié ?</a>
+                </div>
+                
+                <button type="button" class="primary">Se connecter</button>
+            </form>
+        </div>
+
+        <!-- PANNEAU PROMOTIONNEL (Superposé, mobile) -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <!-- Contenu quand le panneau est à DROITE (Inscription active) -->
+                <div class="overlay-panel overlay-left">
+                    <div class="logo">RR</div>
+                    <h2>Déjà membre ?</h2>
+                    <p>Connectez-vous pour accéder à votre espace et gérer vos interventions.</p>
+                    <button class="ghost" id="signIn">Se connecter</button>
+                </div>
+                <!-- Contenu quand le panneau est à GAUCHE (Connexion active) -->
+                <div class="overlay-panel overlay-right">
+                    <div class="logo">RR</div>
+                    <h2>Bienvenue sur Rapid Response</h2>
+                    <p>Gérez efficacement vos interventions techniques et suivez chaque demande en temps réel.</p>
+                    <button class="ghost" id="signUp">Créer un compte</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT POUR GÉRER L'ANIMATION HORIZONTALE -->
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            // Déplace le panneau coloré vers la droite
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            // Déplace le panneau coloré vers la gauche
+            container.classList.remove("right-panel-active");
+        });
+    </script>
+</body>
+</html>

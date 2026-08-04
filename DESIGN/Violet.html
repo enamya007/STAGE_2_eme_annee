@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapid Response (RR) - Authentification</title>
+    <!-- Fonts Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           1. CHARTE GRAPHIQUE & PALETTE MOON
+           ========================================================================== */
+        :root {
+            --moon-pink: #F5D5E0;        /* Rose pâle : Accents lumineux, contrastes */
+            --moon-lavender: #6667AB;    /* Bleu lavande : Dégradés, éléments secondaires */
+            --moon-purple: #7B337E;      /* Violet moyen : Panneaux, dégradés, boutons */
+            --moon-dark-purple: #420D4B; /* Violet foncé : Titres, boutons principaux */
+            --moon-deep-space: #210635;  /* Violet très sombre : Arrière-plans sombres */
+
+            /* Dégradés MOON */
+            --gradient-promo: linear-gradient(135deg, #6667AB 0%, #7B337E 50%, #420D4B 100%);
+            --gradient-deep: linear-gradient(145deg, #420D4B 0%, #210635 100%);
+            --gradient-light-accent: linear-gradient(135deg, #F5D5E0 0%, #6667AB 100%);
+            --gradient-bg-body: radial-gradient(circle at 20% 20%, #420D4B 0%, #210635 60%, #150324 100%);
+
+            /* Ombrages et transitions */
+            --card-shadow: 0 25px 50px -12px rgba(33, 6, 53, 0.6), 0 0 40px rgba(102, 103, 171, 0.25);
+            --input-shadow: 0 2px 8px rgba(33, 6, 53, 0.04);
+            --transition-smooth: all 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--gradient-bg-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+            color: #210635;
+        }
+
+        /* ==========================================================================
+           2. ÉLÉMENTS DÉCORATIFS LUNAIRES ET SPATIAUX EN ARRIÈRE-PLAN
+           ========================================================================== */
+        .bg-decorations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .moon-halo {
+            position: absolute;
+            top: -150px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245, 213, 224, 0.15) 0%, rgba(102, 103, 171, 0.08) 40%, transparent 70%);
+            filter: blur(40px);
+            animation: pulse-halo 10s infinite alternate ease-in-out;
+        }
+
+        .cosmic-orb {
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(123, 51, 126, 0.25) 0%, rgba(33, 6, 53, 0) 70%);
+            filter: blur(50px);
+        }
+
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            width: 1100px;
+            height: 1100px;
+            border: 1px dashed rgba(245, 213, 224, 0.08);
+            border-radius: 50%;
+        }
+
+        @keyframes pulse-halo {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+            100% { transform: scale(1.15) translate(-20px, 20px); opacity: 1; }
+        }
+
+        /* ==========================================================================
+           3. BARRE DE TEST DÉMO (ACCÈS RAPIDE AUX ÉTATS)
+           ========================================================================== */
+        .demo-bar {
+            position: relative;
+            z-index: 100;
+            margin-bottom: 20px;
+            background: rgba(33, 6, 53, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(245, 213, 224, 0.15);
+            padding: 8px 16px;
+            border-radius: 40px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .demo-bar span {
+            color: var(--moon-pink);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 5px;
+        }
+
+        .demo-btn {
+            background: rgba(102, 103, 171, 0.2);
+            border: 1px solid rgba(245, 213, 224, 0.25);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .demo-btn:hover, .demo-btn.active {
+            background: var(--moon-purple);
+            border-color: var(--moon-pink);
+            color: var(--moon-pink);
+            transform: translateY(-1px);
+        }
+
+        /* ==========================================================================
+           4. CONTENEUR PRINCIPAL & CARTE DE CONNEXION / INSCRIPTION
+           ========================================================================== */
+        .auth-container {
+            position: relative;
+            z-index: 10;
+            width: 1000px;
+            max-width: 100%;
+            min-height: 640px;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* Conteneurs de formulaires */
+        .forms-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .form-box {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 58%;
+            padding: 50px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            background: #ffffff;
+            overflow-y: auto;
+        }
+
+        /* État Connexion (Formulaire à droite) */
+        .form-box.sign-in-box {
+            right: 0;
+            opacity: 1;
+            z-index: 2;
+            transform: translateX(0);
+        }
+
+        /* État Inscription (Formulaire à gauche) */
+        .form-box.sign-up-box {
+            left: 0;
+            opacity: 0;
+            z-index: 1;
+            transform: translateX(-20%);
+            pointer-events: none;
+        }
+
+        /* Formulaire mot de passe oublié / réinitialisation */
+        .form-box.utility-box {
+            left: 0;
+            width: 58%;
+            opacity: 0;
+            z-index: 1;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        /* Classes réactives de transition active */
+        .auth-container.right-panel-active .form-box.sign-in-box {
+            transform: translateX(20%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .auth-container.right-panel-active .form-box.sign-up-box {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: all;
+            z-index: 5;
+        }
+
+        /* Formulaire spé : Forgot Password active */
+        .auth-container.forgot-mode .form-box.sign-in-box,
+        .auth-container.forgot-mode .form-box.sign-up-box {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .auth-container.forgot-mode .form-box.utility-box {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+            z-index: 6;
+        }
+
+        /* ==========================================================================
+           5. PANNEAU PROMOTIONNEL COULISSANT (OVERLAY)
+           ========================================================================== */
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 42%;
+            height: 100%;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            z-index: 100;
+            border-radius: 28px 0 0 28px;
+        }
+
+        .auth-container.right-panel-active .overlay-container {
+            transform: translateX(138.1%); /* Déplacement vers la DROITE */
+            border-radius: 0 28px 28px 0;
+        }
+
+        .overlay {
+            background: var(--gradient-promo);
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .auth-container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        /* Formes géométriques & motifs dans le panneau promo */
+        .promo-shape-1 {
+            position: absolute;
+            top: -60px;
+            left: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245, 213, 224, 0.25) 0%, rgba(255,255,255,0) 70%);
+            border: 1px solid rgba(245, 213, 224, 0.2);
+        }
+
+        .promo-shape-2 {
+            position: absolute;
+            bottom: -80px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(33, 6, 53, 0.35);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 213, 224, 0.15);
+        }
+
+        .promo-crescent {
+            position: absolute;
+            top: 40%;
+            right: 10%;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            box-shadow: -22px 12px 0 0 rgba(245, 213, 224, 0.18);
+            transform: rotate(-25deg);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 45px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: var(--transition-smooth);
+            z-index: 2;
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .auth-container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .auth-container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        /* Brand Elements */
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(33, 6, 53, 0.35);
+            border: 1px solid rgba(245, 213, 224, 0.3);
+            padding: 8px 18px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(8px);
+        }
+
+        .brand-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--moon-pink);
+            color: var(--moon-deep-space);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 0 15px rgba(245, 213, 224, 0.5);
+        }
+
+        .brand-name {
+            color: var(--moon-pink);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .overlay-panel h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .overlay-panel p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(245, 213, 224, 0.9);
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        /* Bouton secondaire sur fond sombre */
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--moon-pink);
+            color: var(--moon-pink);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 13px 34px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--moon-pink);
+            color: var(--moon-deep-space);
+            box-shadow: 0 8px 20px rgba(245, 213, 224, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================================
+           6. STYLES DES FORMULAIRES (TYPOGRAPHIE, CHAMPS, BOUTONS)
+           ========================================================================== */
+        .form-header {
+            margin-bottom: 28px;
+        }
+
+        .form-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--moon-dark-purple);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-header p {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        /* Groupes d'entrées */
+        .input-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--moon-dark-purple);
+            margin-bottom: 6px;
+        }
+
+        .field-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 16px;
+            color: var(--moon-lavender);
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 13px 16px 13px 44px;
+            background: #F8FAFC;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--moon-deep-space);
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: var(--input-shadow);
+        }
+
+        .form-input:focus {
+            background: #ffffff;
+            border-color: var(--moon-lavender);
+            box-shadow: 0 0 0 4px rgba(102, 103, 171, 0.15);
+        }
+
+        .form-input:focus + .field-icon,
+        .input-group:focus-within .field-icon {
+            color: var(--moon-purple);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            color: #94A3B8;
+            cursor: pointer;
+            font-size: 15px;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--moon-dark-purple);
+        }
+
+        /* Options supplémentaires (Se souvenir de moi & Oublié) */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .remember-me input[type="checkbox"] {
+            accent-color: var(--moon-purple);
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: var(--moon-purple);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link:hover {
+            color: var(--moon-dark-purple);
+            text-decoration: underline;
+        }
+
+        /* Bouton principal */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--moon-dark-purple);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(66, 13, 75, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--moon-purple);
+            box-shadow: 0 6px 18px rgba(123, 51, 126, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* Indicateur de force de mot de passe */
+        .password-strength {
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 4px;
+            flex-grow: 1;
+        }
+
+        .strength-bar {
+            height: 4px;
+            flex: 1;
+            background: #E2E8F0;
+            border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .strength-text {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* ==========================================================================
+           7. MESSAGES DE NOTIFICATION (SUCCÈS & ERREUR)
+           ========================================================================== */
+        .alert-box {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-error {
+            background-color: var(--moon-pink);
+            border: 1px solid rgba(123, 51, 126, 0.3);
+            color: var(--moon-deep-space);
+        }
+
+        .alert-error i {
+            color: var(--moon-dark-purple);
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #DCFCE7;
+            border: 1px solid #86EFAC;
+            color: #166534;
+        }
+
+        .alert-success i {
+            color: #16A34A;
+            font-size: 16px;
+        }
+
+        /* Loader Spinner */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer interne au formulaire */
+        .form-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #94A3B8;
+        }
+
+        /* ==========================================================================
+           8. RESPONSIVE DESIGN (TABLETTE & MOBILE)
+           ========================================================================== */
+        @media (max-width: 900px) {
+            .auth-container {
+                width: 100%;
+                min-height: auto;
+                flex-direction: column;
+                border-radius: 20px;
+            }
+
+            .forms-wrapper {
+                position: relative;
+                height: auto;
+            }
+
+            .form-box {
+                width: 100%;
+                position: relative;
+                padding: 40px 30px;
+                transform: none !important;
+                opacity: 1 !important;
+                pointer-events: all !important;
+            }
+
+            .form-box.sign-up-box,
+            .form-box.utility-box {
+                display: none;
+            }
+
+            .auth-container.right-panel-active .form-box.sign-in-box {
+                display: none;
+            }
+
+            .auth-container.right-panel-active .form-box.sign-up-box {
+                display: flex;
+            }
+
+            .overlay-container {
+                display: none; /* Le panneau complexe se transforme en bannières mobiles simples */
+            }
+
+            .mobile-header {
+                display: block;
+                background: var(--gradient-promo);
+                padding: 25px 20px;
+                text-align: center;
+                color: #fff;
+            }
+
+            .mobile-header .brand-badge {
+                margin-bottom: 10px;
+            }
+
+            .mobile-switch-btn {
+                margin-top: 15px;
+                background: transparent;
+                border: 1px solid var(--moon-pink);
+                color: var(--moon-pink);
+                padding: 8px 18px;
+                border-radius: 20px;
+                font-size: 13px;
+                cursor: pointer;
+            }
+        }
+
+        @media (min-width: 901px) {
+            .mobile-header {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DÉCORATIONS D'ARRIÈRE-PLAN (MOON & COSMOS) -->
+    <div class="bg-decorations">
+        <div class="moon-halo"></div>
+        <div class="cosmic-orb"></div>
+        <div class="orbit-ring"></div>
+    </div>
+
+    <!-- BARRE INTERACTIVE DE TEST POUR DÉMONSTRATION -->
+    <div class="demo-bar">
+        <span><i class="fa-solid fa-sliders"></i> Contrôles Démo :</span>
+        <button class="demo-btn active" id="btnDemoLogin" onclick="switchState('login')"><i class="fa-solid fa-right-to-bracket"></i> Écran Connexion</button>
+        <button class="demo-btn" id="btnDemoRegister" onclick="switchState('register')"><i class="fa-solid fa-user-plus"></i> Écran Inscription</button>
+        <button class="demo-btn" id="btnDemoForgot" onclick="switchState('forgot')"><i class="fa-solid fa-key"></i> Mot de passe oublié</button>
+        <button class="demo-btn" onclick="toggleErrorDemo()"><i class="fa-solid fa-triangle-exclamation"></i> Simuler Erreur</button>
+        <button class="demo-btn" onclick="toggleLoadingDemo()"><i class="fa-solid fa-spinner"></i> Simuler Chargement</button>
+    </div>
+
+    <!-- CONTENEUR PRINCIPAL D'AUTHENTIFICATION -->
+    <div class="auth-container" id="authContainer">
+
+        <!-- BANNIÈRE EN-TÊTE MOBILE (VISIBILITY: MOBILE ONLY) -->
+        <div class="mobile-header">
+            <div class="brand-badge">
+                <div class="brand-logo-icon">RR</div>
+                <span class="brand-name">Rapid Response</span>
+            </div>
+            <h3 id="mobileHeaderTitle" style="font-family: 'Space Grotesk'; font-size: 20px;">Bienvenue</h3>
+            <p id="mobileHeaderSub" style="font-size: 13px; color: var(--moon-pink); margin-top: 4px;">Plateforme de gestion des interventions</p>
+            <button class="mobile-switch-btn" id="mobileSwitchBtn" onclick="toggleMobileState()">Créer un compte</button>
+        </div>
+
+        <div class="forms-wrapper">
+
+            <!-- ==========================================
+                 FORMULAIRE 1 : CONNEXION (ÉTAT INITIAL)
+                 ========================================== -->
+            <div class="form-box sign-in-box" id="signInBox">
+                <div class="form-header">
+                    <h2>Connexion</h2>
+                    <p>Connectez-vous à votre espace professionnel</p>
+                </div>
+
+                <!-- Zone d'alerte dynamique pour la démo -->
+                <div id="loginAlertBox" style="display: none;"></div>
+
+                <form id="loginForm" onsubmit="handleFormSubmit(event, 'login')">
+                    <!-- CHAMP EMAIL -->
+                    <div class="input-group">
+                        <label for="loginEmail">Adresse e-mail</label>
+                        <div class="field-wrapper">
+                            <input type="email" id="loginEmail" class="form-input" placeholder="technicien@rapidresponse.io" required>
+                            <i class="fa-regular fa-envelope field-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- CHAMP MOT DE PASSE -->
+                    <div class="input-group">
+                        <label for="loginPassword">Mot de passe</label>
+                        <div class="field-wrapper">
+                            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required>
+                            <i class="fa-solid fa-lock field-icon"></i>
+                            <i class="fa-regular fa-eye toggle-password" onclick="togglePasswordVisibility('loginPassword', this)"></i>
+                        </div>
+                    </div>
+
+                    <!-- OPTIONS -->
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" checked>
+                            <span>Se souvenir de moi</span>
+                        </label>
+                        <a href="javascript:void(0)" class="forgot-link" onclick="switchState('forgot')">Mot de passe oublié ?</a>
+                    </div>
+
+                    <!-- BOUTON PRINCIPAL -->
+                    <button type="submit" class="btn-primary" id="btnLoginSubmit">
+                        <span>Se connecter</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="form-footer">
+                    <p><i class="fa-solid fa-shield-halved"></i> Connexion sécurisée SSL 256-bit — Rapid Response v2.4</p>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 FORMULAIRE 2 : INSCRIPTION
+                 ========================================== -->
+            <div class="form-box sign-up-box" id="signUpBox">
+                <div class="form-header">
+                    <h2>Créer un compte</h2>
+                    <p>Inscrivez-vous pour commencer à gérer vos interventions</p>
+                </div>
+
+                <div id="registerAlertBox" style="display: none;"></div>
+
+                <form id="registerForm" onsubmit="handleFormSubmit(event, 'register')">
+                    <!-- NOM COMPLET -->
+                    <div class="input-group">
+                        <label for="regName">Nom complet</label>
+                        <div class="field-wrapper">
+                            <input type="text" id="regName" class="form-input" placeholder="Jean Dupont" required>
+                            <i class="fa-regular fa-user field-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="input-group">
+                        <label for="regEmail">Adresse e-mail</label>
+                        <div class="field-wrapper">
+                            <input type="email" id="regEmail" class="form-input" placeholder="nom@entreprise.com" required>
+                            <i class="fa-regular fa-envelope field-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- MOT DE PASSE -->
+                    <div class="input-group">
+                        <label for="regPassword">Mot de passe</label>
+                        <div class="field-wrapper">
+                            <input type="password" id="regPassword" class="form-input" placeholder="••••••••••••" oninput="checkPasswordStrength(this.value)" required>
+                            <i class="fa-solid fa-lock field-icon"></i>
+                            <i class="fa-regular fa-eye toggle-password" onclick="togglePasswordVisibility('regPassword', this)"></i>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bars">
+                                <div class="strength-bar" id="bar1"></div>
+                                <div class="strength-bar" id="bar2"></div>
+                                <div class="strength-bar" id="bar3"></div>
+                            </div>
+                            <span class="strength-text" id="strengthText">Sécurité</span>
+                        </div>
+                    </div>
+
+                    <!-- CONFIRMATION MOT DE PASSE -->
+                    <div class="input-group">
+                        <label for="regConfirmPassword">Confirmation du mot de passe</label>
+                        <div class="field-wrapper">
+                            <input type="password" id="regConfirmPassword" class="form-input" placeholder="••••••••••••" required>
+                            <i class="fa-solid fa-shield-cat field-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- BOUTON DE SOUMISSION -->
+                    <button type="submit" class="btn-primary" id="btnRegisterSubmit">
+                        <span>S'inscrire</span>
+                        <i class="fa-solid fa-user-check"></i>
+                    </button>
+                </form>
+
+                <div class="form-footer">
+                    <p>En créant un compte, vous acceptez nos CGU et Politique de confidentialité.</p>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 FORMULAIRE 3 : MOT DE PASSE OUBLIÉ & RÉINITIALISATION
+                 ========================================== -->
+            <div class="form-box utility-box" id="utilityBox">
+                <div id="forgotStep1">
+                    <div class="form-header">
+                        <h2>Réinitialisation</h2>
+                        <p>Saisissez votre e-mail pour recevoir un lien de réinitialisation</p>
+                    </div>
+
+                    <div id="utilityAlertBox" style="display: none;"></div>
+
+                    <form onsubmit="handleFormSubmit(event, 'forgot')">
+                        <div class="input-group">
+                            <label for="forgotEmail">Adresse e-mail professionnelle</label>
+                            <div class="field-wrapper">
+                                <input type="email" id="forgotEmail" class="form-input" placeholder="technicien@rapidresponse.io" required>
+                                <i class="fa-regular fa-envelope field-icon"></i>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="margin-top: 10px;">
+                            <span>Envoyer le lien</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+
+                    <div style="margin-top: 20px; text-align: center;">
+                        <a href="javascript:void(0)" class="forgot-link" onclick="switchState('login')">
+                            <i class="fa-solid fa-arrow-left"></i> Retour à la connexion
+                        </a>
+                    </div>
+                </div>
+
+                <div id="forgotStep2" style="display: none; text-align: center;">
+                    <div style="width: 60px; height: 60px; background: #DCFCE7; color: #166534; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px auto;">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h2 style="font-family: 'Space Grotesk'; color: var(--moon-dark-purple); margin-bottom: 10px;">E-mail envoyé !</h2>
+                    <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 25px;">
+                        Un lien de réinitialisation sécurisé a été envoyé à l'adresse indiquée. Veuillez vérifier votre boîte de réception.
+                    </p>
+                    <button class="btn-primary" onclick="switchState('login')">
+                        <span>Retour à la connexion</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==========================================================================
+             9. PANNEAU PROMOTIONNEL COULISSANT HORIZONTALEMENT
+             ========================================================================== -->
+        <div class="overlay-container" id="overlayContainer">
+            <div class="overlay">
+
+                <!-- FORMES DÉCORATIVES INTERNES -->
+                <div class="promo-shape-1"></div>
+                <div class="promo-shape-2"></div>
+                <div class="promo-crescent"></div>
+
+                <!-- CONTENU PROMO POUR L'ÉTAT INSCRIPTION (PANNEAU À GAUCHE) -->
+                <div class="overlay-panel overlay-left">
+                    <div class="brand-badge">
+                        <div class="brand-logo-icon">RR</div>
+                        <span class="brand-name">Rapid Response</span>
+                    </div>
+
+                    <h2>Déjà membre ?</h2>
+                    <p>Connectez-vous pour accéder à votre espace et gérer vos interventions techniques.</p>
+
+                    <button class="btn-outline" id="signInBtn" onclick="switchState('login')">
+                        <span>Se connecter</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- CONTENU PROMO POUR L'ÉTAT CONNEXION (PANNEAU À DROITE) -->
+                <div class="overlay-panel overlay-right">
+                    <div class="brand-badge">
+                        <div class="brand-logo-icon">RR</div>
+                        <span class="brand-name">Rapid Response</span>
+                    </div>
+
+                    <h2>Bienvenue sur Rapid Response</h2>
+                    <p>Gérez efficacement vos interventions techniques et suivez chaque demande en temps réel.</p>
+
+                    <button class="btn-outline" id="signUpBtn" onclick="switchState('register')">
+                        <span>Créer un compte</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================================================================
+         10. LOGIQUE JAVASCRIPT ET ANIMATIONS INTERACTIVES
+         ========================================================================== -->
+    <script>
+        // Sélection des éléments du DOM
+        const authContainer = document.getElementById('authContainer');
+        const btnDemoLogin = document.getElementById('btnDemoLogin');
+        const btnDemoRegister = document.getElementById('btnDemoRegister');
+        const btnDemoForgot = document.getElementById('btnDemoForgot');
+
+        // Gestionnaire d'état principal (Connexion, Inscription, Mot de passe oublié)
+        function switchState(state) {
+            // Réinitialiser les classes spécialisées
+            authContainer.classList.remove('right-panel-active', 'forgot-mode');
+            
+            // Mettre à jour les boutons démo
+            btnDemoLogin.classList.remove('active');
+            btnDemoRegister.classList.remove('active');
+            btnDemoForgot.classList.remove('active');
+
+            if (state === 'register') {
+                authContainer.classList.add('right-panel-active');
+                btnDemoRegister.classList.add('active');
+                updateMobileHeader('Inscription', 'Déjà un compte ?', 'login');
+            } else if (state === 'forgot') {
+                authContainer.classList.add('forgot-mode');
+                btnDemoForgot.classList.add('active');
+                document.getElementById('forgotStep1').style.display = 'block';
+                document.getElementById('forgotStep2').style.display = 'none';
+            } else {
+                // Défaut : Connexion
+                btnDemoLogin.classList.add('active');
+                updateMobileHeader('Connexion', 'Pas encore de compte ?', 'register');
+            }
+        }
+
+        // Gestion mobile
+        let currentMobileState = 'login';
+        function toggleMobileState() {
+            if (currentMobileState === 'login') {
+                switchState('register');
+                currentMobileState = 'register';
+            } else {
+                switchState('login');
+                currentMobileState = 'login';
+            }
+        }
+
+        function updateMobileHeader(title, btnText, nextState) {
+            const mobileHeaderTitle = document.getElementById('mobileHeaderTitle');
+            const mobileSwitchBtn = document.getElementById('mobileSwitchBtn');
+            if (mobileHeaderTitle && mobileSwitchBtn) {
+                mobileHeaderTitle.innerText = title;
+                mobileSwitchBtn.innerText = btnText;
+            }
+        }
+
+        // Masquer/Afficher mot de passe
+        function togglePasswordVisibility(inputId, iconElem) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                iconElem.classList.remove('fa-eye');
+                iconElem.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                iconElem.classList.remove('fa-eye-slash');
+                iconElem.classList.add('fa-eye');
+            }
+        }
+
+        // Indicateur visuel de force de mot de passe
+        function checkPasswordStrength(password) {
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const bar3 = document.getElementById('bar3');
+            const strengthText = document.getElementById('strengthText');
+
+            let score = 0;
+            if (password.length > 5) score++;
+            if (password.length > 8 && /[A-Z]/.test(password)) score++;
+            if (password.length > 10 && /[0-9!@#$%^&*]/.test(password)) score++;
+
+            // Reset
+            bar1.style.background = '#E2E8F0';
+            bar2.style.background = '#E2E8F0';
+            bar3.style.background = '#E2E8F0';
+
+            if (score === 1) {
+                bar1.style.background = '#F87171'; // Faible
+                strengthText.innerText = 'Faible';
+                strengthText.style.color = '#EF4444';
+            } else if (score === 2) {
+                bar1.style.background = '#FBBF24';
+                bar2.style.background = '#FBBF24'; // Moyen
+                strengthText.innerText = 'Moyen';
+                strengthText.style.color = '#D97706';
+            } else if (score === 3) {
+                bar1.style.background = '#34D399';
+                bar2.style.background = '#34D399';
+                bar3.style.background = '#34D399'; // Fort
+                strengthText.innerText = 'Fort';
+                strengthText.style.color = '#059669';
+            } else {
+                strengthText.innerText = 'Sécurité';
+                strengthText.style.color = '#64748b';
+            }
+        }
+
+        // Démonstration des états d'erreur
+        let isErrorActive = false;
+        function toggleErrorDemo() {
+            const alertBox = document.getElementById('loginAlertBox');
+            isErrorActive = !isErrorActive;
+
+            if (isErrorActive) {
+                alertBox.style.display = 'block';
+                alertBox.innerHTML = `
+                    <div class="alert-box alert-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Identifiants incorrects. Veuillez vérifier votre e-mail ou mot de passe.</span>
+                    </div>
+                `;
+            } else {
+                alertBox.style.display = 'none';
+            }
+        }
+
+        // Démonstration des états de chargement
+        let isLoadingActive = false;
+        function toggleLoadingDemo() {
+            const btn = document.getElementById('btnLoginSubmit');
+            isLoadingActive = !isLoadingActive;
+
+            if (isLoadingActive) {
+                btn.disabled = true;
+                btn.innerHTML = `<div class="spinner"></div> <span>Connexion en cours...</span>`;
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Se connecter</span> <i class="fa-solid fa-arrow-right"></i>`;
+            }
+        }
+
+        // Soumission simulée des formulaires
+        function handleFormSubmit(event, type) {
+            event.preventDefault();
+
+            if (type === 'login') {
+                const btn = document.getElementById('btnLoginSubmit');
+                btn.disabled = true;
+                btn.innerHTML = `<div class="spinner"></div> <span>Vérification...</span>`;
+
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Se connecter</span> <i class="fa-solid fa-arrow-right"></i>`;
+                    
+                    const alertBox = document.getElementById('loginAlertBox');
+                    alertBox.style.display = 'block';
+                    alertBox.innerHTML = `
+                        <div class="alert-box alert-success">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Connexion réussie ! Redirection vers le tableau de bord Rapid Response...</span>
+                        </div>
+                    `;
+                }, 1200);
+            } else if (type === 'register') {
+                const btn = document.getElementById('btnRegisterSubmit');
+                btn.disabled = true;
+                btn.innerHTML = `<div class="spinner"></div> <span>Création du compte...</span>`;
+
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>S'inscrire</span> <i class="fa-solid fa-user-check"></i>`;
+
+                    const alertBox = document.getElementById('registerAlertBox');
+                    alertBox.style.display = 'block';
+                    alertBox.innerHTML = `
+                        <div class="alert-box alert-success">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Compte créé avec succès ! Bienvenue sur Rapid Response.</span>
+                        </div>
+                    `;
+                }, 1200);
+            } else if (type === 'forgot') {
+                document.getElementById('forgotStep1').style.display = 'none';
+                document.getElementById('forgotStep2').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
+```eof
+
+L'interface d'authentification interactive pour **Rapid Response (RR)** est prête ! Vous pouvez dès à présent l'ouvrir dans n'importe quel navigateur pour tester le panneau promotionnel coulissant, l'indicateur de sécurité, ainsi que les différents états de démonstration.

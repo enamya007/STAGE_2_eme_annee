@@ -1,0 +1,566 @@
+CONCEVOIR UNE INTERFACE D'AUTHENTIFICATION INTERACTIVE ET ANIMÉE POUR UNE APPLICATION WEB DE GESTION DES INTERVENTIONS TECHNIQUES.
+
+NOM DE L'APPLICATION :
+"Rapid Response"
+
+ABRÉVIATION :
+"RR"
+
+L'application est une plateforme SaaS professionnelle permettant de gérer les demandes et les interventions techniques.
+
+L'interface doit être moderne, élégante, professionnelle, premium et minimaliste.
+
+==================================================
+1. CONCEPT VISUEL GLOBAL
+==================================================
+
+Créer une interface d'authentification composée de deux grandes zones :
+
+1. Un panneau promotionnel coloré.
+2. Un panneau contenant le formulaire d'authentification.
+
+L'interface doit être inspirée des interfaces modernes d'authentification à deux panneaux avec une animation horizontale entre les états Connexion et Inscription.
+
+Le design doit utiliser :
+
+- des cartes aux coins arrondis ;
+- des ombres douces ;
+- des formes géométriques décoratives ;
+- des cercles et formes abstraites ;
+- des dégradés élégants ;
+- une interface épurée ;
+- une typographie moderne ;
+- une hiérarchie visuelle claire.
+
+L'identité visuelle doit évoquer :
+
+- la technologie ;
+- la fiabilité ;
+- la modernité ;
+- l'innovation ;
+- le professionnalisme ;
+- une atmosphère premium et élégante.
+
+==================================================
+2. PALETTE DE COULEURS OBLIGATOIRE
+==================================================
+
+Utiliser exclusivement la palette MOON suivante :
+
+COULEUR 1 — ROSE PÂLE :
+#F5D5E0
+
+COULEUR 2 — BLEU LAVANDE :
+#6667AB
+
+COULEUR 3 — VIOLET MOYEN :
+#7B337E
+
+COULEUR 4 — VIOLET FONCÉ :
+#420D4B
+
+COULEUR 5 — VIOLET TRÈS SOMBRE :
+#210635
+
+==================================================
+3. UTILISATION DES COULEURS
+==================================================
+
+#F5D5E0 — ROSE PÂLE
+
+Utiliser cette couleur pour :
+
+- les accents lumineux ;
+- les textes importants sur fond sombre ;
+- certains boutons secondaires ;
+- les éléments de mise en évidence ;
+- les effets de contraste ;
+- certains éléments décoratifs.
+
+#6667AB — BLEU LAVANDE
+
+Utiliser cette couleur pour :
+
+- les dégradés ;
+- les éléments secondaires ;
+- certains arrière-plans ;
+- les états actifs ;
+- les accents visuels doux.
+
+#7B337E — VIOLET MOYEN
+
+Utiliser cette couleur pour :
+
+- les éléments principaux du panneau promotionnel ;
+- les dégradés ;
+- certains boutons ;
+- les composants importants.
+
+#420D4B — VIOLET FONCÉ
+
+Utiliser cette couleur pour :
+
+- les boutons principaux ;
+- les titres importants ;
+- les éléments actifs ;
+- la navigation ;
+- les zones de contraste.
+
+#210635 — VIOLET TRÈS SOMBRE
+
+Utiliser cette couleur pour :
+
+- les arrière-plans très foncés ;
+- les textes clairs sur fond sombre ;
+- les éléments de contraste fort ;
+- les zones premium de l'interface.
+
+==================================================
+4. DÉGRADÉS À UTILISER
+==================================================
+
+Créer des dégradés harmonieux à partir de la palette MOON.
+
+Dégradé principal du panneau promotionnel :
+
+#6667AB → #7B337E → #420D4B
+
+Créer également des variantes :
+
+#7B337E → #210635
+
+et :
+
+#F5D5E0 → #6667AB
+
+Les dégradés doivent être subtils, élégants et modernes.
+
+Ne pas utiliser de dégradés trop agressifs.
+
+==================================================
+5. STRUCTURE INITIALE — ÉTAT CONNEXION
+==================================================
+
+Au chargement initial, afficher l'écran de CONNEXION.
+
+Créer une grande carte d'authentification centrée dans la page.
+
+La carte doit être divisée en deux parties :
+
+À GAUCHE :
+PANNEAU PROMOTIONNEL COLORÉ
+
+À DROITE :
+FORMULAIRE DE CONNEXION
+
+Disposition initiale :
+
+[ PANNEAU PROMOTIONNEL ] [ FORMULAIRE CONNEXION ]
+
+==================================================
+6. PANNEAU PROMOTIONNEL — ÉTAT CONNEXION
+==================================================
+
+Le panneau de gauche doit occuper environ 40 % de la carte.
+
+Utiliser un arrière-plan avec un dégradé :
+
+#6667AB → #7B337E → #420D4B
+
+Ajouter :
+
+- des formes géométriques abstraites ;
+- des cercles partiellement visibles ;
+- des formes floues ;
+- des éléments décoratifs inspirés de la lune et de l'espace ;
+- des effets de lumière subtils ;
+- des formes avec transparence.
+
+Le panneau doit avoir une apparence élégante et premium.
+
+Afficher :
+
+Logo :
+"RR"
+
+Nom :
+"Rapid Response"
+
+Titre :
+
+"Bienvenue sur Rapid Response"
+
+Texte :
+
+"Gérez efficacement vos interventions techniques et suivez chaque demande en temps réel."
+
+Bouton secondaire :
+
+"Créer un compte"
+
+Le bouton doit être clairement visible mais élégant.
+
+Il peut utiliser :
+
+- une bordure #F5D5E0 ;
+- un texte #F5D5E0 ;
+- un arrière-plan transparent ;
+- un effet de survol avec #F5D5E0.
+
+==================================================
+7. FORMULAIRE DE CONNEXION
+==================================================
+
+Sur la partie droite, afficher :
+
+Titre :
+
+"Connexion"
+
+Le titre doit utiliser une couleur sombre comme :
+
+#420D4B ou #210635.
+
+Sous-titre :
+
+"Connectez-vous à votre espace"
+
+Créer les champs :
+
+- Adresse e-mail ;
+- Mot de passe.
+
+Ajouter :
+
+- une icône discrète dans chaque champ ;
+- des champs avec une apparence claire ;
+- des bordures très légères ;
+- des coins arrondis.
+
+Ajouter :
+
+"Se souvenir de moi"
+
+et :
+
+"Mot de passe oublié ?"
+
+Bouton principal :
+
+"Se connecter"
+
+Le bouton principal doit utiliser :
+
+#420D4B
+
+avec :
+
+- texte clair ;
+- coins arrondis ;
+- effet de survol vers #7B337E ;
+- léger effet d'animation au clic.
+
+==================================================
+8. COMPORTEMENT DE L'ANIMATION
+==================================================
+
+IMPORTANT :
+
+L'interface doit fonctionner comme une transition entre deux états.
+
+ÉTAT 1 :
+
+[ PANNEAU PROMOTIONNEL À GAUCHE ]
+[ FORMULAIRE DE CONNEXION À DROITE ]
+
+Lorsque l'utilisateur clique sur :
+
+"Créer un compte"
+
+l'interface doit effectuer une transition horizontale.
+
+==================================================
+9. ANIMATION CONNEXION → INSCRIPTION
+==================================================
+
+Créer une animation fluide d'une durée comprise entre :
+
+500 ms et 700 ms.
+
+Utiliser une animation :
+
+ease-in-out.
+
+Le panneau promotionnel coloré doit se déplacer de la GAUCHE vers la DROITE.
+
+Le formulaire de connexion doit être remplacé par le formulaire d'inscription.
+
+Le résultat final doit être :
+
+[ FORMULAIRE INSCRIPTION ] [ PANNEAU PROMOTIONNEL ]
+
+L'animation doit donner l'impression que les deux zones échangent leurs positions.
+
+Le panneau coloré ne doit pas simplement disparaître.
+
+Il doit véritablement se déplacer horizontalement de gauche vers la droite.
+
+==================================================
+10. ÉTAT INSCRIPTION
+==================================================
+
+Après l'animation, afficher :
+
+[ FORMULAIRE INSCRIPTION ] [ PANNEAU PROMOTIONNEL ]
+
+Le formulaire d'inscription doit contenir :
+
+Titre :
+
+"Créer un compte"
+
+Sous-titre :
+
+"Inscrivez-vous pour commencer"
+
+Champs :
+
+- Nom complet ;
+- Adresse e-mail ;
+- Mot de passe ;
+- Confirmation du mot de passe.
+
+Bouton :
+
+"S'inscrire"
+
+Utiliser principalement :
+
+#420D4B
+
+avec des accents :
+
+#7B337E
+
+et :
+
+#F5D5E0.
+
+==================================================
+11. PANNEAU PROMOTIONNEL — ÉTAT INSCRIPTION
+==================================================
+
+Le panneau coloré se trouve maintenant à DROITE.
+
+Il conserve le même style visuel :
+
+- dégradé #6667AB → #7B337E → #420D4B ;
+- formes abstraites ;
+- effets lumineux ;
+- éléments géométriques.
+
+Modifier uniquement le contenu.
+
+Afficher :
+
+Titre :
+
+"Déjà membre ?"
+
+Texte :
+
+"Connectez-vous pour accéder à votre espace et gérer vos interventions."
+
+Bouton :
+
+"Se connecter"
+
+==================================================
+12. ANIMATION INSCRIPTION → CONNEXION
+==================================================
+
+Lorsque l'utilisateur clique sur :
+
+"Se connecter"
+
+dans l'état Inscription :
+
+Le panneau promotionnel doit se déplacer de la DROITE vers la GAUCHE.
+
+Le formulaire d'inscription doit être remplacé par le formulaire de connexion.
+
+La disposition finale devient :
+
+[ PANNEAU PROMOTIONNEL ] [ FORMULAIRE CONNEXION ]
+
+L'animation doit être symétrique à l'animation précédente.
+
+Utiliser :
+
+- une durée de 500 à 700 ms ;
+- une transition ease-in-out ;
+- un mouvement fluide ;
+- aucun mouvement brusque.
+
+==================================================
+13. RÉSUMÉ VISUEL DES DEUX ÉTATS
+==================================================
+
+ÉTAT CONNEXION :
+
+┌────────────────────────┬────────────────────────┐
+│                        │                        │
+│  PANNEAU PROMOTIONNEL │  FORMULAIRE CONNEXION  │
+│                        │                        │
+│  Dégradé MOON         │  Email                 │
+│  #6667AB              │  Mot de passe          │
+│  #7B337E              │  Se connecter          │
+│  #420D4B              │                        │
+│                        │                        │
+│  Créer un compte      │                        │
+└────────────────────────┴────────────────────────┘
+
+Après clic sur "Créer un compte" :
+
+Le panneau coloré se déplace horizontalement vers la droite.
+
+ÉTAT INSCRIPTION :
+
+┌────────────────────────┬────────────────────────┐
+│                        │                        │
+│ FORMULAIRE INSCRIPTION │  PANNEAU PROMOTIONNEL  │
+│                        │                        │
+│ Nom                    │  Dégradé MOON         │
+│ Email                  │  #6667AB              │
+│ Mot de passe           │  #7B337E              │
+│ Confirmation           │  #420D4B              │
+│                        │                        │
+│ S'inscrire             │  Se connecter          │
+└────────────────────────┴────────────────────────┘
+
+==================================================
+14. ÉLÉMENTS DÉCORATIFS
+==================================================
+
+Utiliser des formes abstraites inspirées de :
+
+- la lune ;
+- les phases lunaires ;
+- les halos lumineux ;
+- les cercles ;
+- les formes géométriques ;
+- les gradients cosmiques.
+
+Les décorations doivent rester discrètes.
+
+Ne pas surcharger l'interface.
+
+Utiliser des opacités faibles pour créer une profondeur visuelle.
+
+==================================================
+15. AUTRES ÉCRANS D'AUTHENTIFICATION
+==================================================
+
+Créer également :
+
+1. Écran de mot de passe oublié ;
+2. Écran de réinitialisation du mot de passe ;
+3. État de succès après réinitialisation ;
+4. État d'erreur de connexion ;
+5. État de chargement ;
+6. État de validation des champs.
+
+Tous les écrans doivent utiliser la même identité visuelle MOON.
+
+==================================================
+16. RESPONSIVE DESIGN
+==================================================
+
+DESKTOP :
+
+Afficher :
+
+[ PANNEAU ] [ FORMULAIRE ]
+
+TABLETTE :
+
+Réduire la largeur du panneau promotionnel tout en conservant l'identité visuelle.
+
+MOBILE :
+
+Afficher principalement le formulaire.
+
+Le panneau promotionnel peut :
+
+- apparaître au-dessus du formulaire ;
+- apparaître sous le formulaire ;
+- ou être remplacé par une section compacte.
+
+La largeur minimale doit être de 360 px.
+
+==================================================
+17. PROTOTYPE FIGMA
+==================================================
+
+Créer un prototype interactif.
+
+INTERACTION 1 :
+
+Départ :
+État Connexion
+
+Action :
+Clic sur "Créer un compte"
+
+Animation :
+Le panneau coloré se déplace de gauche à droite.
+
+Arrivée :
+État Inscription.
+
+INTERACTION 2 :
+
+Départ :
+État Inscription
+
+Action :
+Clic sur "Se connecter"
+
+Animation :
+Le panneau coloré se déplace de droite à gauche.
+
+Arrivée :
+État Connexion.
+
+Utiliser une transition :
+
+- Smart Animate si possible ;
+- durée entre 500 et 700 ms ;
+- easing ease-in-out.
+
+==================================================
+OBJECTIF FINAL
+==================================================
+
+Créer une interface d'authentification moderne, élégante et professionnelle pour Rapid Response.
+
+L'identité visuelle doit utiliser exclusivement la palette MOON :
+
+#F5D5E0
+#6667AB
+#7B337E
+#420D4B
+#210635
+
+Le design doit être dominé par des tons lavande, violet et violet profond, avec le rose pâle comme accent.
+
+L'animation principale doit clairement faire comprendre que le panneau promotionnel change de côté :
+
+CONNEXION :
+[ PANNEAU ] [ FORMULAIRE ]
+
+INSCRIPTION :
+[ FORMULAIRE ] [ PANNEAU ]
+
+Le panneau doit réellement se déplacer horizontalement d'un côté à l'autre avec une animation fluide.
+réalise ceci avec ces couleurs 
