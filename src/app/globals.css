@@ -5,6 +5,14 @@
   --foreground: #171717;
 }
 
+@theme {
+  --color-moon-rose: #F5D5E0;
+  --color-moon-lavande: #6667AB;
+  --color-moon-violet: #7B337E;
+  --color-moon-violet-dark: #420D4B;
+  --color-moon-abyss: #210635;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
