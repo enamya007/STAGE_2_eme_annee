@@ -1,91 +1,195 @@
 ﻿'use client'
 
 import { useState } from 'react'
-import { Box, Typography, Button } from '@mui/material'
-import { motion, AnimatePresence } from 'framer-motion'
-import { authColors } from '../constants/theme'
+import { authColors, authLayout } from '../constants/theme'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
 type Mode = 'login' | 'register'
 
+const slideClass =
+    'absolute top-0 h-full transition-[left] duration-[600ms] ease-in-out will-change-[left]'
+
 export default function AuthShell({ initialMode = 'login' }: { initialMode?: Mode }) {
     const [mode, setMode] = useState<Mode>(initialMode)
     const isRegister = mode === 'register'
 
-    return (
-        <Box
-            sx={{
-                position: 'relative',
-                width: 900,
-                maxWidth: '100%',
-                height: 600,
-                borderRadius: 4,
-                overflow: 'hidden',
-                boxShadow: 6,
-                display: 'flex'
-            }}
-        >
-            {/* Panneau formulaire : glisse entre 0% et 50% */}
-            <motion.div
-                animate={{ left: isRegister ? '0%' : '50%' }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-                style={{ position: 'absolute', top: 0, width: '50%', height: '100%', background: '#fff', zIndex: 2 }}
-            >
-                <Box sx={{ p: 5, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={mode}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            {isRegister ? <RegisterForm /> : <LoginForm />}
-                        </motion.div>
-                    </AnimatePresence>
-                </Box>
-            </motion.div>
+    const {
+        cardWidth,
+        cardHeight,
+        panelPaddingX,
+        panelPaddingY,
+        logoBlockHeight,
+        formPanelWidth,
+        promoPanelWidth,
+        formContentMaxWidth,
+        logoBadgeSize,
+    } = authLayout
 
-            {/* Panneau violet : glisse entre 50% et 0% (mouvement inverse) */}
-            <motion.div
-                animate={{ left: isRegister ? '50%' : '0%' }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
+    return (
+        <div
+            className="flex min-h-screen items-center justify-center px-4 py-6 sm:px-6"
+            style={{ backgroundColor: authColors.pageBg }}
+        >
+            <div
+                className="relative overflow-hidden rounded-[20px] shadow-2xl"
                 style={{
-                    position: 'absolute',
-                    top: 0,
-                    width: '50%',
-                    height: '100%',
-                    background: `linear-gradient(135deg, ${authColors.gradientStart} 0%, ${authColors.gradientEnd} 100%)`,
-                    zIndex: 1,
-                    color: '#fff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 2,
-                    textAlign: 'center',
-                    padding: '0 40px'
+                    width: cardWidth,
+                    maxWidth: '100%',
+                    height: cardHeight,
+                    boxShadow: '0 25px 50px -12px rgba(33, 6, 53, 0.35)',
                 }}
             >
-                <Box sx={{ bgcolor: authColors.badgeBg, color: authColors.badgeText, px: 2, py: 1, borderRadius: 2, fontWeight: 700 }}>
-                    RR
-                </Box>
-                <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    {isRegister ? 'Déjà membre ?' : 'Nouveau membre ?'}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                    {isRegister
-                        ? 'Connectez-vous pour accéder à votre espace et gérer vos interventions.'
-                        : 'Créez un compte pour commencer à suivre vos interventions.'}
-                </Typography>
-                <Button
-                    onClick={() => setMode(isRegister ? 'login' : 'register')}
-                    sx={{ borderRadius: 8, border: '1px solid white', color: 'white', px: 4, mt: 2 }}
+                {/* Panneau formulaire */}
+                <div
+                    className={`${slideClass} z-20 bg-white`}
+                    style={{
+                        width: formPanelWidth,
+                        left: isRegister ? '0%' : promoPanelWidth,
+                    }}
                 >
-                    {isRegister ? 'Se connecter' : "S'inscrire"}
-                </Button>
-            </motion.div>
-        </Box>
+                    <div
+                        className="auth-form-area flex h-full flex-col justify-center overflow-hidden"
+                        style={{
+                            paddingTop: panelPaddingY,
+                            paddingBottom: panelPaddingY,
+                            paddingLeft: panelPaddingX,
+                            paddingRight: panelPaddingX,
+                        }}
+                    >
+                        <div
+                            className="relative mx-auto w-full"
+                            style={{ maxWidth: formContentMaxWidth }}
+                        >
+                            <div
+                                aria-hidden={isRegister}
+                                className={
+                                    isRegister
+                                        ? 'pointer-events-none invisible absolute inset-0'
+                                        : 'relative'
+                                }
+                            >
+                                <LoginForm />
+                            </div>
+                            <div
+                                aria-hidden={!isRegister}
+                                className={
+                                    !isRegister
+                                        ? 'pointer-events-none invisible absolute inset-0'
+                                        : 'relative'
+                                }
+                            >
+                                <RegisterForm />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Panneau promo violet */}
+                <div
+                    className={`auth-promo-panel ${slideClass} z-10 text-white`}
+                    style={{
+                        width: promoPanelWidth,
+                        left: isRegister ? formPanelWidth : '0%',
+                        background: `linear-gradient(180deg, ${authColors.gradientStart} 0%, ${authColors.gradientMid} 35%, ${authColors.gradientEnd} 70%, ${authColors.gradientDeep} 100%)`,
+                    }}
+                >
+                    <div className="auth-promo-panel__halo" aria-hidden />
+
+                    <div
+                        className="auth-promo-panel__content flex w-full items-center gap-2.5"
+                        style={{
+                            paddingTop: panelPaddingY,
+                            paddingLeft: panelPaddingX,
+                            paddingRight: panelPaddingX,
+                            minHeight: logoBlockHeight,
+                        }}
+                    >
+                        <div
+                            className="flex shrink-0 items-center justify-center rounded-xl text-xs font-bold leading-none"
+                            style={{
+                                width: logoBadgeSize,
+                                height: logoBadgeSize,
+                                backgroundColor: authColors.badgeBg,
+                                color: authColors.badgeText,
+                            }}
+                        >
+                            RR
+                        </div>
+                        <span className="text-sm font-semibold leading-tight text-white">
+                            Rapid Response
+                        </span>
+                    </div>
+
+                    <div
+                        className="auth-promo-panel__content relative flex flex-col items-center justify-center text-center"
+                        style={{
+                            minHeight: `calc(100% - ${logoBlockHeight}px)`,
+                            paddingLeft: panelPaddingX,
+                            paddingRight: panelPaddingX,
+                            paddingBottom: panelPaddingY,
+                        }}
+                    >
+                        <div
+                            aria-hidden={isRegister}
+                            className={
+                                isRegister
+                                    ? 'pointer-events-none invisible absolute inset-0 flex flex-col items-center justify-center px-2'
+                                    : 'flex flex-col items-center justify-center'
+                            }
+                        >
+                            <h2 className="mb-2 max-w-[260px] text-[1.15rem] font-bold leading-snug">
+                                Bienvenue sur Rapid Response
+                            </h2>
+                            <p
+                                className="mb-6 max-w-[260px] text-sm leading-relaxed"
+                                style={{ color: authColors.moonRose, opacity: 0.92 }}
+                            >
+                                Gérez efficacement vos interventions techniques et suivez chaque demande en temps réel.
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => setMode('register')}
+                                className="rounded-full border px-6 py-2 text-sm font-medium transition-colors hover:bg-moon-rose hover:text-moon-violet-dark"
+                                style={{
+                                    borderColor: authColors.moonRose,
+                                    color: authColors.moonRose,
+                                }}
+                            >
+                                Créer un compte
+                            </button>
+                        </div>
+
+                        <div
+                            aria-hidden={!isRegister}
+                            className={
+                                !isRegister
+                                    ? 'pointer-events-none invisible absolute inset-0 flex flex-col items-center justify-center px-2'
+                                    : 'flex flex-col items-center justify-center'
+                            }
+                        >
+                            <h2 className="mb-2 text-[1.15rem] font-bold leading-snug">Déjà membre ?</h2>
+                            <p
+                                className="mb-6 max-w-[260px] text-sm leading-relaxed"
+                                style={{ color: authColors.moonRose, opacity: 0.92 }}
+                            >
+                                Connectez-vous pour accéder à votre espace et gérer vos interventions.
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => setMode('login')}
+                                className="rounded-full border px-6 py-2 text-sm font-medium transition-colors hover:bg-moon-rose hover:text-moon-violet-dark"
+                                style={{
+                                    borderColor: authColors.moonRose,
+                                    color: authColors.moonRose,
+                                }}
+                            >
+                                Se connecter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
