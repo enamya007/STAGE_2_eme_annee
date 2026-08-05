@@ -1,5 +1,5 @@
-import AuthCard from '@/components/auth/AuthCard'
+import AuthShell from '@/features/auth/components/AuthShell'
 
 export default function LoginPage() {
-    return <AuthCard />
+    return <AuthShell initialMode="login" />
 }

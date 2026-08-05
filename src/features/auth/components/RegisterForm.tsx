@@ -4,184 +4,180 @@ import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { useMutation } from '@tanstack/react-query'
-import { Box, TextField, Typography, Button, InputAdornment, IconButton, CircularProgress, Alert } from '@mui/material'
-import { PersonOutlined, MailOutlined, LockOutlined, Visibility, VisibilityOff } from '@mui/icons-material'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import Alert from '@mui/material/Alert'
+import CircularProgress from '@mui/material/CircularProgress'
+import MoonField from './MoonField'
+import MoonFieldIcon from './MoonFieldIcon'
+import MoonPasswordToggle from './MoonPasswordToggle'
 import { registerSchema, type RegisterFormValues } from '../schemas/registerSchema'
-import { authColors } from '../constants/theme'
+import { moonButtonSx, moonButtonPendingSx, moonFormHeaderSx } from '../constants/moonTheme'
 import { mockRegister } from '../api/mockAuth'
-
-const inputSx = { mb: 2.5, '& .MuiOutlinedInput-root': { borderRadius: 8 } }
 
 export default function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirm, setShowConfirm] = useState(false)
 
-    const { control, handleSubmit } = useForm<RegisterFormValues>({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<RegisterFormValues>({
         resolver: valibotResolver(registerSchema),
-        defaultValues: { fullName: '', email: '', password: '', confirmPassword: '' }
+        defaultValues: { fullName: '', email: '', password: '', confirmPassword: '' },
     })
 
     const registerMutation = useMutation({ mutationFn: mockRegister })
 
-    const onSubmit = (values: RegisterFormValues) => registerMutation.mutate(values)
+    const onSubmit = (values: RegisterFormValues) => {
+        registerMutation.mutate({
+            fullName: values.fullName,
+            email: values.email,
+            password: values.password,
+        })
+    }
 
     return (
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: authColors.headingText, mb: 1 }}>
-                Créer un compte
-            </Typography>
-            <Typography variant="body2" sx={{ color: authColors.mutedText, mb: 3 }}>
-                Renseignez vos informations pour commencer.
-            </Typography>
+        <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            sx={{ display: 'flex', flexDirection: 'column', gap: 1.35 }}
+        >
+            <Box sx={{ mb: 0.25 }}>
+                <Typography variant="h5" sx={moonFormHeaderSx.title}>
+                    Créer un compte
+                </Typography>
+                <Typography sx={moonFormHeaderSx.subtitle}>Inscrivez-vous pour commencer</Typography>
+            </Box>
 
+            {registerMutation.isError && (
+                <Alert severity="error" sx={{ py: 0.25, alignItems: 'center' }}>
+                    Impossible de créer le compte. Réessayez.
+                </Alert>
+            )}
             {registerMutation.isSuccess && (
-                <Alert severity="success" sx={{ mb: 2 }}>
+                <Alert severity="success" sx={{ py: 0.25, alignItems: 'center' }}>
                     Inscription simulée réussie (API pas encore branchée).
                 </Alert>
             )}
 
-            <Typography component="label" htmlFor="register-fullName" sx={{ fontWeight: 600, color: authColors.headingText, display: 'block', mb: 0.5 }}>
-                Nom et Prénom(s)
-            </Typography>
             <Controller
                 name="fullName"
                 control={control}
-                render={({ field, fieldState }) => (
-                    <TextField
+                render={({ field }) => (
+                    <MoonField
                         {...field}
-                        id="register-fullName"
-                        fullWidth
-                        placeholder="KOLA Balakiyèm"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        label="Nom et Prénom(s)"
+                        fieldId="register-fullname"
+                        placeholder="KOLA Balakiyém"
+                        autoComplete="name"
+                        error={!!errors.fullName}
+                        helperText={errors.fullName?.message}
                         slotProps={{
                             input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <PersonOutlined sx={{ color: authColors.iconPrimary }} />
-                                    </InputAdornment>
-                                )
-                            }
+                                startAdornment: <MoonFieldIcon type="user" />,
+                            },
                         }}
-                        sx={inputSx}
                     />
                 )}
             />
 
-            <Typography component="label" htmlFor="register-email" sx={{ fontWeight: 600, color: authColors.headingText, display: 'block', mb: 0.5 }}>
-                Email
-            </Typography>
             <Controller
                 name="email"
                 control={control}
-                render={({ field, fieldState }) => (
-                    <TextField
+                render={({ field }) => (
+                    <MoonField
                         {...field}
-                        id="register-email"
-                        fullWidth
-                        placeholder="vous@exemple.com"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        label="Adresse e-mail"
+                        fieldId="register-email"
+                        placeholder="name@exemple.com"
+                        type="email"
+                        autoComplete="email"
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
                         slotProps={{
                             input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <MailOutlined sx={{ color: authColors.iconPrimary }} />
-                                    </InputAdornment>
-                                )
-                            }
+                                startAdornment: <MoonFieldIcon type="mail" />,
+                            },
                         }}
-                        sx={inputSx}
                     />
                 )}
             />
 
-            <Typography component="label" htmlFor="register-password" sx={{ fontWeight: 600, color: authColors.headingText, display: 'block', mb: 0.5 }}>
-                Mot de passe
-            </Typography>
             <Controller
                 name="password"
                 control={control}
-                render={({ field, fieldState }) => (
-                    <TextField
+                render={({ field }) => (
+                    <MoonField
                         {...field}
-                        id="register-password"
+                        label="Mot de passe"
+                        fieldId="register-password"
+                        placeholder="Mot de passe"
                         type={showPassword ? 'text' : 'password'}
-                        fullWidth
-                        placeholder="••••••••"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        autoComplete="new-password"
+                        error={!!errors.password}
+                        helperText={errors.password?.message}
                         slotProps={{
                             input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <LockOutlined sx={{ color: authColors.iconAccent }} />
-                                    </InputAdornment>
-                                ),
+                                startAdornment: <MoonFieldIcon type="lock" />,
                                 endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={() => setShowPassword((v) => !v)} edge="end" size="small">
-                                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }
+                                    <MoonPasswordToggle
+                                        visible={showPassword}
+                                        onToggle={() => setShowPassword((p) => !p)}
+                                    />
+                                ),
+                            },
                         }}
-                        sx={inputSx}
                     />
                 )}
             />
 
-            <Typography component="label" htmlFor="register-confirmPassword" sx={{ fontWeight: 600, color: authColors.headingText, display: 'block', mb: 0.5 }}>
-                Confirmer le mot de passe
-            </Typography>
             <Controller
                 name="confirmPassword"
                 control={control}
-                render={({ field, fieldState }) => (
-                    <TextField
+                render={({ field }) => (
+                    <MoonField
                         {...field}
-                        id="register-confirmPassword"
+                        label="Confirmer le mot de passe"
+                        fieldId="register-confirm-password"
+                        placeholder="Confirmer le mot de passe"
                         type={showConfirm ? 'text' : 'password'}
-                        fullWidth
-                        placeholder="••••••••"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        autoComplete="new-password"
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword?.message}
                         slotProps={{
                             input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <LockOutlined sx={{ color: authColors.iconAccent }} />
-                                    </InputAdornment>
-                                ),
+                                startAdornment: <MoonFieldIcon type="key" />,
                                 endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={() => setShowConfirm((v) => !v)} edge="end" size="small">
-                                            {showConfirm ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }
+                                    <MoonPasswordToggle
+                                        visible={showConfirm}
+                                        onToggle={() => setShowConfirm((p) => !p)}
+                                    />
+                                ),
+                            },
                         }}
-                        sx={{ mb: 3.5, '& .MuiOutlinedInput-root': { borderRadius: 8 } }}
                     />
                 )}
             />
 
             <Button
                 type="submit"
-                fullWidth
                 disabled={registerMutation.isPending}
+                fullWidth
                 sx={{
-                    borderRadius: 8,
-                    bgcolor: authColors.submitBg,
-                    color: '#fff',
-                    py: 1.5,
-                    fontWeight: 700,
-                    '&:hover': { bgcolor: authColors.submitBg, opacity: 0.9 }
+                    ...moonButtonSx,
+                    ...(registerMutation.isPending ? moonButtonPendingSx : {}),
+                    mt: 0.5,
                 }}
             >
-                {registerMutation.isPending ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : "S'inscrire"}
+                {registerMutation.isPending ? (
+                    <CircularProgress size={20} sx={{ color: '#fff' }} />
+                ) : (
+                    "S'inscrire"
+                )}
             </Button>
         </Box>
     )
