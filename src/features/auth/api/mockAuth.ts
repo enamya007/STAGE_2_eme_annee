@@ -40,3 +40,19 @@ export async function mockRegister(values: {
         user: { id: '2', email: values.email, role: 'CLIENT' },
     }
 }
+
+export interface ForgotPasswordResponse {
+    message: string
+}
+
+// Plus tard : POST /auth/forgot-password — le backend envoie un e-mail
+// contenant un lien de réinitialisation avec un token à usage unique.
+export async function mockForgotPassword(values: { email: string }): Promise<ForgotPasswordResponse> {
+    await new Promise((resolve) => setTimeout(resolve, 350))
+
+    // Le backend répondra toujours 200 même si l'e-mail est inconnu,
+    // pour ne pas révéler quels comptes existent (anti-énumération).
+    return {
+        message: `Si un compte existe pour ${values.email}, un lien de réinitialisation a été envoyé.`,
+    }
+}

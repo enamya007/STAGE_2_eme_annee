@@ -6,6 +6,9 @@ export default withAuth({
     },
 })
 
+// Phase front-end : /dashboard reste accessible sans session NextAuth
+// (le login passe encore par le mock). Remettre '/dashboard/:path*'
+// dans le matcher après l'intégration de l'API d'authentification.
 export const config = {
-    matcher: ['/dashboard/:path*', '/admin/:path*'],
+    matcher: ['/admin/:path*'],
 }
