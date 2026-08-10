@@ -3,7 +3,7 @@ export const moon = {
     light: '#F5D5E0',
     periwinkle: '#6667AB',
     magenta: '#7B337E',
-    plum: '#706fd3',
+    plum: '#420D4B',
     midnight: '#2c2c54',
     subtitle: 'rgba(44, 44, 84, 0.55)',
     border: 'rgba(44, 44, 84, 0.14)',
