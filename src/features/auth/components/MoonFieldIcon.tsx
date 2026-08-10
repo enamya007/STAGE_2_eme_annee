@@ -10,15 +10,12 @@ type Props = {
     type: MoonFieldIconType
 }
 
-/* Pastille ronde à contour fin, style « social icons » */
-const circleSx = {
+const iconBoxSx = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: 28,
     height: 28,
-    borderRadius: '50%',
-    border: '1.5px solid rgba(102, 103, 171, 0.45)',
     color: '#6667AB',
 } as const
 
@@ -32,8 +29,8 @@ const MoonFieldIcon = ({ type }: Props) => {
 
     return (
         <InputAdornment position="start">
-            <Box sx={circleSx}>
-                <Icon size={14} strokeWidth={2} aria-hidden />
+            <Box sx={iconBoxSx}>
+                <Icon size={18} strokeWidth={1.9} aria-hidden />
             </Box>
         </InputAdornment>
     )

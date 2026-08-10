@@ -9,7 +9,6 @@ import {
     Users,
     Activity,
     Settings,
-    Plus,
 } from 'lucide-react'
 
 const navItems = [
@@ -35,17 +34,6 @@ export default function Sidebar() {
                     <p className="text-sm font-bold leading-tight">Rapid Response</p>
                     <p className="text-[11px] text-white/50">RR · v2.4</p>
                 </div>
-            </div>
-
-            {/* Bouton nouveau ticket : ouvre le modal de création sur la page Tickets */}
-            <div className="px-4 pb-4">
-                <Link
-                    href="/dashboard/tickets?new=1"
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-moon-violet bg-moon-violet-dark py-2.5 text-sm font-medium transition-colors hover:bg-moon-violet"
-                >
-                    <Plus size={16} />
-                    Nouveau ticket
-                </Link>
             </div>
 
             <p className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
