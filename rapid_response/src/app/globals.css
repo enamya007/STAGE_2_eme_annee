@@ -9,8 +9,8 @@
   --color-moon-rose: #F5D5E0;
   --color-moon-lavande: #6667AB;
   --color-moon-violet: #7B337E;
-  --color-moon-violet-dark: #420D4B;
-  --color-moon-abyss: #210635;
+  --color-moon-violet-dark: #706fd3;
+  --color-moon-abyss: #2c2c54;
 }
 
 @theme inline {
@@ -38,8 +38,8 @@ body {
 .auth-form-area input:-webkit-autofill:hover,
 .auth-form-area input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-  -webkit-text-fill-color: #210635 !important;
-  caret-color: #210635;
+  -webkit-text-fill-color: #2c2c54 !important;
+  caret-color: #2c2c54;
   transition: background-color 99999s ease-out;
 }
 

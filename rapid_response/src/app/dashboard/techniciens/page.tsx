@@ -95,7 +95,7 @@ export default function TechniciansPage() {
                             <div className="mt-4 flex items-center gap-3">
                                 <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-moon-abyss/8">
                                     <div
-                                        className="h-full rounded-full bg-gradient-to-r from-moon-lavande to-moon-violet"
+                                        className="h-full rounded-full bg-moon-violet-dark"
                                         style={{ width: `${load}%` }}
                                     />
                                 </div>

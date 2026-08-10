@@ -37,7 +37,7 @@ export default function AuthShell({ initialMode = 'login' }: { initialMode?: Mod
                     width: cardWidth,
                     maxWidth: '100%',
                     height: cardHeight,
-                    boxShadow: '0 25px 50px -12px rgba(33, 6, 53, 0.35)',
+                    boxShadow: '0 25px 50px -12px rgba(44, 44, 84, 0.35)',
                 }}
             >
                 {/* Panneau formulaire */}
@@ -91,7 +91,7 @@ export default function AuthShell({ initialMode = 'login' }: { initialMode?: Mod
                     style={{
                         width: promoPanelWidth,
                         left: isRegister ? formPanelWidth : '0%',
-                        background: `linear-gradient(180deg, ${authColors.gradientStart} 0%, ${authColors.gradientMid} 35%, ${authColors.gradientEnd} 70%, ${authColors.gradientDeep} 100%)`,
+                        background: authColors.moonVioletDark,
                     }}
                 >
                     <div className="auth-promo-panel__halo" aria-hidden />

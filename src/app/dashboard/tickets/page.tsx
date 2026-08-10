@@ -59,6 +59,7 @@ function TicketsContent() {
     const [status, setStatus] = useState<'Tous' | TicketStatus>('Tous')
     const [priority, setPriority] = useState<'Toutes' | TicketPriority>('Toutes')
     const [technicianFilter, setTechnicianFilter] = useState('Tous')
+    const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
 
     const [createOpen, setCreateOpen] = useState(false)
     const [createForm, setCreateForm] = useState({
@@ -232,10 +233,30 @@ function TicketsContent() {
                     aria-label="Date fin"
                 />
                 <div className="ml-auto flex gap-1">
-                    <button type="button" aria-label="Vue liste" className="rounded-lg bg-moon-violet-dark p-2 text-white">
+                    <button
+                        type="button"
+                        aria-label="Vue liste"
+                        aria-pressed={viewMode === 'list'}
+                        onClick={() => setViewMode('list')}
+                        className={`rounded-lg p-2 transition-colors ${
+                            viewMode === 'list'
+                                ? 'bg-moon-violet-dark text-white'
+                                : 'border border-moon-abyss/10 text-moon-abyss/50 hover:bg-moon-rose/30'
+                        }`}
+                    >
                         <List size={15} />
                     </button>
-                    <button type="button" aria-label="Vue grille" className="rounded-lg border border-moon-abyss/10 p-2 text-moon-abyss/50 hover:bg-moon-rose/30">
+                    <button
+                        type="button"
+                        aria-label="Vue grille"
+                        aria-pressed={viewMode === 'grid'}
+                        onClick={() => setViewMode('grid')}
+                        className={`rounded-lg p-2 transition-colors ${
+                            viewMode === 'grid'
+                                ? 'bg-moon-violet-dark text-white'
+                                : 'border border-moon-abyss/10 text-moon-abyss/50 hover:bg-moon-rose/30'
+                        }`}
+                    >
                         <LayoutGrid size={15} />
                     </button>
                 </div>
@@ -245,7 +266,58 @@ function TicketsContent() {
                 {filtered.length} tickets trouvés
             </p>
 
-            {/* Tableau */}
+            {/* Vue grille (cartes) */}
+            {viewMode === 'grid' && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {filtered.map((t) => (
+                        <div
+                            key={t.ref}
+                            className="flex flex-col gap-3 rounded-2xl border border-moon-abyss/8 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                        >
+                            <div className="flex items-start justify-between gap-2">
+                                <div className="min-w-0">
+                                    <p className="font-mono text-xs text-moon-abyss/40">{t.ref}</p>
+                                    <p className="truncate font-semibold text-moon-abyss">{t.title}</p>
+                                </div>
+                                <span className={`shrink-0 rounded-md px-2 py-1 text-[11px] font-bold tracking-wide ${statusStyles[t.status]}`}>
+                                    {t.status}
+                                </span>
+                            </div>
+                            <p className="truncate text-sm text-moon-abyss/70">{t.client}</p>
+                            <div className="flex items-center justify-between text-sm">
+                                <span className="flex items-center gap-1.5 text-moon-abyss/70">
+                                    <span className={`h-2 w-2 rounded-full ${priorityDots[t.priority]}`} />
+                                    {t.priority}
+                                </span>
+                                <span className="font-mono text-xs text-moon-abyss/50">{t.createdAt}</span>
+                            </div>
+                            <div className="mt-auto flex items-center justify-between border-t border-moon-abyss/5 pt-3">
+                                {t.technician ? (
+                                    <span className="flex min-w-0 items-center gap-2 text-sm text-moon-abyss/80">
+                                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-moon-lavande/15 text-[10px] font-bold text-moon-lavande">
+                                            {t.technician.split(' ').map((w) => w[0]).join('')}
+                                        </span>
+                                        <span className="truncate">{t.technician}</span>
+                                    </span>
+                                ) : (
+                                    <span className="text-sm text-moon-abyss/35">Non affecté</span>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={() => openAssign(t)}
+                                    className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
+                                >
+                                    <ArrowRight size={13} />
+                                    {t.technician ? 'Réaffecter' : 'Affecter'}
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Vue liste (tableau) */}
+            {viewMode === 'list' && (
             <div className="overflow-hidden rounded-2xl border border-moon-abyss/8 bg-white shadow-sm">
                 <table className="w-full text-left text-sm">
                     <thead>
@@ -308,6 +380,7 @@ function TicketsContent() {
                     </tbody>
                 </table>
             </div>
+            )}
 
             {/* Modal créer un ticket */}
             <Modal open={createOpen} title="Créer un ticket" onClose={() => setCreateOpen(false)}>
@@ -462,7 +535,7 @@ function TicketsContent() {
 
 export default function TicketsPage() {
     return (
-        <Suspense>
+        <Suspense fallback={<p>Chargement des données...</p>}>
             <TicketsContent />
         </Suspense>
     )

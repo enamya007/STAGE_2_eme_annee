@@ -19,9 +19,14 @@ const MoonPasswordToggle = ({ visible, onToggle, label = 'afficher le mot de pas
             edge="end"
             size="small"
             aria-label={visible ? 'masquer le mot de passe' : label}
-            sx={{ color: moon.icon }}
+            sx={{
+                color: moon.icon,
+                width: 28,
+                height: 28,
+                border: '1.5px solid rgba(102, 103, 171, 0.45)',
+            }}
         >
-            {visible ? <EyeOff size={18} strokeWidth={1.75} /> : <Eye size={18} strokeWidth={1.75} />}
+            {visible ? <EyeOff size={14} strokeWidth={2} /> : <Eye size={14} strokeWidth={2} />}
         </IconButton>
     </InputAdornment>
 )

@@ -79,8 +79,8 @@ function TrendChart() {
 
                 return (
                     <g key={v}>
-                        <line x1={padX} y1={y} x2={width - padX} y2={y} stroke="#210635" strokeOpacity="0.06" />
-                        <text x={padX - 8} y={y + 3} textAnchor="end" fontSize="9" fill="#21063580">
+                        <line x1={padX} y1={y} x2={width - padX} y2={y} stroke="#2c2c54" strokeOpacity="0.06" />
+                        <text x={padX - 8} y={y + 3} textAnchor="end" fontSize="9" fill="#2c2c5480">
                             {v}
                         </text>
                     </g>
@@ -93,7 +93,7 @@ function TrendChart() {
             {points.map((p, i) => (
                 <g key={weeklyTrend[i].day}>
                     <circle cx={p.x} cy={p.y} r="4" fill="#6667AB" stroke="#fff" strokeWidth="1.5" />
-                    <text x={p.x} y={height + 12} textAnchor="middle" fontSize="9" fill="#21063580">
+                    <text x={p.x} y={height + 12} textAnchor="middle" fontSize="9" fill="#2c2c5480">
                         {weeklyTrend[i].day}
                     </text>
                 </g>
@@ -196,7 +196,7 @@ export default function StatisticsPage() {
                             </span>
                             <div className="h-3.5 flex-1 overflow-hidden rounded-full bg-moon-rose/30">
                                 <div
-                                    className="h-full rounded-full bg-gradient-to-r from-moon-lavande to-moon-violet"
+                                    className="h-full rounded-full bg-moon-violet-dark"
                                     style={{ width: `${(t.value / t.capacity) * 100}%` }}
                                 />
                             </div>

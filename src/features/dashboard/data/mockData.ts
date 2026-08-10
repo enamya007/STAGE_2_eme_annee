@@ -76,7 +76,7 @@ export const users: AppUser[] = [
 export const statusBreakdown = [
     { label: 'Ouvert', value: 3, color: '#7B337E' },
     { label: 'En cours', value: 4, color: '#6667AB' },
-    { label: 'Affecté', value: 2, color: '#420D4B' },
+    { label: 'Affecté', value: 2, color: '#706fd3' },
     { label: 'Résolu', value: 8, color: '#2e9e6b' },
     { label: 'Urgent', value: 1, color: '#d24b6a' },
 ]

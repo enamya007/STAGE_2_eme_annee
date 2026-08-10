@@ -46,21 +46,21 @@ export default function ForgotPasswordCard() {
         <div
             className="flex min-h-screen items-center justify-center px-4 py-6 sm:px-6"
             style={{
-                background: `linear-gradient(160deg, ${authColors.moonRose} 0%, #faeef3 45%, ${authColors.pageBg} 100%)`,
+                background: authColors.pageBg,
             }}
         >
             <div
                 className="w-full overflow-hidden rounded-[20px] bg-white"
                 style={{
                     maxWidth: 440,
-                    boxShadow: '0 25px 50px -12px rgba(33, 6, 53, 0.25)',
+                    boxShadow: '0 25px 50px -12px rgba(44, 44, 84, 0.25)',
                 }}
             >
-                {/* Bandeau logo — dégradé Moon, cohérent avec le panneau promo */}
+                {/* Bandeau logo — couleur unie Moon, cohérente avec le panneau promo */}
                 <div
                     className="flex items-center gap-2.5 px-8 py-4"
                     style={{
-                        background: `linear-gradient(90deg, ${authColors.gradientStart} 0%, ${authColors.gradientMid} 55%, ${authColors.gradientEnd} 100%)`,
+                        background: authColors.moonVioletDark,
                     }}
                 >
                     <div
