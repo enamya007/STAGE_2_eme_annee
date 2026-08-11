@@ -59,8 +59,11 @@ export default function UsersPage() {
         setEditing(user)
     }
 
+    const canCreateUser =
+        form.name.trim().length > 0 && form.email.trim().length > 0 && !!form.role
+
     const createUser = () => {
-        if (!form.name.trim() || !form.email.trim()) return
+        if (!canCreateUser) return
 
         const initials = form.name
             .split(' ')
@@ -266,7 +269,8 @@ export default function UsersPage() {
                         <button
                             type="button"
                             onClick={createUser}
-                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet"
+                            disabled={!canCreateUser}
+                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             Créer le compte
                         </button>
