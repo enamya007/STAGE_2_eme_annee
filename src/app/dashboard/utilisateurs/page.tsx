@@ -23,6 +23,9 @@ const inputClass =
 const labelClass =
     'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
 
+const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+
 export default function UsersPage() {
     const [users, setUsers] = useState<AppUser[]>(initialUsers)
     const [query, setQuery] = useState('')
@@ -60,7 +63,7 @@ export default function UsersPage() {
     }
 
     const canCreateUser =
-        form.name.trim().length > 0 && form.email.trim().length > 0 && !!form.role
+        form.name.trim().length > 0 && isValidEmail(form.email) && !!form.role
 
     const createUser = () => {
         if (!canCreateUser) return
@@ -244,6 +247,11 @@ export default function UsersPage() {
                             placeholder="email@exemple.fr"
                             className={inputClass}
                         />
+                        {form.email.trim().length > 0 && !isValidEmail(form.email) && (
+                            <p className="mt-1.5 text-xs text-red-600">
+                                Entrez une adresse e-mail valide (ex. nom@gmail.com).
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="add-role" className={labelClass}>Rôle</label>
