@@ -1,0 +1,9 @@
+// keys/index.ts — point d'entrée des query keys (généré api-forge).
+
+export { authKeys } from '@/keys/auth.keys'
+export { ticketsKeys } from '@/keys/tickets.keys'
+export { techniciansKeys } from '@/keys/technicians.keys'
+export { attachmentsKeys } from '@/keys/attachments.keys'
+export { skillsKeys } from '@/keys/skills.keys'
+export { notificationsKeys } from '@/keys/notifications.keys'
+
