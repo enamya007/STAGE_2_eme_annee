@@ -15,10 +15,10 @@ const roleLabels = {
 } as const
 
 const inputClass =
-    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none'
+    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none'
 
 const labelClass =
-    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
+    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/70'
 
 export default function SettingsPage() {
     const meQuery = useMe()
@@ -68,13 +68,13 @@ export default function SettingsPage() {
         <div className="space-y-5">
             <div>
                 <h1 className="text-2xl font-bold text-moon-abyss">Paramètres</h1>
-                <p className="mt-0.5 text-sm text-moon-abyss/50">Votre compte</p>
+                <p className="mt-0.5 text-sm text-moon-abyss/70">Votre compte</p>
             </div>
 
-            <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                 <h2 className="font-bold text-moon-violet-dark">Profil</h2>
                 {meQuery.isLoading && (
-                    <p className="mt-4 text-sm text-moon-abyss/50">Chargement…</p>
+                    <p className="mt-4 text-sm text-moon-abyss/70">Chargement…</p>
                 )}
                 {meQuery.isError && (
                     <p className="mt-4 text-sm text-rose-700">Impossible de charger le profil.</p>
@@ -107,7 +107,7 @@ export default function SettingsPage() {
                 )}
                 {me && canEditProfile && (
                     <div className="mt-4 space-y-4">
-                        <p className="text-xs text-moon-abyss/50">
+                        <p className="text-xs text-moon-abyss/70">
                             Rôle : {roleLabels[me.role]} — vous ne pouvez pas changer votre propre
                             rôle ici.
                         </p>
@@ -205,7 +205,7 @@ export default function SettingsPage() {
             </div>
 
             {canEditProfile && (
-                <p className="text-sm text-moon-abyss/50">
+                <p className="text-sm text-moon-abyss/70">
                     Changement de mot de passe une fois connecté : non disponible. Utilisez{' '}
                     <Link href="/forgot-password" className="font-medium text-moon-violet underline">
                         Mot de passe oublié

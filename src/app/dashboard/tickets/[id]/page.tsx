@@ -149,7 +149,7 @@ export default function TicketDetailPage() {
         cancelTicket.error
 
     if (ticketQuery.isLoading) {
-        return <p className="text-sm text-moon-abyss/50">Chargement du ticket…</p>
+        return <p className="text-sm text-moon-abyss/70">Chargement du ticket…</p>
     }
 
     if (ticketQuery.isError || !ticket) {
@@ -190,7 +190,7 @@ export default function TicketDetailPage() {
 
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                    <p className="font-mono text-xs text-moon-abyss/40">{ticket.reference}</p>
+                    <p className="font-mono text-xs text-moon-abyss/65">{ticket.reference}</p>
                     <h1 className="text-2xl font-bold text-moon-abyss">{ticket.title}</h1>
                 </div>
                 <span
@@ -284,7 +284,7 @@ export default function TicketDetailPage() {
             </div>
 
             <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
-                <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+                <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                     <h2 className="font-bold text-moon-violet-dark">Description</h2>
                     <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-moon-abyss/80">
                         {ticket.description}
@@ -296,7 +296,7 @@ export default function TicketDetailPage() {
                         </div>
                     )}
                 </div>
-                <div className="space-y-3 rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+                <div className="space-y-3 rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                     <p className={ticketLabelClass}>Catégorie</p>
                     <p className="text-sm font-medium text-moon-abyss">{ticket.category.name}</p>
                     <p className={ticketLabelClass}>Priorité</p>

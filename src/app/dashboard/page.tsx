@@ -56,7 +56,7 @@ export default function DashboardHomePage() {
         <div className="space-y-5">
             <div>
                 <h1 className="text-2xl font-bold text-moon-abyss">Tableau de bord</h1>
-                <p className="mt-0.5 text-sm text-moon-abyss/50">{subtitle}</p>
+                <p className="mt-0.5 text-sm text-moon-abyss/70">{subtitle}</p>
             </div>
 
             {ticketsQuery.isError && (
@@ -74,10 +74,10 @@ export default function DashboardHomePage() {
             </div>
 
             {isTechnician && myProfileQuery.data && (
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-moon-abyss/8 bg-white p-4 shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-moon-abyss/15 bg-white p-4 shadow-sm">
                     <div>
                         <p className="text-sm font-semibold text-moon-abyss">Ma disponibilité</p>
-                        <p className="text-xs text-moon-abyss/50">
+                        <p className="text-xs text-moon-abyss/70">
                             Cliquez pour indiquer si vous pouvez recevoir de nouveaux tickets.
                         </p>
                     </div>
@@ -104,13 +104,13 @@ export default function DashboardHomePage() {
                 </div>
             )}
 
-            <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
                     <div>
                         <h2 className="font-bold text-moon-violet-dark">
                             {isTechnician ? 'Derniers tickets affectés' : 'Derniers tickets'}
                         </h2>
-                        <p className="text-xs text-moon-abyss/50">Les 5 plus récents</p>
+                        <p className="text-xs text-moon-abyss/70">Les 5 plus récents</p>
                     </div>
                     <Link
                         href="/dashboard/tickets"
@@ -121,10 +121,10 @@ export default function DashboardHomePage() {
                     </Link>
                 </div>
                 {ticketsQuery.isLoading && (
-                    <p className="text-sm text-moon-abyss/50">Chargement…</p>
+                    <p className="text-sm text-moon-abyss/70">Chargement…</p>
                 )}
                 {!ticketsQuery.isLoading && recent.length === 0 && (
-                    <p className="text-sm text-moon-abyss/50">Aucun ticket pour le moment.</p>
+                    <p className="text-sm text-moon-abyss/70">Aucun ticket pour le moment.</p>
                 )}
                 <ul className="divide-y divide-moon-abyss/5">
                     {recent.map((t) => (
@@ -133,13 +133,13 @@ export default function DashboardHomePage() {
                                 href={`/dashboard/tickets/${t.id}`}
                                 className="flex items-center gap-4 py-3 transition-colors hover:bg-moon-rose/10"
                             >
-                                <span className="w-20 shrink-0 font-mono text-xs text-moon-abyss/40">
+                                <span className="w-20 shrink-0 font-mono text-xs text-moon-abyss/65">
                                     {t.reference}
                                 </span>
                                 <span className="flex-1 truncate text-sm font-medium text-moon-abyss">
                                     {t.title}
                                 </span>
-                                <span className="hidden text-sm text-moon-abyss/50 sm:block">
+                                <span className="hidden text-sm text-moon-abyss/70 sm:block">
                                     {t.category.name}
                                 </span>
                                 <span className="shrink-0 rounded-md bg-moon-rose/50 px-2 py-1 text-[11px] font-bold text-moon-violet-dark">

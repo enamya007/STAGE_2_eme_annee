@@ -24,7 +24,7 @@ export default function RequireRole({
   }, [allowed, router, status])
 
   if (status === 'loading') {
-    return <p className="text-sm text-moon-abyss/50">Chargement…</p>
+    return <p className="text-sm text-moon-abyss/70">Chargement…</p>
   }
 
   if (!allowed) return null

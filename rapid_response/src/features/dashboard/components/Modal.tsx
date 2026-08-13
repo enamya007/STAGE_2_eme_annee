@@ -48,7 +48,7 @@ export default function Modal({
                         type="button"
                         onClick={onClose}
                         aria-label="Fermer"
-                        className="rounded-full p-1 text-moon-abyss/50 transition-colors hover:bg-moon-rose/40 hover:text-moon-abyss"
+                        className="rounded-full p-1 text-moon-abyss/70 transition-colors hover:bg-moon-rose/40 hover:text-moon-abyss"
                     >
                         <X size={18} />
                     </button>

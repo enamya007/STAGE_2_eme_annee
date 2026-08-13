@@ -19,7 +19,7 @@ export default function TicketAttachments({
   const canDelete = role === 'ADMIN' || role === 'CLIENT' || role === 'TECHNICIAN'
 
   return (
-    <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <h2 className="font-bold text-moon-violet-dark">Pièces jointes</h2>
         <button
@@ -43,7 +43,7 @@ export default function TicketAttachments({
       </div>
 
       {listQuery.isLoading && (
-        <p className="mt-3 text-sm text-moon-abyss/50">Chargement…</p>
+        <p className="mt-3 text-sm text-moon-abyss/70">Chargement…</p>
       )}
       {listQuery.isError && (
         <p className="mt-3 text-sm text-rose-700">Impossible de charger les fichiers.</p>
@@ -89,7 +89,7 @@ export default function TicketAttachments({
           </li>
         ))}
         {!listQuery.isLoading && files.length === 0 && (
-          <li className="text-sm text-moon-abyss/50">Aucune pièce jointe.</li>
+          <li className="text-sm text-moon-abyss/70">Aucune pièce jointe.</li>
         )}
       </ul>
     </div>

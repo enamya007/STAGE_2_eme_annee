@@ -118,7 +118,7 @@ function TrendChart({ points }: { points: { day: string; value: number }[] }) {
     const max = Math.max(1, ...points.map((p) => p.value))
 
     if (points.length === 0) {
-        return <p className="py-10 text-center text-sm text-moon-abyss/40">Aucune donnée</p>
+        return <p className="py-10 text-center text-sm text-moon-abyss/65">Aucune donnée</p>
     }
 
     const coords = points.map((p, i) => ({
@@ -265,7 +265,7 @@ function StatisticsPageContent() {
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h1 className="text-2xl font-bold text-moon-abyss">Statistiques détaillées</h1>
-                    <p className="mt-0.5 text-sm text-moon-abyss/50">
+                    <p className="mt-0.5 text-sm text-moon-abyss/70">
                         Calculées à partir des tickets et techniciens de l&apos;API
                     </p>
                 </div>
@@ -332,9 +332,9 @@ function StatisticsPageContent() {
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
-                <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+                <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                     <h2 className="font-bold text-moon-violet-dark">Répartition par statut</h2>
-                    <p className="text-xs text-moon-abyss/50">Tickets de la période</p>
+                    <p className="text-xs text-moon-abyss/70">Tickets de la période</p>
                     <div className="mt-4 flex items-center gap-6">
                         <DonutChart slices={statusBreakdown} />
                         <ul className="flex-1 space-y-2.5">
@@ -352,23 +352,23 @@ function StatisticsPageContent() {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+                <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                     <h2 className="font-bold text-moon-violet-dark">Évolution temporelle</h2>
-                    <p className="text-xs text-moon-abyss/50">Tickets créés par jour</p>
+                    <p className="text-xs text-moon-abyss/70">Tickets créés par jour</p>
                     <div className="mt-4">
                         <TrendChart points={trend} />
                     </div>
                 </div>
             </div>
 
-            <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
                 <h2 className="font-bold text-moon-violet-dark">Charge comparée par technicien</h2>
-                <p className="text-xs text-moon-abyss/50">Tickets actifs / capacité max</p>
+                <p className="text-xs text-moon-abyss/70">Tickets actifs / capacité max</p>
                 {techniciansQuery.isLoading && (
-                    <p className="mt-4 text-sm text-moon-abyss/50">Chargement…</p>
+                    <p className="mt-4 text-sm text-moon-abyss/70">Chargement…</p>
                 )}
                 {!techniciansQuery.isLoading && technicians.length === 0 && (
-                    <p className="mt-4 text-sm text-moon-abyss/50">Aucun technicien.</p>
+                    <p className="mt-4 text-sm text-moon-abyss/70">Aucun technicien.</p>
                 )}
                 <div className="mt-5 space-y-4">
                     {technicians.map((t) => {

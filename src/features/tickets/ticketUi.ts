@@ -5,11 +5,11 @@ export function canAssignStatus(status: TicketStatus) {
 }
 
 export const statusStyles: Record<TicketStatus, string> = {
-  OPEN: 'bg-moon-rose/70 text-moon-violet-dark',
+  OPEN: 'bg-moon-rose text-moon-violet-dark',
   ASSIGNED: 'bg-amber-100 text-amber-800',
-  IN_PROGRESS: 'bg-moon-lavande/15 text-moon-lavande',
-  RESOLVED: 'bg-emerald-100 text-emerald-700',
-  CLOSED: 'bg-slate-100 text-slate-700',
+  IN_PROGRESS: 'bg-moon-lavande/20 text-moon-lavande',
+  RESOLVED: 'bg-emerald-100 text-emerald-800',
+  CLOSED: 'bg-sky-100 text-sky-800',
   CANCELLED: 'bg-rose-100 text-rose-700',
 }
 
@@ -64,7 +64,7 @@ export function formatDate(iso: string) {
 }
 
 export const ticketFieldClass =
-  'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none'
+  'w-full rounded-lg border border-moon-abyss/20 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none'
 
 export const ticketLabelClass =
-  'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
+  'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/70'

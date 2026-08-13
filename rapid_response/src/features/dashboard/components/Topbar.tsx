@@ -64,17 +64,17 @@ export default function Topbar() {
     return (
         <header className="flex items-center justify-between border-b border-moon-abyss/10 bg-white px-6 py-3">
             <div className="flex items-center gap-1.5 text-sm">
-                <span className="flex items-center gap-1 text-moon-abyss/50">
+                <span className="flex items-center gap-1 text-moon-abyss/70">
                     {roleLabel}
                     <ChevronDown size={14} />
                 </span>
-                <span className="text-moon-abyss/30">/</span>
+                <span className="text-moon-abyss/65">/</span>
                 <span className="font-semibold text-moon-abyss">{section}</span>
             </div>
 
             <div className="flex items-center gap-3">
                 <form
-                    className="flex items-center gap-2 rounded-full border border-moon-abyss/10 bg-moon-rose/20 px-3.5 py-1.5"
+                    className="flex items-center gap-2 rounded-full border border-moon-rose/50 bg-moon-rose/30 px-3.5 py-1.5"
                     onSubmit={(e) => {
                         e.preventDefault()
                         const q = search.trim()
@@ -85,13 +85,13 @@ export default function Topbar() {
                         )
                     }}
                 >
-                    <Search size={15} className="text-moon-abyss/40" />
+                    <Search size={15} className="text-moon-violet" />
                     <input
                         type="search"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Recherche de tickets..."
-                        className="w-44 bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:outline-none"
+                        className="w-44 bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:outline-none"
                     />
                 </form>
                 <div className="relative" ref={panelRef}>
@@ -100,7 +100,7 @@ export default function Topbar() {
                         aria-label="Notifications"
                         aria-expanded={open}
                         onClick={() => setOpen((v) => !v)}
-                        className="relative rounded-full border border-moon-abyss/10 p-2 text-moon-abyss/60 transition-colors hover:bg-moon-rose/30"
+                        className="relative rounded-full border border-moon-rose/50 bg-moon-rose/30 p-2 text-moon-violet transition-colors hover:bg-moon-rose/50"
                     >
                         <Bell size={17} />
                         {unread > 0 && (
@@ -124,7 +124,7 @@ export default function Topbar() {
                             </div>
                             <ul className="max-h-80 overflow-y-auto">
                                 {listQuery.isLoading && (
-                                    <li className="px-3 py-4 text-sm text-moon-abyss/50">Chargement…</li>
+                                    <li className="px-3 py-4 text-sm text-moon-abyss/70">Chargement…</li>
                                 )}
                                 {notifications.map((n) => {
                                     const inner = (
@@ -133,7 +133,7 @@ export default function Topbar() {
                                             <p className="mt-0.5 line-clamp-2 text-xs text-moon-abyss/60">
                                                 {n.body}
                                             </p>
-                                            <p className="mt-1 font-mono text-[10px] text-moon-abyss/40">
+                                            <p className="mt-1 font-mono text-[10px] text-moon-abyss/65">
                                                 {formatDate(n.createdAt)}
                                                 {n.ticketReference ? ` · ${n.ticketReference}` : ''}
                                             </p>
@@ -171,7 +171,7 @@ export default function Topbar() {
                                     )
                                 })}
                                 {!listQuery.isLoading && notifications.length === 0 && (
-                                    <li className="px-3 py-4 text-sm text-moon-abyss/50">
+                                    <li className="px-3 py-4 text-sm text-moon-abyss/70">
                                         Aucune notification.
                                     </li>
                                 )}

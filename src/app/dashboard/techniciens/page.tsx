@@ -11,10 +11,10 @@ import type { Technician } from '@/types/technician'
 import { isValidPhone } from '@/schema/phone.schema'
 
 const inputClass =
-    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none'
+    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none'
 
 const labelClass =
-    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
+    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/70'
 
 function displayName(tech: Technician) {
     const full = [tech.firstName, tech.lastName].filter(Boolean).join(' ').trim()
@@ -116,7 +116,7 @@ function TechniciansPageContent() {
             <div className="flex items-start justify-between gap-3">
                 <div>
                     <h1 className="text-2xl font-bold text-moon-abyss">Techniciens</h1>
-                    <p className="mt-0.5 text-sm text-moon-abyss/50">
+                    <p className="mt-0.5 text-sm text-moon-abyss/70">
                         {techniciansQuery.data?.meta.total ?? technicians.length}{' '}
                         techniciens
                     </p>
@@ -156,11 +156,11 @@ function TechniciansPageContent() {
             </div>
 
             {techniciansQuery.isLoading && (
-                <p className="text-sm text-moon-abyss/50">Chargement…</p>
+                <p className="text-sm text-moon-abyss/70">Chargement…</p>
             )}
 
             {!techniciansQuery.isLoading && technicians.length === 0 && (
-                <p className="rounded-2xl border border-dashed border-moon-abyss/15 bg-white px-5 py-8 text-center text-sm text-moon-abyss/50">
+                <p className="rounded-2xl border border-dashed border-moon-abyss/15 bg-white px-5 py-8 text-center text-sm text-moon-abyss/70">
                     Aucun technicien pour l’instant. Ajoutez-en un pour pouvoir affecter
                     des tickets.
                 </p>
@@ -180,7 +180,7 @@ function TechniciansPageContent() {
                     return (
                         <div
                             key={t.id}
-                            className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm"
+                            className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-moon-lavande/15 text-sm font-bold text-moon-lavande">
@@ -188,7 +188,7 @@ function TechniciansPageContent() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="truncate font-bold text-moon-abyss">{name}</p>
-                                    <p className="truncate text-xs text-moon-abyss/45">{t.email}</p>
+                                    <p className="truncate text-xs text-moon-abyss/70">{t.email}</p>
                                     <span
                                         className={`mt-0.5 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
                                             t.isAvailable
@@ -201,12 +201,12 @@ function TechniciansPageContent() {
                                 </div>
                             </div>
 
-                            <p className="mb-2 mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-moon-abyss/40">
+                            <p className="mb-2 mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-moon-abyss/65">
                                 Compétences
                             </p>
                             <div className="flex flex-wrap gap-1.5">
                                 {t.skills.length === 0 && (
-                                    <span className="text-xs text-moon-abyss/40">Aucune</span>
+                                    <span className="text-xs text-moon-abyss/65">Aucune</span>
                                 )}
                                 {t.skills.map((s) => (
                                     <span
@@ -246,7 +246,7 @@ function TechniciansPageContent() {
                 )}
                 <div className="flex flex-wrap gap-2">
                     {skillsQuery.isLoading && (
-                        <span className="text-sm text-moon-abyss/50">Chargement…</span>
+                        <span className="text-sm text-moon-abyss/70">Chargement…</span>
                     )}
                     {skills.map((s) => (
                         <span
@@ -271,7 +271,7 @@ function TechniciansPageContent() {
                         onChange={(e) => setNewSkill(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && addSkill()}
                         placeholder="Nouvelle compétence..."
-                        className="flex-1 rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none"
+                        className="flex-1 rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none"
                     />
                     <button
                         type="button"

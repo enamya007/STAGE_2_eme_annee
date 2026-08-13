@@ -35,16 +35,16 @@ export default function TicketComments({
   }
 
   return (
-    <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
       <h2 className="font-bold text-moon-violet-dark">Commentaires</h2>
-      <p className="text-xs text-moon-abyss/50">
+      <p className="text-xs text-moon-abyss/70">
         {role === 'CLIENT'
           ? 'Les notes internes des techniciens ne vous sont pas visibles.'
           : 'Les commentaires internes ne sont pas visibles par le client.'}
       </p>
 
       {commentsQuery.isLoading && (
-        <p className="mt-3 text-sm text-moon-abyss/50">Chargement…</p>
+        <p className="mt-3 text-sm text-moon-abyss/70">Chargement…</p>
       )}
       {commentsQuery.isError && (
         <p className="mt-3 text-sm text-rose-700">Impossible de charger les commentaires.</p>
@@ -57,7 +57,7 @@ export default function TicketComments({
               <span className="text-sm font-semibold text-moon-abyss">
                 {c.author?.username ?? 'Compte supprimé'}
               </span>
-              <span className="font-mono text-[11px] text-moon-abyss/40">
+              <span className="font-mono text-[11px] text-moon-abyss/65">
                 {formatDate(c.createdAt)}
                 {c.visibility === 'INTERNAL' ? ' · interne' : ''}
               </span>
@@ -66,7 +66,7 @@ export default function TicketComments({
           </li>
         ))}
         {!commentsQuery.isLoading && comments.length === 0 && (
-          <li className="text-sm text-moon-abyss/50">Aucun commentaire.</li>
+          <li className="text-sm text-moon-abyss/70">Aucun commentaire.</li>
         )}
       </ul>
 

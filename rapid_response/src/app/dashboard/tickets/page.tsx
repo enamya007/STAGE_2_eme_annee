@@ -156,7 +156,7 @@ function TicketsContent() {
             <div className="flex items-start justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-moon-abyss">{heading}</h1>
-                    <p className="mt-0.5 text-sm text-moon-abyss/50">{subheading}</p>
+                    <p className="mt-0.5 text-sm text-moon-abyss/70">{subheading}</p>
                 </div>
                 {canCreate && (
                     <button
@@ -184,18 +184,18 @@ function TicketsContent() {
                 <StatCard value={urgent} label="Urgents" tone="plum" />
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-moon-abyss/8 bg-white p-3 shadow-sm">
-                <div className="flex min-w-56 flex-1 items-center gap-2 rounded-lg bg-moon-rose/20 px-3 py-2">
-                    <Search size={15} className="text-moon-abyss/40" />
+            <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-moon-abyss/15 bg-white p-3 shadow-sm">
+                <div className="flex min-w-56 flex-1 items-center gap-2 rounded-lg border border-moon-rose/40 bg-moon-rose/25 px-3 py-2">
+                    <Search size={15} className="text-moon-violet" />
                     <input
                         type="search"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Rechercher..."
-                        className="w-full bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:outline-none"
+                        className="w-full bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:outline-none"
                     />
                 </div>
-                <div className="flex items-center gap-2 rounded-lg border border-moon-abyss/10 px-3 py-2 text-sm text-moon-abyss/70">
+                <div className="flex items-center gap-2 rounded-lg border border-moon-abyss/15 px-3 py-2 text-sm text-moon-abyss">
                     <Filter size={14} />
                     <select
                         value={status}
@@ -215,7 +215,7 @@ function TicketsContent() {
                 <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as typeof priority)}
-                    className="rounded-lg border border-moon-abyss/10 bg-transparent px-3 py-2 text-sm text-moon-abyss/70 focus:outline-none"
+                    className="rounded-lg border border-moon-abyss/15 bg-transparent px-3 py-2 text-sm text-moon-abyss focus:outline-none"
                     aria-label="Filtrer par priorité"
                 >
                     <option value="Toutes">Priorité</option>
@@ -228,7 +228,7 @@ function TicketsContent() {
                     <select
                         value={technicianFilter}
                         onChange={(e) => setTechnicianFilter(e.target.value)}
-                        className="rounded-lg border border-moon-abyss/10 bg-transparent px-3 py-2 text-sm text-moon-abyss/70 focus:outline-none"
+                        className="rounded-lg border border-moon-abyss/15 bg-transparent px-3 py-2 text-sm text-moon-abyss focus:outline-none"
                         aria-label="Filtrer par technicien"
                     >
                         <option value="Tous">Technicien</option>
@@ -248,7 +248,7 @@ function TicketsContent() {
                         className={`rounded-lg p-2 transition-colors ${
                             viewMode === 'list'
                                 ? 'bg-moon-violet-dark text-white'
-                                : 'border border-moon-abyss/10 text-moon-abyss/50 hover:bg-moon-rose/30'
+                                : 'border border-moon-abyss/10 text-moon-abyss/70 hover:bg-moon-rose/30'
                         }`}
                     >
                         <List size={15} />
@@ -261,7 +261,7 @@ function TicketsContent() {
                         className={`rounded-lg p-2 transition-colors ${
                             viewMode === 'grid'
                                 ? 'bg-moon-violet-dark text-white'
-                                : 'border border-moon-abyss/10 text-moon-abyss/50 hover:bg-moon-rose/30'
+                                : 'border border-moon-abyss/10 text-moon-abyss/70 hover:bg-moon-rose/30'
                         }`}
                     >
                         <LayoutGrid size={15} />
@@ -269,7 +269,7 @@ function TicketsContent() {
                 </div>
             </div>
 
-            <p className="font-mono text-xs uppercase tracking-widest text-moon-abyss/40">
+            <p className="font-mono text-xs uppercase tracking-widest text-moon-abyss/65">
                 {ticketsQuery.isLoading ? 'Chargement…' : `${tickets.length} tickets trouvés`}
             </p>
 
@@ -280,11 +280,11 @@ function TicketsContent() {
                         return (
                             <div
                                 key={t.id}
-                                className="flex flex-col gap-3 rounded-2xl border border-moon-abyss/8 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                                className="flex flex-col gap-3 rounded-2xl border border-moon-abyss/15 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
                             >
                                 <div className="flex items-start justify-between gap-2">
                                     <Link href={`/dashboard/tickets/${t.id}`} className="min-w-0">
-                                        <p className="font-mono text-xs text-moon-abyss/40">{t.reference}</p>
+                                        <p className="font-mono text-xs text-moon-abyss/65">{t.reference}</p>
                                         <p className="truncate font-semibold text-moon-abyss hover:text-moon-violet">
                                             {t.title}
                                         </p>
@@ -301,7 +301,7 @@ function TicketsContent() {
                                         <span className={`h-2 w-2 rounded-full ${priorityDots[t.priority]}`} />
                                         {priorityLabels[t.priority]}
                                     </span>
-                                    <span className="font-mono text-xs text-moon-abyss/50">
+                                    <span className="font-mono text-xs text-moon-abyss/70">
                                         {formatDate(t.createdAt)}
                                     </span>
                                 </div>
@@ -314,7 +314,7 @@ function TicketsContent() {
                                             <span className="truncate">{assignee}</span>
                                         </span>
                                     ) : (
-                                        <span className="text-sm text-moon-abyss/35">Non affecté</span>
+                                        <span className="text-sm text-moon-abyss/65">Non affecté</span>
                                     )}
                                     {isAdmin && canAssignStatus(t.status) ? (
                                         <button
@@ -341,10 +341,10 @@ function TicketsContent() {
             )}
 
             {viewMode === 'list' && (
-                <div className="overflow-hidden rounded-2xl border border-moon-abyss/8 bg-white shadow-sm">
+                <div className="overflow-hidden rounded-2xl border border-moon-abyss/15 bg-white shadow-sm">
                     <table className="w-full text-left text-sm">
                         <thead>
-                            <tr className="border-b border-moon-abyss/8 font-mono text-[11px] uppercase tracking-widest text-moon-abyss/40">
+                            <tr className="border-b border-moon-abyss/8 font-mono text-[11px] uppercase tracking-widest text-moon-abyss/65">
                                 <th className="px-5 py-3 font-medium">Réf. / Titre</th>
                                 <th className="px-5 py-3 font-medium">Catégorie</th>
                                 <th className="px-5 py-3 font-medium">Statut</th>
@@ -364,7 +364,7 @@ function TicketsContent() {
                                     >
                                         <td className="px-5 py-3.5">
                                             <Link href={`/dashboard/tickets/${t.id}`} className="block">
-                                                <p className="font-mono text-xs text-moon-abyss/40">{t.reference}</p>
+                                                <p className="font-mono text-xs text-moon-abyss/65">{t.reference}</p>
                                                 <p className="font-semibold text-moon-abyss hover:text-moon-violet">
                                                     {t.title}
                                                 </p>
@@ -397,10 +397,10 @@ function TicketsContent() {
                                                     {assignee}
                                                 </span>
                                             ) : (
-                                                <span className="text-moon-abyss/35">Non affecté</span>
+                                                <span className="text-moon-abyss/65">Non affecté</span>
                                             )}
                                         </td>
-                                        <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-moon-abyss/50">
+                                        <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-moon-abyss/70">
                                             {formatDate(t.createdAt)}
                                         </td>
                                         <td className="px-5 py-3.5 text-right">
@@ -485,7 +485,7 @@ function TicketsContent() {
                             </p>
                         )}
                         {!categoriesQuery.isError && categories.length === 0 && (
-                            <p className="mt-1 text-xs text-moon-abyss/50">
+                            <p className="mt-1 text-xs text-moon-abyss/70">
                                 Aucune catégorie active. Un administrateur doit en créer une.
                             </p>
                         )}

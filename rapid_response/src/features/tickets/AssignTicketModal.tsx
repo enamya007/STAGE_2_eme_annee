@@ -68,13 +68,13 @@ export default function AssignTicketModal({
       {ticket && (
         <>
           <p className="mb-4 rounded-lg bg-moon-rose/25 px-3.5 py-2.5 text-sm text-moon-abyss/70">
-            <span className="font-mono text-xs text-moon-abyss/45">{ticket.reference}</span>
-            <span className="mx-2 text-moon-abyss/30">·</span>
+            <span className="font-mono text-xs text-moon-abyss/70">{ticket.reference}</span>
+            <span className="mx-2 text-moon-abyss/55">·</span>
             <span className="font-semibold text-moon-abyss">{ticket.title}</span>
           </p>
 
           {suggestionsQuery.isLoading && (
-            <p className="text-sm text-moon-abyss/50">Chargement des suggestions…</p>
+            <p className="text-sm text-moon-abyss/70">Chargement des suggestions…</p>
           )}
           {suggestionsQuery.isError && (
             <p className="text-sm text-rose-700">
@@ -82,7 +82,7 @@ export default function AssignTicketModal({
             </p>
           )}
           {!suggestionsQuery.isLoading && suggestions.length === 0 && (
-            <p className="text-sm text-moon-abyss/50">
+            <p className="text-sm text-moon-abyss/70">
               Aucun technicien éligible pour cette catégorie (compétence requise ou charge
               max).
             </p>
@@ -111,7 +111,7 @@ export default function AssignTicketModal({
                     <span className="block truncate text-sm font-semibold text-moon-abyss">
                       {name}
                     </span>
-                    <span className="text-xs text-moon-abyss/50">
+                    <span className="text-xs text-moon-abyss/70">
                       {t.currentLoad}/{t.maxConcurrentTickets} tickets
                       {t.skillLevel != null ? ` · niveau ${t.skillLevel}` : ''}
                     </span>

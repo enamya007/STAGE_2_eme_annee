@@ -26,10 +26,10 @@ const roleLabels: Record<UserRole, string> = {
 }
 
 const inputClass =
-    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none'
+    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none'
 
 const labelClass =
-    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
+    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/70'
 
 const emptyCreate = {
     username: '',
@@ -183,7 +183,7 @@ function UsersPageContent() {
             <div className="flex items-start justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-moon-abyss">Utilisateurs</h1>
-                    <p className="mt-0.5 text-sm text-moon-abyss/50">
+                    <p className="mt-0.5 text-sm text-moon-abyss/70">
                         {usersQuery.data?.meta.total ?? users.length} comptes enregistrés
                     </p>
                 </div>
@@ -218,21 +218,21 @@ function UsersPageContent() {
                 <StatCard value={disabled} label="Désactivés" tone="neutral" />
             </div>
 
-            <div className="flex w-72 items-center gap-2 rounded-lg border border-moon-abyss/10 bg-white px-3 py-2 shadow-sm">
-                <Search size={15} className="text-moon-abyss/40" />
+            <div className="flex w-72 items-center gap-2 rounded-lg border border-moon-rose/40 bg-moon-rose/25 px-3 py-2 shadow-sm">
+                <Search size={15} className="text-moon-violet" />
                 <input
                     type="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Rechercher..."
-                    className="w-full bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:outline-none"
+                    className="w-full bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:outline-none"
                 />
             </div>
 
-            <div className="overflow-hidden rounded-2xl border border-moon-abyss/8 bg-white shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-moon-abyss/15 bg-white shadow-sm">
                 <table className="w-full text-left text-sm">
                     <thead>
-                        <tr className="border-b border-moon-abyss/8 font-mono text-[11px] uppercase tracking-widest text-moon-abyss/40">
+                        <tr className="border-b border-moon-abyss/8 font-mono text-[11px] uppercase tracking-widest text-moon-abyss/65">
                             <th className="px-5 py-3 font-medium">Nom</th>
                             <th className="px-5 py-3 font-medium">Email</th>
                             <th className="px-5 py-3 font-medium">Rôle</th>
@@ -244,7 +244,7 @@ function UsersPageContent() {
                     <tbody>
                         {usersQuery.isLoading && (
                             <tr>
-                                <td colSpan={6} className="px-5 py-8 text-sm text-moon-abyss/50">
+                                <td colSpan={6} className="px-5 py-8 text-sm text-moon-abyss/70">
                                     Chargement…
                                 </td>
                             </tr>
@@ -280,13 +280,13 @@ function UsersPageContent() {
                                             className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
                                                 u.isActive
                                                     ? 'bg-emerald-100 text-emerald-700'
-                                                    : 'bg-moon-abyss/8 text-moon-abyss/50'
+                                                    : 'bg-moon-abyss/8 text-moon-abyss/70'
                                             }`}
                                         >
                                             {u.isActive ? 'Actif' : 'Désactivé'}
                                         </span>
                                     </td>
-                                    <td className="px-5 py-3.5 font-mono text-xs text-moon-abyss/50">
+                                    <td className="px-5 py-3.5 font-mono text-xs text-moon-abyss/70">
                                         {formatDate(u.createdAt)}
                                     </td>
                                     <td className="px-5 py-3.5">
@@ -304,7 +304,7 @@ function UsersPageContent() {
                                                     type="button"
                                                     onClick={() => setDeactivating(u)}
                                                     disabled={isSelf}
-                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-moon-abyss/15 px-3 py-1.5 text-xs font-medium text-moon-abyss/50 transition-colors hover:bg-moon-abyss/5 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-moon-abyss/15 px-3 py-1.5 text-xs font-medium text-moon-abyss/70 transition-colors hover:bg-moon-abyss/5 disabled:cursor-not-allowed disabled:opacity-40"
                                                 >
                                                     <Ban size={12} />
                                                     Désactiver
@@ -561,7 +561,7 @@ function UsersPageContent() {
                         </div>
                     )}
                     {editing?.role === 'TECHNICIAN' && (
-                        <p className="text-xs text-moon-abyss/50">
+                        <p className="text-xs text-moon-abyss/70">
                             Le rôle technicien ne peut pas être changé ici. Charge et compétences : page
                             Techniciens.
                         </p>
@@ -586,7 +586,7 @@ function UsersPageContent() {
                             <option value="inactive">Désactivé</option>
                         </select>
                         {editing?.id === myId && (
-                            <p className="mt-1.5 text-xs text-moon-abyss/50">
+                            <p className="mt-1.5 text-xs text-moon-abyss/70">
                                 Vous ne pouvez pas désactiver votre propre compte.
                             </p>
                         )}
