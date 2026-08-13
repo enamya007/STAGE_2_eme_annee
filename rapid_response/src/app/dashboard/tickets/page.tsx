@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter, Plus, ArrowRight, List, LayoutGrid, Check } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
@@ -98,10 +98,22 @@ function TicketsContent() {
     const createTicket = useCreateTicket()
     const assignTicket = useAssignTicket()
 
-    const tickets = ticketsQuery.data?.data ?? []
+    const tickets = useMemo(
+        () => ticketsQuery.data?.data ?? [],
+        [ticketsQuery.data?.data],
+    )
     const technicians = techniciansQuery.data?.data ?? []
 
-    const [createOpen, setCreateOpen] = useState(false)
+    const openFromQuery = searchParams.get('new') === '1'
+    const [createRequested, setCreateRequested] = useState(false)
+    const createOpen = createRequested || openFromQuery
+
+    const closeCreate = () => {
+        setCreateRequested(false)
+        if (openFromQuery) {
+            router.replace('/dashboard/tickets', { scroll: false })
+        }
+    }
     const [createForm, setCreateForm] = useState({
         title: '',
         description: '',
@@ -121,13 +133,6 @@ function TicketsContent() {
         return [...map.entries()].map(([id, name]) => ({ id, name }))
     }, [tickets])
 
-    useEffect(() => {
-        if (searchParams.get('new') === '1') {
-            setCreateOpen(true)
-            router.replace('/dashboard/tickets', { scroll: false })
-        }
-    }, [searchParams, router])
-
     const open = tickets.filter((t) => t.status === 'OPEN').length
     const inProgress = tickets.filter((t) => t.status === 'IN_PROGRESS').length
     const resolved = tickets.filter((t) => t.status === 'RESOLVED').length
@@ -143,7 +148,7 @@ function TicketsContent() {
             categoryId: categories[0]?.id ?? '',
             siteLabel: '',
         })
-        setCreateOpen(true)
+        setCreateRequested(true)
     }
 
     const submitCreate = () => {
@@ -159,7 +164,7 @@ function TicketsContent() {
                 categoryId: createForm.categoryId,
                 siteLabel: createForm.siteLabel.trim() || undefined,
             },
-            { onSuccess: () => setCreateOpen(false) },
+            { onSuccess: () => closeCreate() },
         )
     }
 
@@ -434,7 +439,7 @@ function TicketsContent() {
                 </div>
             )}
 
-            <Modal open={createOpen} title="Créer un ticket" onClose={() => setCreateOpen(false)}>
+            <Modal open={createOpen} title="Créer un ticket" onClose={closeCreate}>
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="ticket-title" className={labelClass}>
@@ -535,7 +540,7 @@ function TicketsContent() {
                     <div className="flex justify-end gap-2.5 pt-2">
                         <button
                             type="button"
-                            onClick={() => setCreateOpen(false)}
+                            onClick={closeCreate}
                             className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70 hover:bg-moon-rose/20"
                         >
                             Annuler

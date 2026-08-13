@@ -293,29 +293,6 @@ export type PaginationQuery = {
 `,
 )
 
-// Build type files for response DTOs + shared summaries
-const RESPONSE_SCHEMAS = [
-  'UserResponseDto',
-  'AuthResponseDto',
-  'UserSummaryDto',
-  'TicketCategorySummaryDto',
-  'TicketListCategorySummaryDto',
-  'TicketListAssigneeSummaryDto',
-  'TicketListItemDto',
-  'TicketResponseDto',
-  'CommentAuthorDto',
-  'CommentResponseDto',
-  'TechnicianSkillResponseDto',
-  'TechnicianResponseDto',
-  'TechnicianSuggestionDto',
-  'AssignmentActorSummaryDto',
-  'TicketAssignmentResponseDto',
-  'AttachmentResponseDto',
-  'SkillResponseDto',
-  'NotificationResponseDto',
-  'UnreadCountResponseDto',
-]
-
 function emitObjectType(schemaName) {
   const schema = manifest.schemas[schemaName]
   const name = typeName(schemaName)

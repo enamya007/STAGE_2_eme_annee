@@ -60,7 +60,18 @@ function DonutChart({ slices }: { slices: { label: string; value: number; color:
     const total = slices.reduce((sum, s) => sum + s.value, 0)
     const radius = 70
     const circumference = 2 * Math.PI * radius
-    let offset = 0
+
+    const segments = slices.map((s, index) => {
+        const dash = total === 0 ? 0 : (s.value / total) * circumference
+        const offset = slices
+            .slice(0, index)
+            .reduce(
+                (sum, prev) =>
+                    sum + (total === 0 ? 0 : (prev.value / total) * circumference),
+                0,
+            )
+        return { ...s, dash, offset }
+    })
 
     if (total === 0) {
         return (
@@ -80,28 +91,20 @@ function DonutChart({ slices }: { slices: { label: string; value: number; color:
 
     return (
         <svg viewBox="0 0 180 180" className="h-44 w-44">
-            {slices.map((s) => {
-                const fraction = s.value / total
-                const dash = fraction * circumference
-                const segment = (
-                    <circle
-                        key={s.label}
-                        cx="90"
-                        cy="90"
-                        r={radius}
-                        fill="none"
-                        stroke={s.color}
-                        strokeWidth="24"
-                        strokeDasharray={`${Math.max(dash - 3, 0)} ${circumference - dash + 3}`}
-                        strokeDashoffset={-offset}
-                        transform="rotate(-90 90 90)"
-                    />
-                )
-
-                offset += dash
-
-                return segment
-            })}
+            {segments.map((s) => (
+                <circle
+                    key={s.label}
+                    cx="90"
+                    cy="90"
+                    r={radius}
+                    fill="none"
+                    stroke={s.color}
+                    strokeWidth="24"
+                    strokeDasharray={`${Math.max(s.dash - 3, 0)} ${circumference - s.dash + 3}`}
+                    strokeDashoffset={-s.offset}
+                    transform="rotate(-90 90 90)"
+                />
+            ))}
         </svg>
     )
 }
@@ -230,7 +233,10 @@ export default function StatisticsPage() {
     const ticketsQuery = useTickets({ page: 1, limit: 100 })
     const techniciansQuery = useTechnicians({ page: 1, limit: 100 })
 
-    const tickets = ticketsQuery.data?.data ?? []
+    const tickets = useMemo(
+        () => ticketsQuery.data?.data ?? [],
+        [ticketsQuery.data?.data],
+    )
     const technicians = techniciansQuery.data?.data ?? []
 
     const filtered = useMemo(
