@@ -1,6 +1,4 @@
-// types/comment.ts — modèles commentaires (généré api-forge).
-
-import type { CommentVisibility } from '@/types/enums'
+export type CommentVisibility = 'PUBLIC' | 'INTERNAL'
 
 export type CommentAuthor = {
   id: string
@@ -14,4 +12,3 @@ export type Comment = {
   author: CommentAuthor | null
   createdAt: string
 }
-

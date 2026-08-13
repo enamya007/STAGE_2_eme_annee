@@ -1,6 +1,14 @@
-// schema/tickets.schema.ts — validation entrées tickets (généré api-forge).
-
 import * as v from 'valibot'
+
+const ticketPrioritySchema = v.picklist(
+  ['LOW', 'NORMAL', 'HIGH', 'CRITICAL'] as const,
+  'Valeur invalide pour la priorité',
+)
+
+const commentVisibilitySchema = v.picklist(
+  ['PUBLIC', 'INTERNAL'] as const,
+  'Valeur invalide pour la visibilité',
+)
 
 export const createTicketSchema = v.object({
   title: v.pipe(
@@ -15,12 +23,7 @@ export const createTicketSchema = v.object({
     v.minLength(1, 'La description doit contenir au moins 1 caractère'),
     v.maxLength(5000, 'La description ne doit pas dépasser 5000 caractères'),
   ),
-  priority: v.optional(
-    v.picklist(
-      ['LOW', 'NORMAL', 'HIGH', 'CRITICAL'] as const,
-      'Valeur invalide pour priorité',
-    ),
-  ),
+  priority: v.optional(ticketPrioritySchema),
   categoryId: v.pipe(
     v.string('La catégorie est requise'),
     v.nonEmpty('La catégorie est requise'),
@@ -57,12 +60,7 @@ export const updateTicketSchema = v.object({
       v.maxLength(5000, 'La description ne doit pas dépasser 5000 caractères'),
     ),
   ),
-  priority: v.optional(
-    v.picklist(
-      ['LOW', 'NORMAL', 'HIGH', 'CRITICAL'] as const,
-      'Valeur invalide pour priorité',
-    ),
-  ),
+  priority: v.optional(ticketPrioritySchema),
   categoryId: v.optional(
     v.pipe(v.string('La catégorie est invalide'), v.uuid('Identifiant invalide')),
   ),
@@ -117,9 +115,7 @@ export const assignTicketSchema = v.object({
       v.maxLength(1000, 'Le motif ne doit pas dépasser 1000 caractères'),
     ),
   ),
-  isAutoSuggested: v.optional(
-    v.boolean('La suggestion automatique est invalide'),
-  ),
+  isAutoSuggested: v.optional(v.boolean('La suggestion automatique est invalide')),
 })
 
 export type AssignTicketInput = v.InferInput<typeof assignTicketSchema>
@@ -131,12 +127,7 @@ export const createCommentSchema = v.object({
     v.minLength(1, 'Le contenu doit contenir au moins 1 caractère'),
     v.maxLength(5000, 'Le contenu ne doit pas dépasser 5000 caractères'),
   ),
-  visibility: v.optional(
-    v.picklist(
-      ['PUBLIC', 'INTERNAL'] as const,
-      'Valeur invalide pour visibilité',
-    ),
-  ),
+  visibility: v.optional(commentVisibilitySchema),
 })
 
 export type CreateCommentInput = v.InferInput<typeof createCommentSchema>

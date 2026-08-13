@@ -1,5 +1,3 @@
-// schema/skills.schema.ts — validation entrées compétences (généré api-forge).
-
 import * as v from 'valibot'
 
 export const createSkillSchema = v.object({

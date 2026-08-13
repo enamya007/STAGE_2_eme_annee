@@ -1,5 +1,3 @@
-// schema/technicians.schema.ts — validation entrées techniciens (généré api-forge).
-
 import * as v from 'valibot'
 
 export const technicianSkillInputSchema = v.object({
@@ -51,8 +49,8 @@ export const createTechnicianSchema = v.object({
   ),
   phone: v.optional(
     v.pipe(
-      v.string('Le téléphone est invalide'),
-      v.maxLength(30, 'Le téléphone ne doit pas dépasser 30 caractères'),
+      v.string('Le numéro de téléphone est invalide'),
+      v.maxLength(30, 'Le numéro de téléphone ne doit pas dépasser 30 caractères'),
     ),
   ),
   isAvailable: v.optional(v.boolean('La disponibilité est invalide')),
@@ -64,7 +62,7 @@ export const createTechnicianSchema = v.object({
     ),
   ),
   skills: v.optional(
-    v.array(technicianSkillInputSchema, 'Les compétences sont requises'),
+    v.array(technicianSkillInputSchema, 'Les compétences sont invalides'),
   ),
 })
 

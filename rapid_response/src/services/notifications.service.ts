@@ -1,24 +1,33 @@
-// services/notifications.service.ts — appels API notifications (généré api-forge).
-
-import { http } from '@/services/http/axios'
+import instance_api from '@/services/http/axios'
+import type {
+  Notification,
+  NotificationListQuery,
+  UnreadCount,
+} from '@/types/notification'
 import type { Paginated } from '@/types/common'
-import type { Notification, UnreadCount } from '@/types/notification'
 
 export const notificationsService = {
-  list: (params?: { page?: number; limit?: number; unreadOnly?: string }): Promise<Paginated<Notification>> => {
-    return http.get<Paginated<Notification>>('/notifications', { params }).then((r) => r.data)
+  list: (
+    params?: NotificationListQuery,
+  ): Promise<Paginated<Notification>> => {
+    return instance_api
+      .get<Paginated<Notification>>('/notifications', { params })
+      .then((r) => r.data)
   },
 
   unreadCount: (): Promise<UnreadCount> => {
-    return http.get<UnreadCount>('/notifications/unread-count').then((r) => r.data)
+    return instance_api
+      .get<UnreadCount>('/notifications/unread-count')
+      .then((r) => r.data)
   },
 
   readAll: (): Promise<void> => {
-    return http.patch('/notifications/read-all').then(() => undefined)
+    return instance_api.patch('/notifications/read-all').then(() => undefined)
   },
 
   markRead: (id: string): Promise<void> => {
-    return http.patch(`/notifications/${id}/read`).then(() => undefined)
-  }
+    return instance_api
+      .patch(`/notifications/${id}/read`)
+      .then(() => undefined)
+  },
 }
-

@@ -1,7 +1,5 @@
 'use client'
 
-// hooks/useTechnicians.ts — hooks TanStack Query techniciens (généré api-forge).
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { techniciansService } from '@/services/technicians.service'
 import { techniciansKeys } from '@/keys/technicians.keys'
@@ -11,9 +9,9 @@ import type {
   UpdateAvailabilityInput,
   SetTechnicianSkillsInput,
 } from '@/schema/technician.schema'
-import type { PaginationQuery } from '@/types/common'
+import type { TechnicianListQuery } from '@/types/technician'
 
-export const useTechnicians = (params?: PaginationQuery & Record<string, unknown>) =>
+export const useTechnicians = (params?: TechnicianListQuery) =>
   useQuery({
     queryKey: techniciansKeys.list(params),
     queryFn: () => techniciansService.list(params),
@@ -42,8 +40,8 @@ export const useUpdateTechnician = () => {
   return useMutation({
     mutationFn: ({ id, body }: { id: string; body: UpdateTechnicianInput }) =>
       techniciansService.update(id, body),
-    onSuccess: (_data, { id }) => {
-      queryClient.invalidateQueries({ queryKey: techniciansKeys.detail(id) })
+    onSuccess: (data, { id }) => {
+      queryClient.setQueryData(techniciansKeys.detail(id), data)
       queryClient.invalidateQueries({ queryKey: techniciansKeys.lists() })
     },
   })
@@ -55,8 +53,10 @@ export const useUpdateMyAvailability = () => {
   return useMutation({
     mutationFn: (body: UpdateAvailabilityInput) =>
       techniciansService.updateMyAvailability(body),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: techniciansKeys.all }),
+    onSuccess: (data) => {
+      queryClient.setQueryData(techniciansKeys.detail(data.id), data)
+      queryClient.invalidateQueries({ queryKey: techniciansKeys.lists() })
+    },
   })
 }
 
@@ -66,10 +66,9 @@ export const useSetTechnicianSkills = () => {
   return useMutation({
     mutationFn: ({ id, body }: { id: string; body: SetTechnicianSkillsInput }) =>
       techniciansService.setSkills(id, body),
-    onSuccess: (_data, { id }) => {
-      queryClient.invalidateQueries({ queryKey: techniciansKeys.detail(id) })
+    onSuccess: (data, { id }) => {
+      queryClient.setQueryData(techniciansKeys.detail(id), data)
       queryClient.invalidateQueries({ queryKey: techniciansKeys.lists() })
     },
   })
 }
-

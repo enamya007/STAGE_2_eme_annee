@@ -1,6 +1,9 @@
-// types/notification.ts — modèles notifications (généré api-forge).
-
-import type { NotificationType } from '@/types/enums'
+export type NotificationType =
+  | 'TICKET_CREATED'
+  | 'TICKET_ASSIGNED'
+  | 'TICKET_STATUS_CHANGED'
+  | 'TICKET_COMMENTED'
+  | 'TICKET_SLA_BREACHED'
 
 export type Notification = {
   id: string
@@ -18,3 +21,8 @@ export type UnreadCount = {
   count: number
 }
 
+export type NotificationListQuery = {
+  page?: number
+  limit?: number
+  unreadOnly?: boolean
+}

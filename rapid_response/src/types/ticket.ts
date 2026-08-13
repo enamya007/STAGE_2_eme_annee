@@ -1,14 +1,21 @@
-// types/ticket.ts — modèles tickets (généré api-forge).
+export type TicketPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'CRITICAL'
 
-import type { TicketPriority, TicketStatus } from '@/types/enums'
-import type { UserSummary } from '@/types/user'
+export type TicketStatus =
+  | 'OPEN'
+  | 'ASSIGNED'
+  | 'IN_PROGRESS'
+  | 'RESOLVED'
+  | 'CLOSED'
+  | 'CANCELLED'
 
-export type TicketCategorySummary = {
+export type UserSummary = {
   id: string
-  name: string
+  username: string
+  firstName: string | null
+  lastName: string | null
 }
 
-export type TicketListCategorySummary = {
+export type TicketCategorySummary = {
   id: string
   name: string
 }
@@ -24,7 +31,7 @@ export type TicketListItem = {
   title: string
   status: TicketStatus
   priority: TicketPriority
-  category: TicketListCategorySummary
+  category: TicketCategorySummary
   assignee: TicketListAssigneeSummary | null
   slaDueAt: string | null
   createdAt: string
@@ -39,12 +46,7 @@ export type Ticket = {
   priority: TicketPriority
   category: TicketCategorySummary
   createdBy: UserSummary
-  assignee: {
-    id: string
-    username: string
-    firstName: string | null
-    lastName: string | null
-  } | null
+  assignee: UserSummary | null
   siteLabel: string | null
   siteAddress: string | null
   slaDueAt: string | null
@@ -83,3 +85,18 @@ export type TicketAssignment = {
   unassignedAt: string | null
 }
 
+export type TicketSortField = 'createdAt' | 'priority' | 'slaDueAt' | 'status'
+export type SortOrder = 'ASC' | 'DESC'
+
+export type TicketListQuery = {
+  page?: number
+  limit?: number
+  status?: TicketStatus
+  priority?: TicketPriority
+  categoryId?: string
+  assigneeId?: string
+  createdById?: string
+  q?: string
+  sort?: TicketSortField
+  order?: SortOrder
+}

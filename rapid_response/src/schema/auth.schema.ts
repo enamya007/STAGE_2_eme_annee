@@ -1,5 +1,3 @@
-// schema/auth.schema.ts — validation entrées auth (généré api-forge).
-
 import * as v from 'valibot'
 
 export const registerSchema = v.object({
@@ -20,7 +18,15 @@ export const registerSchema = v.object({
   ),
   firstName: v.optional(v.string('Le prénom est invalide')),
   lastName: v.optional(v.string('Le nom est invalide')),
-  phone: v.pipe(v.string('Le téléphone est invalide'), v.regex(/d+/, 'entre des nom²')),
+  phone: v.optional(
+    v.pipe(
+      v.string('Le numéro de téléphone est invalide'),
+      v.regex(
+        /^[789]\d{7}$/,
+        'Le numéro doit contenir 8 chiffres et commencer par 7, 8 ou 9',
+      ),
+    ),
+  ),
 })
 
 export type RegisterInput = v.InferInput<typeof registerSchema>
@@ -37,6 +43,7 @@ export const loginSchema = v.object({
 })
 
 export type LoginInput = v.InferInput<typeof loginSchema>
+
 
 export const refreshTokenSchema = v.object({
   refreshToken: v.pipe(
@@ -71,3 +78,7 @@ export const resetPasswordSchema = v.object({
 })
 
 export type ResetPasswordInput = v.InferInput<typeof resetPasswordSchema>
+
+/** Alias : logout nous renvoie le même body que refresh (RefreshTokenDto). */
+export const logoutSchema = refreshTokenSchema
+export type LogoutInput = RefreshTokenInput
