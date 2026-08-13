@@ -1,11 +1,9 @@
-// keys/notifications.keys.ts — query keys notifications (généré api-forge).
+import type { NotificationListQuery } from '@/types/notification'
 
 export const notificationsKeys = {
   all: ['notifications'] as const,
   lists: () => [...notificationsKeys.all, 'list'] as const,
-  list: (params?: Record<string, unknown>) =>
+  list: (params?: NotificationListQuery) =>
     [...notificationsKeys.lists(), params ?? {}] as const,
-  details: () => [...notificationsKeys.all, 'detail'] as const,
-  detail: (id: string) => [...notificationsKeys.details(), id] as const,
+  unreadCount: () => [...notificationsKeys.all, 'unread-count'] as const,
 }
-

@@ -1,13 +1,11 @@
 'use client'
 
-// hooks/useNotifications.ts — hooks TanStack Query notifications (généré api-forge).
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { notificationsService } from '@/services/notifications.service'
 import { notificationsKeys } from '@/keys/notifications.keys'
-import type { PaginationQuery } from '@/types/common'
+import type { NotificationListQuery } from '@/types/notification'
 
-export const useNotifications = (params?: PaginationQuery) =>
+export const useNotifications = (params?: NotificationListQuery) =>
   useQuery({
     queryKey: notificationsKeys.list(params),
     queryFn: () => notificationsService.list(params),
@@ -15,7 +13,7 @@ export const useNotifications = (params?: PaginationQuery) =>
 
 export const useUnreadCount = () =>
   useQuery({
-    queryKey: [...notificationsKeys.all, 'unread-count'] as const,
+    queryKey: notificationsKeys.unreadCount(),
     queryFn: () => notificationsService.unreadCount(),
   })
 
@@ -38,4 +36,3 @@ export const useMarkNotificationRead = () => {
       queryClient.invalidateQueries({ queryKey: notificationsKeys.all }),
   })
 }
-
