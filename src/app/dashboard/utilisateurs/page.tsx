@@ -5,11 +5,11 @@ import { Search, Plus, Pencil, Ban, AlertCircle } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
 import {
-    users as initialUsers,
-    initialSkills,
+    mockUsers as initialUsers,
+    mockSkills as initialSkills,
     type AppUser,
     type UserRole,
-} from '@/features/dashboard/data/mockData'
+} from './mockUsers'
 
 const roleStyles: Record<UserRole, string> = {
     ADMIN: 'bg-moon-abyss text-moon-rose',
@@ -136,6 +136,12 @@ export default function UsersPage() {
                     Ajouter un utilisateur
                 </button>
             </div>
+
+            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                Cette liste est encore simulée : l’API Nest n’expose pas de{' '}
+                <code className="font-mono text-xs">GET /users</code>. Les comptes
+                techniciens se gèrent sur la page Techniciens.
+            </p>
 
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard value={admins} label="Administrateurs" tone="rose" />

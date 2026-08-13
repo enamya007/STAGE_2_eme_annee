@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { signOut, useSession } from 'next-auth/react'
 import {
     Ticket,
     LayoutDashboard,
@@ -12,7 +13,7 @@ import {
 } from 'lucide-react'
 
 const navItems = [
-    { href: '/dashboard/tickets', label: 'Tickets', icon: Ticket, badge: 3 },
+    { href: '/dashboard/tickets', label: 'Tickets', icon: Ticket },
     { href: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
     { href: '/dashboard/techniciens', label: 'Techniciens', icon: Wrench },
     { href: '/dashboard/utilisateurs', label: 'Utilisateurs', icon: Users },
@@ -22,10 +23,18 @@ const navItems = [
 
 export default function Sidebar() {
     const pathname = usePathname()
+    const { data } = useSession()
+    const name = data?.user?.name ?? data?.user?.email ?? 'Utilisateur'
+    const email = data?.user?.email ?? ''
+    const initials = name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
 
     return (
         <aside className="flex h-screen w-60 shrink-0 flex-col bg-moon-abyss text-white">
-            {/* Logo */}
             <div className="flex items-center gap-2.5 px-5 py-5">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-moon-rose text-xs font-bold text-moon-violet-dark">
                     RR
@@ -41,7 +50,7 @@ export default function Sidebar() {
             </p>
 
             <nav className="flex flex-1 flex-col gap-1 px-3">
-                {navItems.map(({ href, label, icon: Icon, badge }) => {
+                {navItems.map(({ href, label, icon: Icon }) => {
                     const active =
                         href === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(href)
 
@@ -57,25 +66,28 @@ export default function Sidebar() {
                         >
                             <Icon size={17} strokeWidth={1.9} />
                             <span className="flex-1">{label}</span>
-                            {badge != null && (
-                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-moon-rose text-[11px] font-bold text-moon-violet-dark">
-                                    {badge}
-                                </span>
-                            )}
                         </Link>
                     )
                 })}
             </nav>
 
-            {/* Profil admin */}
-            <div className="m-3 flex items-center gap-2.5 rounded-xl bg-white/5 p-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-moon-rose text-xs font-bold text-moon-violet-dark">
-                    AR
+            <div className="m-3 space-y-2">
+                <div className="flex items-center gap-2.5 rounded-xl bg-white/5 p-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-moon-rose text-xs font-bold text-moon-violet-dark">
+                        {initials || 'RR'}
+                    </div>
+                    <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{name}</p>
+                        <p className="truncate text-[11px] text-white/50">{email}</p>
+                    </div>
                 </div>
-                <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold">Admin RR</p>
-                    <p className="truncate text-[11px] text-white/50">admin@rapidresponse.fr</p>
-                </div>
+                <button
+                    type="button"
+                    onClick={() => signOut({ callbackUrl: '/login' })}
+                    className="w-full rounded-lg px-3 py-2 text-left text-xs text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                    Se déconnecter
+                </button>
             </div>
         </aside>
     )

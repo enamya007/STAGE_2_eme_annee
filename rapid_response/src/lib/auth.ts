@@ -1,60 +1,67 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { authService } from '@/services/auth.service'
 
 export const authOptions: NextAuthOptions = {
-    providers: [
-        CredentialsProvider({
-            name: 'Credentials',
-            credentials: {
-                email: { label: 'Email', type: 'text' },
-                password: { label: 'Mot de passe', type: 'password' }
-            },
-            async authorize(credentials) {
-                if (
-                    credentials?.email === 'admin@ticket-checker.local' &&
-                    credentials?.password === 'Admin@1234'
-                ) {
-                    return {
-                        id: '1',
-                        email: credentials.email,
-                        name: 'Admin Ticket Checker',
-                        role: 'admin',
-                        accessToken: 'mock-access-token',
-                        refreshToken: 'mock-refresh-token'
-                    }
-                }
-
-                return null
-            }
-        })
-    ],
-    callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id
-                token.role = user.role
-                token.accessToken = user.accessToken
-                token.refreshToken = user.refreshToken
-            }
-
-            return token
-        },
-        async session({ session, token }) {
-            // Assignation de accessToken à la racine de la session
-            session.accessToken = token.accessToken
-
-            if (session.user) {
-                session.user.id = token.id
-                session.user.role = token.role
-            }
-
-            return session
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        identifier: { label: 'Identifiant', type: 'text' },
+        password: { label: 'Mot de passe', type: 'password' },
+      },
+      async authorize(credentials) {
+        if (!credentials?.identifier || !credentials?.password) {
+          return null
         }
+
+        try {
+          const data = await authService.login({
+            identifier: credentials.identifier,
+            password: credentials.password,
+          })
+
+          return {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.username,
+            role: data.user.role,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          }
+        } catch {
+          return null
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.role = user.role
+        token.accessToken = user.accessToken
+        token.refreshToken = user.refreshToken
+      }
+
+      return token
     },
-    session: {
-        strategy: 'jwt'
+    async session({ session, token }) {
+      session.accessToken = token.accessToken
+      session.refreshToken = token.refreshToken
+
+      if (session.user) {
+        session.user.id = token.id
+        session.user.role = token.role
+      }
+
+      return session
     },
-    pages: {
-        signIn: '/login'
-    }
+  },
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/login',
+  },
 }

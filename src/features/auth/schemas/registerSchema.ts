@@ -12,11 +12,11 @@ export const registerSchema = pipe(
         ),
         password: pipe(
             string('Le mot de passe est requis'),
-            minLength(8, 'Entrez un minimum de 8 caractères')
+            minLength(10, 'Entrez un minimum de 10 caractères')
         ),
         confirmPassword: pipe(
             string('Veuillez confirmer le mot de passe'),
-            minLength(8, 'Entrez un minimum de 8 caractères')
+            minLength(10, 'Entrez un minimum de 10 caractères')
         )
     }),
     forward(

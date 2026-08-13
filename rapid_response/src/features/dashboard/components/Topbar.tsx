@@ -1,7 +1,9 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { Search, Bell, ChevronDown } from 'lucide-react'
+import type { UserRole } from '@/types/auth'
 
 const sectionLabels: Record<string, string> = {
     '/dashboard': 'Tableau de bord',
@@ -12,8 +14,16 @@ const sectionLabels: Record<string, string> = {
     '/dashboard/parametres': 'Paramètres',
 }
 
+const roleLabels: Record<UserRole, string> = {
+    ADMIN: 'Admin',
+    TECHNICIAN: 'Technicien',
+    CLIENT: 'Client',
+}
+
 export default function Topbar() {
     const pathname = usePathname()
+    const { data } = useSession()
+    const roleLabel = data?.user?.role ? roleLabels[data.user.role] : 'Compte'
     const section =
         Object.entries(sectionLabels)
             .sort((a, b) => b[0].length - a[0].length)
@@ -23,7 +33,7 @@ export default function Topbar() {
         <header className="flex items-center justify-between border-b border-moon-abyss/10 bg-white px-6 py-3">
             <div className="flex items-center gap-1.5 text-sm">
                 <span className="flex items-center gap-1 text-moon-abyss/50">
-                    Admin
+                    {roleLabel}
                     <ChevronDown size={14} />
                 </span>
                 <span className="text-moon-abyss/30">/</span>

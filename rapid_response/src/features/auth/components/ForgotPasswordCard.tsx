@@ -2,7 +2,6 @@
 
 import { useForm, Controller } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { useMutation } from '@tanstack/react-query'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -23,7 +22,7 @@ import {
     moonLinkSx,
 } from '../constants/moonTheme'
 import { authColors } from '../constants/theme'
-import { mockForgotPassword } from '../api/mockAuth'
+import { useForgotPassword } from '@/hooks/useAuth'
 
 export default function ForgotPasswordCard() {
     const {
@@ -36,7 +35,7 @@ export default function ForgotPasswordCard() {
         defaultValues: { email: '' },
     })
 
-    const forgotMutation = useMutation({ mutationFn: mockForgotPassword })
+    const forgotMutation = useForgotPassword()
 
     const onSubmit = (values: ForgotPasswordFormValues) => {
         forgotMutation.mutate({ email: values.email })

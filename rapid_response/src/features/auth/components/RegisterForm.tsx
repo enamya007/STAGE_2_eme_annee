@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { useMutation } from '@tanstack/react-query'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -14,7 +15,7 @@ import MoonFieldIcon from './MoonFieldIcon'
 import MoonPasswordToggle from './MoonPasswordToggle'
 import { registerSchema, type RegisterFormValues } from '../schemas/registerSchema'
 import { moonButtonSx, moonButtonPendingSx, moonFormHeaderSx } from '../constants/moonTheme'
-import { mockRegister } from '../api/mockAuth'
+import { useRegister } from '@/hooks/useAuth'
 
 export default function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false)
@@ -29,14 +30,37 @@ export default function RegisterForm() {
         defaultValues: { fullName: '', email: '', password: '', confirmPassword: '' },
     })
 
-    const registerMutation = useMutation({ mutationFn: mockRegister })
+    const registerMutation = useRegister()
+    const router = useRouter()
 
     const onSubmit = (values: RegisterFormValues) => {
-        registerMutation.mutate({
-            fullName: values.fullName,
-            email: values.email,
-            password: values.password,
-        })
+        const parts = values.fullName.trim().split(/\s+/)
+        const firstName = parts[0]
+        const lastName = parts.slice(1).join(' ') || undefined
+        const username = values.email.split('@')[0] ?? values.email
+
+        registerMutation.mutate(
+            {
+                username,
+                email: values.email,
+                password: values.password,
+                firstName,
+                lastName,
+            },
+            {
+                onSuccess: async () => {
+                    const result = await signIn('credentials', {
+                        identifier: values.email,
+                        password: values.password,
+                        redirect: false,
+                    })
+                    if (result?.ok) {
+                        router.push('/dashboard')
+                        router.refresh()
+                    }
+                },
+            },
+        )
     }
 
     return (
@@ -55,12 +79,9 @@ export default function RegisterForm() {
 
             {registerMutation.isError && (
                 <Alert severity="error" sx={{ py: 0.25, alignItems: 'center' }}>
-                    Impossible de créer le compte. Réessayez.
-                </Alert>
-            )}
-            {registerMutation.isSuccess && (
-                <Alert severity="success" sx={{ py: 0.25, alignItems: 'center' }}>
-                    Inscription simulée réussie (API pas encore branchée).
+                    {registerMutation.error instanceof Error
+                        ? registerMutation.error.message
+                        : 'Impossible de créer le compte. Réessayez.'}
                 </Alert>
             )}
 

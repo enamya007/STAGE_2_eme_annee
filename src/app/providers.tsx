@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SessionProvider } from 'next-auth/react'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material'
+import { SessionTokenSync } from '@/components/SessionTokenSync'
 
 const muiTheme = createTheme({
     typography: {
@@ -18,6 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <AppRouterCacheProvider>
             <SessionProvider>
+                <SessionTokenSync />
                 <QueryClientProvider client={queryClient}>
                     <ThemeProvider theme={muiTheme}>
                         <CssBaseline enableColorScheme />

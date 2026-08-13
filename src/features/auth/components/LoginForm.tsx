@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { useMutation } from '@tanstack/react-query'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -24,10 +25,12 @@ import {
     moonFormHeaderSx,
     moonLinkSx,
 } from '../constants/moonTheme'
-import { mockLogin } from '../api/mockAuth'
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
+    const [isPending, setIsPending] = useState(false)
+    const [isError, setIsError] = useState(false)
+    const router = useRouter()
 
     const {
         control,
@@ -38,14 +41,25 @@ export default function LoginForm() {
         defaultValues: { email: '', password: '', rememberMe: false },
     })
 
-    const loginMutation = useMutation({ mutationFn: mockLogin })
+    const onSubmit = async (values: LoginFormValues) => {
+        setIsError(false)
+        setIsPending(true)
 
-    const onSubmit = (values: LoginFormValues) => {
-        loginMutation.mutate({
-            email: values.email,
+        const result = await signIn('credentials', {
+            identifier: values.email,
             password: values.password,
-            rememberMe: values.rememberMe,
+            redirect: false,
         })
+
+        setIsPending(false)
+
+        if (!result?.ok) {
+            setIsError(true)
+            return
+        }
+
+        router.push('/dashboard')
+        router.refresh()
     }
 
     return (
@@ -62,14 +76,9 @@ export default function LoginForm() {
                 <Typography sx={moonFormHeaderSx.subtitle}>Connectez-vous à votre espace</Typography>
             </Box>
 
-            {loginMutation.isError && (
+            {isError && (
                 <Alert severity="error" sx={{ py: 0.25, alignItems: 'center' }}>
-                    Adresse e-mail ou mot de passe incorrect.
-                </Alert>
-            )}
-            {loginMutation.isSuccess && (
-                <Alert severity="success" sx={{ py: 0.25, alignItems: 'center' }}>
-                    Connexion simulée réussie (API pas encore branchée).
+                    Identifiant ou mot de passe incorrect.
                 </Alert>
             )}
 
@@ -79,11 +88,11 @@ export default function LoginForm() {
                 render={({ field }) => (
                     <MoonField
                         {...field}
-                        label="Adresse e-mail"
+                        label="E-mail ou nom d'utilisateur"
                         fieldId="login-email"
                         placeholder="name@exemple.com"
-                        type="email"
-                        autoComplete="email"
+                        type="text"
+                        autoComplete="username"
                         rounded="pill"
                         error={!!errors.email}
                         helperText={errors.email?.message}
@@ -155,15 +164,15 @@ export default function LoginForm() {
 
             <Button
                 type="submit"
-                disabled={loginMutation.isPending}
+                disabled={isPending}
                 fullWidth
                 sx={{
                     ...moonButtonSx,
-                    ...(loginMutation.isPending ? moonButtonPendingSx : {}),
+                    ...(isPending ? moonButtonPendingSx : {}),
                     mt: 0.5,
                 }}
             >
-                {loginMutation.isPending ? (
+                {isPending ? (
                     <CircularProgress size={20} sx={{ color: '#fff' }} />
                 ) : (
                     'Se connecter'

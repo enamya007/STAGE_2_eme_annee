@@ -1,13 +1,33 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
-import { tickets, technicians } from '@/features/dashboard/data/mockData'
+import { useTickets } from '@/hooks/useTickets'
+import { useTechnicians } from '@/hooks/useTechnicians'
+import type { TicketStatus } from '@/types/ticket'
+
+const statusLabels: Record<TicketStatus, string> = {
+    OPEN: 'Ouvert',
+    ASSIGNED: 'Affecté',
+    IN_PROGRESS: 'En cours',
+    RESOLVED: 'Résolu',
+    CLOSED: 'Fermé',
+    CANCELLED: 'Annulé',
+}
 
 export default function DashboardHomePage() {
-    const open = tickets.filter((t) => t.status === 'OUVERT').length
-    const inProgress = tickets.filter((t) => t.status === 'EN COURS').length
-    const urgent = tickets.filter((t) => t.priority === 'Urgente' && t.status !== 'RÉSOLU').length
-    const available = technicians.filter((t) => t.available).length
+    const ticketsQuery = useTickets({ page: 1, limit: 20 })
+    const techniciansQuery = useTechnicians({ page: 1, limit: 50, isAvailable: true })
+
+    const tickets = ticketsQuery.data?.data ?? []
+    const technicians = techniciansQuery.data?.data ?? []
+
+    const open = tickets.filter((t) => t.status === 'OPEN').length
+    const inProgress = tickets.filter((t) => t.status === 'IN_PROGRESS').length
+    const urgent = tickets.filter(
+        (t) => t.priority === 'CRITICAL' && t.status !== 'RESOLVED' && t.status !== 'CLOSED',
+    ).length
     const recent = tickets.slice(0, 5)
 
     return (
@@ -21,7 +41,7 @@ export default function DashboardHomePage() {
                 <StatCard value={open} label="Tickets ouverts" tone="rose" />
                 <StatCard value={inProgress} label="En cours" tone="violet" />
                 <StatCard value={urgent} label="Urgents" tone="plum" />
-                <StatCard value={available} label="Techniciens disponibles" tone="green" />
+                <StatCard value={technicians.length} label="Techniciens disponibles" tone="green" />
             </div>
 
             <div className="rounded-2xl border border-moon-abyss/8 bg-white p-5 shadow-sm">
@@ -38,14 +58,26 @@ export default function DashboardHomePage() {
                         <ArrowRight size={14} />
                     </Link>
                 </div>
+                {ticketsQuery.isLoading && (
+                    <p className="text-sm text-moon-abyss/50">Chargement…</p>
+                )}
+                {ticketsQuery.isError && (
+                    <p className="text-sm text-rose-700">Impossible de charger les tickets.</p>
+                )}
                 <ul className="divide-y divide-moon-abyss/5">
                     {recent.map((t) => (
-                        <li key={t.ref} className="flex items-center gap-4 py-3">
-                            <span className="w-16 shrink-0 font-mono text-xs text-moon-abyss/40">{t.ref}</span>
-                            <span className="flex-1 truncate text-sm font-medium text-moon-abyss">{t.title}</span>
-                            <span className="hidden text-sm text-moon-abyss/50 sm:block">{t.client}</span>
+                        <li key={t.id} className="flex items-center gap-4 py-3">
+                            <span className="w-20 shrink-0 font-mono text-xs text-moon-abyss/40">
+                                {t.reference}
+                            </span>
+                            <span className="flex-1 truncate text-sm font-medium text-moon-abyss">
+                                {t.title}
+                            </span>
+                            <span className="hidden text-sm text-moon-abyss/50 sm:block">
+                                {t.category.name}
+                            </span>
                             <span className="shrink-0 rounded-md bg-moon-rose/50 px-2 py-1 text-[11px] font-bold text-moon-violet-dark">
-                                {t.status}
+                                {statusLabels[t.status]}
                             </span>
                         </li>
                     ))}
