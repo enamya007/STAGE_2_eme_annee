@@ -19,7 +19,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@services/*": ["./src/services/*"],
+      "@schema/*": ["./src/schema/*"],
+      "@config/*": ["./src/config/*"],
+      "@features/*": ["./src/features/*"],
+      "@types/*": ["./src/types/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@keys/*": ["./src/keys/*"],
+      "@lib/*": ["./src/lib/*"]
     }
   },
   "include": [
@@ -30,5 +38,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "rapid_response"]
 }

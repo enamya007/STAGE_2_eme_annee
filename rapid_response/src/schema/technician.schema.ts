@@ -1,4 +1,4 @@
-// schema/technician.schema.ts — validation entrées techniciens (généré api-forge).
+// schema/technicians.schema.ts — validation entrées techniciens (généré api-forge).
 
 import * as v from 'valibot'
 

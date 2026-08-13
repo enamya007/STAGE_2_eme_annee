@@ -12,7 +12,7 @@ import type {
   ReasonInput,
   AssignTicketInput,
   CreateCommentInput,
-} from '@/schema/ticket.schema'
+} from '@/schema/tickets.schema'
 import type { PaginationQuery } from '@/types/common'
 
 export const useTickets = (params?: PaginationQuery & Record<string, unknown>) =>

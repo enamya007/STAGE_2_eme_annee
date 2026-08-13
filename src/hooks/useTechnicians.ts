@@ -10,7 +10,7 @@ import type {
   UpdateTechnicianInput,
   UpdateAvailabilityInput,
   SetTechnicianSkillsInput,
-} from '@/schema/technician.schema'
+} from '@/schema/technicians.schema'
 import type { PaginationQuery } from '@/types/common'
 
 export const useTechnicians = (params?: PaginationQuery & Record<string, unknown>) =>

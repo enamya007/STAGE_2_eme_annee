@@ -1,4 +1,4 @@
-// schema/ticket.schema.ts — validation entrées tickets (généré api-forge).
+// schema/tickets.schema.ts — validation entrées tickets (généré api-forge).
 
 import * as v from 'valibot'
 

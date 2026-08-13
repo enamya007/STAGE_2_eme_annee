@@ -1,4 +1,4 @@
-// schema/skill.schema.ts — validation entrées compétences (généré api-forge).
+// schema/skills.schema.ts — validation entrées compétences (généré api-forge).
 
 import * as v from 'valibot'
 

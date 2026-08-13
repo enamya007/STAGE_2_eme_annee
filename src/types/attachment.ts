@@ -1,5 +1,3 @@
-// types/attachment.ts — modèles pièces jointes (généré api-forge).
-
 export type Attachment = {
   id: string
   originalName: string
@@ -8,4 +6,3 @@ export type Attachment = {
   createdAt: string
   downloadUrl: string | null
 }
-

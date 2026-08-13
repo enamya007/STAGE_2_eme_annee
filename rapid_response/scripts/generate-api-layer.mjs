@@ -743,7 +743,7 @@ ${schemaFromDto('ResetPasswordDto', 'resetPasswordSchema')}
 )
 
 write(
-  'schema/ticket.schema.ts',
+  'schema/tickets.schema.ts',
   `// schema/ticket.schema.ts — validation entrées tickets (généré api-forge).
 
 import * as v from 'valibot'
@@ -759,7 +759,7 @@ ${schemaFromDto('CreateCommentDto', 'createCommentSchema')}
 )
 
 write(
-  'schema/technician.schema.ts',
+  'schema/technicians.schema.ts',
   `// schema/technician.schema.ts — validation entrées techniciens (généré api-forge).
 
 import * as v from 'valibot'
@@ -773,7 +773,7 @@ ${schemaFromDto('SetTechnicianSkillsDto', 'setTechnicianSkillsSchema')}
 )
 
 write(
-  'schema/skill.schema.ts',
+  'schema/skills.schema.ts',
   `// schema/skill.schema.ts — validation entrées compétences (généré api-forge).
 
 import * as v from 'valibot'

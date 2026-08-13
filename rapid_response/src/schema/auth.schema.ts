@@ -20,7 +20,7 @@ export const registerSchema = v.object({
   ),
   firstName: v.optional(v.string('Le prénom est invalide')),
   lastName: v.optional(v.string('Le nom est invalide')),
-  phone: v.optional(v.string('Le téléphone est invalide')),
+  phone: v.pipe(v.string('Le téléphone est invalide'), v.regex(/d+/, 'entre des nom²')),
 })
 
 export type RegisterInput = v.InferInput<typeof registerSchema>

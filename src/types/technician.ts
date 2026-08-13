@@ -1,5 +1,3 @@
-// types/technician.ts — modèles techniciens (généré api-forge).
-
 export type TechnicianSkill = {
   id: string
   name: string
@@ -20,3 +18,10 @@ export type Technician = {
   skills: TechnicianSkill[]
 }
 
+export type TechnicianListQuery = {
+  page?: number
+  limit?: number
+  isAvailable?: boolean
+  skillId?: string
+  isActive?: boolean
+}

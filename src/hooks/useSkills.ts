@@ -5,7 +5,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { skillsService } from '@/services/skills.service'
 import { skillsKeys } from '@/keys/skills.keys'
-import type { CreateSkillInput } from '@/schema/skill.schema'
+import type { CreateSkillInput } from '@/schema/skills.schema'
 
 export const useSkills = () =>
   useQuery({
