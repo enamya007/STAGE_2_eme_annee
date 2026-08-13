@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { Search, Plus, Pencil, Ban, Trash2, AlertCircle } from 'lucide-react'
+import { Search, Plus, Pencil, Ban, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
 import RequireRole from '@/components/RequireRole'
@@ -65,6 +65,7 @@ function UsersPageContent() {
     const [addOpen, setAddOpen] = useState(false)
     const [editing, setEditing] = useState<User | null>(null)
     const [deactivating, setDeactivating] = useState<User | null>(null)
+    const [reactivating, setReactivating] = useState<User | null>(null)
     const [deleting, setDeleting] = useState<User | null>(null)
     const [createForm, setCreateForm] = useState(emptyCreate)
     const [editForm, setEditForm] = useState({
@@ -161,6 +162,14 @@ function UsersPageContent() {
         updateUser.mutate(
             { id: deactivating.id, body: { isActive: false } },
             { onSuccess: () => setDeactivating(null) },
+        )
+    }
+
+    const confirmReactivate = () => {
+        if (!reactivating) return
+        updateUser.mutate(
+            { id: reactivating.id, body: { isActive: true } },
+            { onSuccess: () => setReactivating(null) },
         )
     }
 
@@ -290,15 +299,30 @@ function UsersPageContent() {
                                                 <Pencil size={12} />
                                                 Modifier
                                             </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setDeactivating(u)}
-                                                disabled={!u.isActive || isSelf}
-                                                className="inline-flex items-center gap-1.5 rounded-lg border border-moon-abyss/15 px-3 py-1.5 text-xs font-medium text-moon-abyss/50 transition-colors hover:bg-moon-abyss/5 disabled:cursor-not-allowed disabled:opacity-40"
-                                            >
-                                                <Ban size={12} />
-                                                Désactiver
-                                            </button>
+                                            {u.isActive ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDeactivating(u)}
+                                                    disabled={isSelf}
+                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-moon-abyss/15 px-3 py-1.5 text-xs font-medium text-moon-abyss/50 transition-colors hover:bg-moon-abyss/5 disabled:cursor-not-allowed disabled:opacity-40"
+                                                >
+                                                    <Ban size={12} />
+                                                    Désactiver
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        updateUser.reset()
+                                                        setReactivating(u)
+                                                    }}
+                                                    disabled={isSelf}
+                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                >
+                                                    <CheckCircle size={12} />
+                                                    Réactiver
+                                                </button>
+                                            )}
                                             <button
                                                 type="button"
                                                 onClick={() => setDeleting(u)}
@@ -542,6 +566,31 @@ function UsersPageContent() {
                             Techniciens.
                         </p>
                     )}
+                    <div>
+                        <label htmlFor="edit-status" className={labelClass}>
+                            Statut
+                        </label>
+                        <select
+                            id="edit-status"
+                            value={editForm.isActive ? 'active' : 'inactive'}
+                            disabled={editing?.id === myId}
+                            onChange={(e) =>
+                                setEditForm((f) => ({
+                                    ...f,
+                                    isActive: e.target.value === 'active',
+                                }))
+                            }
+                            className={`${inputClass} disabled:cursor-not-allowed disabled:opacity-60`}
+                        >
+                            <option value="active">Actif</option>
+                            <option value="inactive">Désactivé</option>
+                        </select>
+                        {editing?.id === myId && (
+                            <p className="mt-1.5 text-xs text-moon-abyss/50">
+                                Vous ne pouvez pas désactiver votre propre compte.
+                            </p>
+                        )}
+                    </div>
                     {updateUser.isError && (
                         <p className="text-sm text-rose-700">
                             {updateUser.error instanceof Error
@@ -582,7 +631,7 @@ function UsersPageContent() {
             >
                 <p className="text-sm leading-relaxed text-moon-abyss/70">
                     L&apos;utilisateur ne pourra plus se connecter. Vous pourrez le réactiver plus tard
-                    via Modifier.
+                    via Réactiver ou Modifier.
                 </p>
                 {updateUser.isError && (
                     <p className="mt-3 text-sm text-rose-700">
@@ -606,6 +655,46 @@ function UsersPageContent() {
                         className="rounded-lg bg-moon-violet px-4 py-2.5 text-sm font-medium text-white"
                     >
                         Confirmer
+                    </button>
+                </div>
+            </Modal>
+
+            <Modal
+                open={!!reactivating}
+                title={
+                    <span className="flex items-center gap-2">
+                        <CheckCircle size={19} className="text-emerald-600" />
+                        Réactiver le compte
+                    </span>
+                }
+                onClose={() => setReactivating(null)}
+                maxWidth={420}
+            >
+                <p className="text-sm leading-relaxed text-moon-abyss/70">
+                    L&apos;utilisateur pourra de nouveau se connecter.
+                </p>
+                {updateUser.isError && (
+                    <p className="mt-3 text-sm text-rose-700">
+                        {updateUser.error instanceof Error
+                            ? updateUser.error.message
+                            : 'Action impossible'}
+                    </p>
+                )}
+                <div className="mt-5 flex justify-end gap-2.5">
+                    <button
+                        type="button"
+                        onClick={() => setReactivating(null)}
+                        className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="button"
+                        onClick={confirmReactivate}
+                        disabled={updateUser.isPending}
+                        className="rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-700"
+                    >
+                        {updateUser.isPending ? 'Réactivation…' : 'Réactiver'}
                     </button>
                 </div>
             </Modal>
