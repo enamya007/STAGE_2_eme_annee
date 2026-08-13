@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import {
     Ticket,
     LayoutDashboard,
@@ -10,16 +10,19 @@ import {
     Users,
     Activity,
     Settings,
+    type LucideIcon,
 } from 'lucide-react'
+import { ALL_NAV_HREFS, navKeysForRole, type NavItemKey } from '@/lib/roles'
+import { logoutCurrentSession } from '@/lib/logout'
 
-const navItems = [
-    { href: '/dashboard/tickets', label: 'Tickets', icon: Ticket },
-    { href: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
-    { href: '/dashboard/techniciens', label: 'Techniciens', icon: Wrench },
-    { href: '/dashboard/utilisateurs', label: 'Utilisateurs', icon: Users },
-    { href: '/dashboard/statistiques', label: 'Statistiques', icon: Activity },
-    { href: '/dashboard/parametres', label: 'Paramètres', icon: Settings },
-]
+const navMeta: Record<NavItemKey, { label: string; icon: LucideIcon }> = {
+    tickets: { label: 'Tickets', icon: Ticket },
+    dashboard: { label: 'Tableau de bord', icon: LayoutDashboard },
+    techniciens: { label: 'Techniciens', icon: Wrench },
+    utilisateurs: { label: 'Utilisateurs', icon: Users },
+    statistiques: { label: 'Statistiques', icon: Activity },
+    parametres: { label: 'Paramètres', icon: Settings },
+}
 
 export default function Sidebar() {
     const pathname = usePathname()
@@ -33,6 +36,12 @@ export default function Sidebar() {
         .slice(0, 2)
         .toUpperCase()
 
+    const items = navKeysForRole(data?.user?.role).map((key) => ({
+        key,
+        href: ALL_NAV_HREFS[key],
+        ...navMeta[key],
+    }))
+
     return (
         <aside className="flex h-screen w-60 shrink-0 flex-col bg-moon-abyss text-white">
             <div className="flex items-center gap-2.5 px-5 py-5">
@@ -41,7 +50,6 @@ export default function Sidebar() {
                 </div>
                 <div>
                     <p className="text-sm font-bold leading-tight">Rapid Response</p>
-                    <p className="text-[11px] text-white/50">RR · v2.4</p>
                 </div>
             </div>
 
@@ -50,7 +58,7 @@ export default function Sidebar() {
             </p>
 
             <nav className="flex flex-1 flex-col gap-1 px-3">
-                {navItems.map(({ href, label, icon: Icon }) => {
+                {items.map(({ href, label, icon: Icon }) => {
                     const active =
                         href === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(href)
 
@@ -83,7 +91,7 @@ export default function Sidebar() {
                 </div>
                 <button
                     type="button"
-                    onClick={() => signOut({ callbackUrl: '/login' })}
+                    onClick={() => void logoutCurrentSession()}
                     className="w-full rounded-lg px-3 py-2 text-left text-xs text-white/60 transition-colors hover:bg-white/5 hover:text-white"
                 >
                     Se déconnecter

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { Table } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
+import RequireRole from '@/components/RequireRole'
 import { useTickets } from '@/hooks/useTickets'
 import { useTechnicians } from '@/hooks/useTechnicians'
 import type { TicketListItem, TicketStatus } from '@/types/ticket'
@@ -228,7 +229,7 @@ function exportCsv(tickets: TicketListItem[]) {
     URL.revokeObjectURL(url)
 }
 
-export default function StatisticsPage() {
+function StatisticsPageContent() {
     const [period, setPeriod] = useState<Period>('7 jours')
     const ticketsQuery = useTickets({ page: 1, limit: 100 })
     const techniciansQuery = useTechnicians({ page: 1, limit: 100 })
@@ -395,5 +396,13 @@ export default function StatisticsPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function StatisticsPage() {
+    return (
+        <RequireRole roles={['ADMIN']}>
+            <StatisticsPageContent />
+        </RequireRole>
     )
 }

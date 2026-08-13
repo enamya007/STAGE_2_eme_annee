@@ -27,7 +27,7 @@ export default function RegisterForm() {
         formState: { errors },
     } = useForm<RegisterFormValues>({
         resolver: valibotResolver(registerSchema),
-        defaultValues: { fullName: '', email: '', password: '', confirmPassword: '' },
+        defaultValues: { fullName: '', email: '', phone: '', password: '', confirmPassword: '' },
     })
 
     const registerMutation = useRegister()
@@ -46,6 +46,7 @@ export default function RegisterForm() {
                 password: values.password,
                 firstName,
                 lastName,
+                phone: values.phone.trim(),
             },
             {
                 onSuccess: async () => {
@@ -122,6 +123,28 @@ export default function RegisterForm() {
                         slotProps={{
                             input: {
                                 startAdornment: <MoonFieldIcon type="mail" />,
+                            },
+                        }}
+                    />
+                )}
+            />
+
+            <Controller
+                name="phone"
+                control={control}
+                render={({ field }) => (
+                    <MoonField
+                        {...field}
+                        label="Numéro de téléphone"
+                        fieldId="register-phone"
+                        placeholder="90 00 00 00"
+                        type="tel"
+                        autoComplete="tel"
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
+                        slotProps={{
+                            input: {
+                                startAdornment: <MoonFieldIcon type="phone" />,
                             },
                         }}
                     />

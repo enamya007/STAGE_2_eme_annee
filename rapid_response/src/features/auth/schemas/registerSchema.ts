@@ -10,6 +10,10 @@ export const registerSchema = pipe(
             string("L'email est requis"),
             email('Format d\'email invalide')
         ),
+        phone: pipe(
+            string('Le numéro de téléphone est requis'),
+            minLength(8, 'Le numéro doit contenir au moins 8 caractères')
+        ),
         password: pipe(
             string('Le mot de passe est requis'),
             minLength(10, 'Entrez un minimum de 10 caractères')

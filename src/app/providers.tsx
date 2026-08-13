@@ -14,7 +14,20 @@ const muiTheme = createTheme({
 })
 
 export function Providers({ children }: { children: React.ReactNode }) {
-    const [queryClient] = useState(() => new QueryClient())
+    const [queryClient] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: {
+                    queries: {
+                        retry: (failureCount, error) => {
+                            const status = (error as { status?: number }).status
+                            if (status === 401 || status === 403) return false
+                            return failureCount < 2
+                        },
+                    },
+                },
+            }),
+    )
 
     return (
         <AppRouterCacheProvider>

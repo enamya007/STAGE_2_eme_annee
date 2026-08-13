@@ -5,10 +5,14 @@ import { notificationsService } from '@/services/notifications.service'
 import { notificationsKeys } from '@/keys/notifications.keys'
 import type { NotificationListQuery } from '@/types/notification'
 
-export const useNotifications = (params?: NotificationListQuery) =>
+export const useNotifications = (
+  params?: NotificationListQuery,
+  options?: { enabled?: boolean },
+) =>
   useQuery({
     queryKey: notificationsKeys.list(params),
     queryFn: () => notificationsService.list(params),
+    enabled: options?.enabled ?? true,
   })
 
 export const useUnreadCount = () =>

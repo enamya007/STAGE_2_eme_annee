@@ -1,5 +1,13 @@
 export type UserRole = 'ADMIN' | 'TECHNICIAN' | 'CLIENT'
 
+export type UserListQuery = {
+  page?: number
+  limit?: number
+  role?: UserRole
+  isActive?: boolean
+  search?: string
+}
+
 export type User = {
     id: string
     username: string

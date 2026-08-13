@@ -1,85 +1,49 @@
 'use client'
 
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Search, Filter, Plus, ArrowRight, List, LayoutGrid, Check } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { Search, Filter, Plus, ArrowRight, List, LayoutGrid } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
-import { useTickets, useCreateTicket, useAssignTicket } from '@/hooks/useTickets'
+import AssignTicketModal from '@/features/tickets/AssignTicketModal'
+import { useTickets, useCreateTicket } from '@/hooks/useTickets'
 import { useTechnicians } from '@/hooks/useTechnicians'
+import { useCategories } from '@/hooks/useCategories'
 import type { TicketListItem, TicketPriority, TicketStatus } from '@/types/ticket'
 import type { Technician } from '@/types/technician'
-
-const statusStyles: Record<TicketStatus, string> = {
-    OPEN: 'bg-moon-rose/70 text-moon-violet-dark',
-    ASSIGNED: 'bg-amber-100 text-amber-800',
-    IN_PROGRESS: 'bg-moon-lavande/15 text-moon-lavande',
-    RESOLVED: 'bg-emerald-100 text-emerald-700',
-    CLOSED: 'bg-slate-100 text-slate-700',
-    CANCELLED: 'bg-rose-100 text-rose-700',
-}
-
-const statusLabels: Record<TicketStatus, string> = {
-    OPEN: 'Ouvert',
-    ASSIGNED: 'Affecté',
-    IN_PROGRESS: 'En cours',
-    RESOLVED: 'Résolu',
-    CLOSED: 'Fermé',
-    CANCELLED: 'Annulé',
-}
-
-const priorityLabels: Record<TicketPriority, string> = {
-    LOW: 'Basse',
-    NORMAL: 'Moyenne',
-    HIGH: 'Haute',
-    CRITICAL: 'Urgente',
-}
-
-const priorityDots: Record<TicketPriority, string> = {
-    CRITICAL: 'bg-red-500',
-    HIGH: 'bg-amber-500',
-    NORMAL: 'bg-moon-lavande',
-    LOW: 'bg-emerald-500',
-}
-
-const inputClass =
-    'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none'
-
-const labelClass =
-    'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
-
-function displayName(first: string | null, last: string | null, fallback: string) {
-    const full = [first, last].filter(Boolean).join(' ').trim()
-    return full || fallback
-}
-
-function initialsOf(name: string) {
-    return name
-        .split(' ')
-        .filter(Boolean)
-        .map((w) => w[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase()
-}
-
-function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-    })
-}
+import {
+    canAssignStatus,
+    displayPersonName,
+    formatDate,
+    initialsOf,
+    priorityDots,
+    priorityLabels,
+    statusLabels,
+    statusStyles,
+    ticketFieldClass,
+    ticketLabelClass,
+} from '@/features/tickets/ticketUi'
 
 function TicketsContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
+    const { data: session } = useSession()
+    const role = session?.user?.role
+    const isAdmin = role === 'ADMIN'
+    const isTechnician = role === 'TECHNICIAN'
+    const canCreate = role === 'ADMIN' || role === 'CLIENT'
 
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
     const [status, setStatus] = useState<'Tous' | TicketStatus>('Tous')
     const [priority, setPriority] = useState<'Toutes' | TicketPriority>('Toutes')
     const [technicianFilter, setTechnicianFilter] = useState('Tous')
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
+
+    useEffect(() => {
+        setQuery(searchParams.get('q') ?? '')
+    }, [searchParams])
 
     const listQuery = useMemo(
         () => ({
@@ -88,25 +52,26 @@ function TicketsContent() {
             q: query || undefined,
             status: status === 'Tous' ? undefined : status,
             priority: priority === 'Toutes' ? undefined : priority,
-            assigneeId: technicianFilter === 'Tous' ? undefined : technicianFilter,
+            assigneeId: isAdmin && technicianFilter !== 'Tous' ? technicianFilter : undefined,
         }),
-        [query, status, priority, technicianFilter],
+        [query, status, priority, technicianFilter, isAdmin],
     )
 
     const ticketsQuery = useTickets(listQuery)
-    const techniciansQuery = useTechnicians({ page: 1, limit: 50 })
+    const techniciansQuery = useTechnicians({ page: 1, limit: 50 }, { enabled: isAdmin })
+    const categoriesQuery = useCategories({ isActive: true }, { enabled: canCreate })
     const createTicket = useCreateTicket()
-    const assignTicket = useAssignTicket()
 
     const tickets = useMemo(
         () => ticketsQuery.data?.data ?? [],
         [ticketsQuery.data?.data],
     )
     const technicians = techniciansQuery.data?.data ?? []
+    const categories = categoriesQuery.data ?? []
 
     const openFromQuery = searchParams.get('new') === '1'
     const [createRequested, setCreateRequested] = useState(false)
-    const createOpen = createRequested || openFromQuery
+    const createOpen = canCreate && (createRequested || openFromQuery)
 
     const closeCreate = () => {
         setCreateRequested(false)
@@ -123,21 +88,16 @@ function TicketsContent() {
     })
 
     const [assigning, setAssigning] = useState<TicketListItem | null>(null)
-    const [selectedTech, setSelectedTech] = useState<string | null>(null)
 
-    const categories = useMemo(() => {
-        const map = new Map<string, string>()
-        for (const t of tickets) {
-            map.set(t.category.id, t.category.name)
-        }
-        return [...map.entries()].map(([id, name]) => ({ id, name }))
-    }, [tickets])
-
-    const open = tickets.filter((t) => t.status === 'OPEN').length
+    const openCount = tickets.filter((t) => t.status === 'OPEN').length
     const inProgress = tickets.filter((t) => t.status === 'IN_PROGRESS').length
     const resolved = tickets.filter((t) => t.status === 'RESOLVED').length
     const urgent = tickets.filter(
-        (t) => t.priority === 'CRITICAL' && t.status !== 'RESOLVED' && t.status !== 'CLOSED',
+        (t) =>
+            t.priority === 'CRITICAL' &&
+            t.status !== 'RESOLVED' &&
+            t.status !== 'CLOSED' &&
+            t.status !== 'CANCELLED',
     ).length
 
     const openCreate = () => {
@@ -152,7 +112,12 @@ function TicketsContent() {
     }
 
     const submitCreate = () => {
-        if (!createForm.title.trim() || !createForm.description.trim() || !createForm.categoryId) {
+        if (
+            !createForm.title.trim() ||
+            !createForm.description.trim() ||
+            !createForm.categoryId ||
+            !createForm.siteLabel.trim()
+        ) {
             return
         }
 
@@ -162,47 +127,47 @@ function TicketsContent() {
                 description: createForm.description.trim(),
                 priority: createForm.priority,
                 categoryId: createForm.categoryId,
-                siteLabel: createForm.siteLabel.trim() || undefined,
+                siteLabel: createForm.siteLabel.trim(),
             },
             { onSuccess: () => closeCreate() },
         )
     }
 
     const openAssign = (ticket: TicketListItem) => {
-        setSelectedTech(ticket.assignee?.id ?? null)
         setAssigning(ticket)
     }
 
-    const confirmAssign = () => {
-        if (!assigning || !selectedTech) return
-
-        assignTicket.mutate(
-            { id: assigning.id, body: { technicianId: selectedTech } },
-            { onSuccess: () => setAssigning(null) },
-        )
-    }
-
     const technicianName = (tech: Technician) =>
-        displayName(tech.firstName, tech.lastName, tech.username)
+        displayPersonName(tech.firstName, tech.lastName, tech.username)
+
+    const heading = isTechnician
+        ? 'Tickets qui me sont affectés'
+        : isAdmin
+          ? 'Tickets'
+          : 'Mes tickets'
+    const subheading = isTechnician
+        ? 'Uniquement les tickets qui vous ont été assignés'
+        : isAdmin
+          ? `${ticketsQuery.data?.meta.total ?? tickets.length} tickets au total · ${openCount} ouvert${openCount > 1 ? 's' : ''}`
+          : 'Historique des tickets que vous avez créés'
 
     return (
         <div className="space-y-5">
             <div className="flex items-start justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-moon-abyss">Tickets</h1>
-                    <p className="mt-0.5 text-sm text-moon-abyss/50">
-                        {ticketsQuery.data?.meta.total ?? tickets.length} tickets au total · {open}{' '}
-                        ouvert{open > 1 ? 's' : ''}
-                    </p>
+                    <h1 className="text-2xl font-bold text-moon-abyss">{heading}</h1>
+                    <p className="mt-0.5 text-sm text-moon-abyss/50">{subheading}</p>
                 </div>
-                <button
-                    type="button"
-                    onClick={openCreate}
-                    className="flex items-center gap-2 rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet"
-                >
-                    <Plus size={16} />
-                    Créer un ticket
-                </button>
+                {canCreate && (
+                    <button
+                        type="button"
+                        onClick={openCreate}
+                        className="flex items-center gap-2 rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet"
+                    >
+                        <Plus size={16} />
+                        Créer un ticket
+                    </button>
+                )}
             </div>
 
             {ticketsQuery.isError && (
@@ -213,7 +178,7 @@ function TicketsContent() {
             )}
 
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                <StatCard value={open} label="Tickets ouverts" tone="rose" />
+                <StatCard value={openCount} label="Tickets ouverts" tone="rose" />
                 <StatCard value={inProgress} label="En cours" tone="violet" />
                 <StatCard value={resolved} label="Résolus" tone="green" />
                 <StatCard value={urgent} label="Urgents" tone="plum" />
@@ -259,19 +224,21 @@ function TicketsContent() {
                     <option value="NORMAL">Moyenne</option>
                     <option value="LOW">Basse</option>
                 </select>
-                <select
-                    value={technicianFilter}
-                    onChange={(e) => setTechnicianFilter(e.target.value)}
-                    className="rounded-lg border border-moon-abyss/10 bg-transparent px-3 py-2 text-sm text-moon-abyss/70 focus:outline-none"
-                    aria-label="Filtrer par technicien"
-                >
-                    <option value="Tous">Technicien</option>
-                    {technicians.map((t) => (
-                        <option key={t.id} value={t.id}>
-                            {technicianName(t)}
-                        </option>
-                    ))}
-                </select>
+                {isAdmin && (
+                    <select
+                        value={technicianFilter}
+                        onChange={(e) => setTechnicianFilter(e.target.value)}
+                        className="rounded-lg border border-moon-abyss/10 bg-transparent px-3 py-2 text-sm text-moon-abyss/70 focus:outline-none"
+                        aria-label="Filtrer par technicien"
+                    >
+                        <option value="Tous">Technicien</option>
+                        {technicians.map((t) => (
+                            <option key={t.id} value={t.id}>
+                                {technicianName(t)}
+                            </option>
+                        ))}
+                    </select>
+                )}
                 <div className="ml-auto flex gap-1">
                     <button
                         type="button"
@@ -316,10 +283,12 @@ function TicketsContent() {
                                 className="flex flex-col gap-3 rounded-2xl border border-moon-abyss/8 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
                             >
                                 <div className="flex items-start justify-between gap-2">
-                                    <div className="min-w-0">
+                                    <Link href={`/dashboard/tickets/${t.id}`} className="min-w-0">
                                         <p className="font-mono text-xs text-moon-abyss/40">{t.reference}</p>
-                                        <p className="truncate font-semibold text-moon-abyss">{t.title}</p>
-                                    </div>
+                                        <p className="truncate font-semibold text-moon-abyss hover:text-moon-violet">
+                                            {t.title}
+                                        </p>
+                                    </Link>
                                     <span
                                         className={`shrink-0 rounded-md px-2 py-1 text-[11px] font-bold tracking-wide ${statusStyles[t.status]}`}
                                     >
@@ -347,14 +316,23 @@ function TicketsContent() {
                                     ) : (
                                         <span className="text-sm text-moon-abyss/35">Non affecté</span>
                                     )}
-                                    <button
-                                        type="button"
-                                        onClick={() => openAssign(t)}
-                                        className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
-                                    >
-                                        <ArrowRight size={13} />
-                                        {assignee ? 'Réaffecter' : 'Affecter'}
-                                    </button>
+                                    {isAdmin && canAssignStatus(t.status) ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => openAssign(t)}
+                                            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
+                                        >
+                                            <ArrowRight size={13} />
+                                            {assignee ? 'Réaffecter' : 'Affecter'}
+                                        </button>
+                                    ) : (
+                                        <Link
+                                            href={`/dashboard/tickets/${t.id}`}
+                                            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
+                                        >
+                                            Détails
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         )
@@ -385,8 +363,12 @@ function TicketsContent() {
                                         className="border-b border-moon-abyss/5 last:border-0 hover:bg-moon-rose/10"
                                     >
                                         <td className="px-5 py-3.5">
-                                            <p className="font-mono text-xs text-moon-abyss/40">{t.reference}</p>
-                                            <p className="font-semibold text-moon-abyss">{t.title}</p>
+                                            <Link href={`/dashboard/tickets/${t.id}`} className="block">
+                                                <p className="font-mono text-xs text-moon-abyss/40">{t.reference}</p>
+                                                <p className="font-semibold text-moon-abyss hover:text-moon-violet">
+                                                    {t.title}
+                                                </p>
+                                            </Link>
                                         </td>
                                         <td className="max-w-36 truncate px-5 py-3.5 text-moon-abyss/70">
                                             {t.category.name}
@@ -422,14 +404,23 @@ function TicketsContent() {
                                             {formatDate(t.createdAt)}
                                         </td>
                                         <td className="px-5 py-3.5 text-right">
-                                            <button
-                                                type="button"
-                                                onClick={() => openAssign(t)}
-                                                className="inline-flex items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
-                                            >
-                                                <ArrowRight size={13} />
-                                                {assignee ? 'Réaffecter' : 'Affecter'}
-                                            </button>
+                                            {isAdmin && canAssignStatus(t.status) ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openAssign(t)}
+                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
+                                                >
+                                                    <ArrowRight size={13} />
+                                                    {assignee ? 'Réaffecter' : 'Affecter'}
+                                                </button>
+                                            ) : (
+                                                <Link
+                                                    href={`/dashboard/tickets/${t.id}`}
+                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-moon-violet/25 px-3 py-1.5 text-xs font-medium text-moon-violet transition-colors hover:bg-moon-violet hover:text-white"
+                                                >
+                                                    Détails
+                                                </Link>
+                                            )}
                                         </td>
                                     </tr>
                                 )
@@ -442,7 +433,7 @@ function TicketsContent() {
             <Modal open={createOpen} title="Créer un ticket" onClose={closeCreate}>
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="ticket-title" className={labelClass}>
+                        <label htmlFor="ticket-title" className={ticketLabelClass}>
                             Titre
                         </label>
                         <input
@@ -451,12 +442,12 @@ function TicketsContent() {
                             value={createForm.title}
                             onChange={(e) => setCreateForm((f) => ({ ...f, title: e.target.value }))}
                             placeholder="Ex : Panne réseau au 2e étage"
-                            className={inputClass}
+                            className={ticketFieldClass}
                         />
                     </div>
                     <div>
-                        <label htmlFor="ticket-site" className={labelClass}>
-                            Site (optionnel)
+                        <label htmlFor="ticket-site" className={ticketLabelClass}>
+                            Site / lieu d&apos;intervention
                         </label>
                         <input
                             id="ticket-site"
@@ -465,12 +456,12 @@ function TicketsContent() {
                             onChange={(e) =>
                                 setCreateForm((f) => ({ ...f, siteLabel: e.target.value }))
                             }
-                            placeholder="Libellé du site"
-                            className={inputClass}
+                            placeholder="Ex : Agence Lomé Centre, 2e étage"
+                            className={ticketFieldClass}
                         />
                     </div>
                     <div>
-                        <label htmlFor="ticket-category" className={labelClass}>
+                        <label htmlFor="ticket-category" className={ticketLabelClass}>
                             Catégorie
                         </label>
                         <select
@@ -479,7 +470,7 @@ function TicketsContent() {
                             onChange={(e) =>
                                 setCreateForm((f) => ({ ...f, categoryId: e.target.value }))
                             }
-                            className={inputClass}
+                            className={ticketFieldClass}
                         >
                             <option value="">Choisir une catégorie</option>
                             {categories.map((c) => (
@@ -488,14 +479,19 @@ function TicketsContent() {
                                 </option>
                             ))}
                         </select>
-                        {categories.length === 0 && (
+                        {categoriesQuery.isError && (
+                            <p className="mt-1 text-xs text-rose-700">
+                                Impossible de charger les catégories.
+                            </p>
+                        )}
+                        {!categoriesQuery.isError && categories.length === 0 && (
                             <p className="mt-1 text-xs text-moon-abyss/50">
-                                Aucune catégorie disponible tant qu’aucun ticket n’existe encore.
+                                Aucune catégorie active. Un administrateur doit en créer une.
                             </p>
                         )}
                     </div>
                     <div>
-                        <label htmlFor="ticket-priority" className={labelClass}>
+                        <label htmlFor="ticket-priority" className={ticketLabelClass}>
                             Priorité
                         </label>
                         <select
@@ -507,7 +503,7 @@ function TicketsContent() {
                                     priority: e.target.value as TicketPriority,
                                 }))
                             }
-                            className={inputClass}
+                            className={ticketFieldClass}
                         >
                             <option value="LOW">Basse</option>
                             <option value="NORMAL">Moyenne</option>
@@ -516,7 +512,7 @@ function TicketsContent() {
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="ticket-description" className={labelClass}>
+                        <label htmlFor="ticket-description" className={ticketLabelClass}>
                             Description
                         </label>
                         <textarea
@@ -527,7 +523,7 @@ function TicketsContent() {
                             }
                             placeholder="Décrivez le problème..."
                             rows={3}
-                            className={`${inputClass} resize-none`}
+                            className={`${ticketFieldClass} resize-none`}
                         />
                     </div>
                     {createTicket.isError && (
@@ -552,6 +548,7 @@ function TicketsContent() {
                                 !createForm.title.trim() ||
                                 !createForm.description.trim() ||
                                 !createForm.categoryId ||
+                                !createForm.siteLabel.trim() ||
                                 createTicket.isPending
                             }
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
@@ -562,96 +559,7 @@ function TicketsContent() {
                 </div>
             </Modal>
 
-            <Modal
-                open={!!assigning}
-                title={assigning?.assignee ? 'Réaffecter le ticket' : 'Affecter le ticket'}
-                onClose={() => setAssigning(null)}
-            >
-                {assigning && (
-                    <>
-                        <p className="mb-4 rounded-lg bg-moon-rose/25 px-3.5 py-2.5 text-sm text-moon-abyss/70">
-                            <span className="font-mono text-xs text-moon-abyss/45">
-                                {assigning.reference}
-                            </span>
-                            <span className="mx-2 text-moon-abyss/30">·</span>
-                            <span className="font-semibold text-moon-abyss">{assigning.title}</span>
-                        </p>
-                        <div className="space-y-2">
-                            {technicians.map((t) => {
-                                const name = technicianName(t)
-                                const selected = selectedTech === t.id
-
-                                return (
-                                    <button
-                                        key={t.id}
-                                        type="button"
-                                        onClick={() => setSelectedTech(t.id)}
-                                        className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-colors ${
-                                            selected
-                                                ? 'border-moon-violet bg-moon-violet/5'
-                                                : 'border-moon-abyss/10 hover:border-moon-violet/40'
-                                        }`}
-                                    >
-                                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-moon-lavande/15 text-xs font-bold text-moon-lavande">
-                                            {initialsOf(name)}
-                                        </span>
-                                        <span className="min-w-0 flex-1">
-                                            <span className="block truncate text-sm font-semibold text-moon-abyss">
-                                                {name}
-                                            </span>
-                                            <span className="text-xs text-moon-abyss/50">
-                                                {t.currentLoad}/{t.maxConcurrentTickets} tickets ·{' '}
-                                                {t.skills
-                                                    .slice(0, 2)
-                                                    .map((s) => s.name)
-                                                    .join(', ')}
-                                            </span>
-                                        </span>
-                                        <span
-                                            className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                                                t.isAvailable
-                                                    ? 'bg-emerald-100 text-emerald-700'
-                                                    : 'bg-moon-violet/10 text-moon-violet'
-                                            }`}
-                                        >
-                                            {t.isAvailable ? 'Disponible' : 'Occupé'}
-                                        </span>
-                                        {selected && <Check size={16} className="shrink-0 text-moon-violet" />}
-                                    </button>
-                                )
-                            })}
-                        </div>
-                        {assignTicket.isError && (
-                            <p className="mt-3 text-sm text-rose-700">
-                                {assignTicket.error instanceof Error
-                                    ? assignTicket.error.message
-                                    : 'Affectation impossible'}
-                            </p>
-                        )}
-                        <div className="mt-5 flex justify-end gap-2.5">
-                            <button
-                                type="button"
-                                onClick={() => setAssigning(null)}
-                                className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70 hover:bg-moon-rose/20"
-                            >
-                                Annuler
-                            </button>
-                            <button
-                                type="button"
-                                onClick={confirmAssign}
-                                disabled={
-                                    !selectedTech ||
-                                    selectedTech === assigning.assignee?.id ||
-                                    assignTicket.isPending
-                                }
-                                className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
-                            >
-                                {assignTicket.isPending ? 'Envoi…' : "Confirmer l'affectation"}
-                            </button>
-                        </div>
-                    </>
-                )}
-            </Modal>
+            <AssignTicketModal ticket={assigning} onClose={() => setAssigning(null)} />
         </div>
     )
 }

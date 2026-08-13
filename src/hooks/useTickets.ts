@@ -123,11 +123,14 @@ export const useCancelTicket = () => {
   })
 }
 
-export const useAssignmentSuggestions = (id: string) =>
+export const useAssignmentSuggestions = (
+  id: string,
+  options?: { enabled?: boolean },
+) =>
   useQuery({
     queryKey: ticketsKeys.suggestions(id),
     queryFn: () => ticketsService.getAssignmentSuggestions(id),
-    enabled: Boolean(id),
+    enabled: Boolean(id) && (options?.enabled ?? true),
   })
 
 export const useAssignTicket = () => {

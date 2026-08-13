@@ -11,17 +11,21 @@ import type {
 } from '@/schema/technician.schema'
 import type { TechnicianListQuery } from '@/types/technician'
 
-export const useTechnicians = (params?: TechnicianListQuery) =>
+export const useTechnicians = (
+  params?: TechnicianListQuery,
+  options?: { enabled?: boolean },
+) =>
   useQuery({
     queryKey: techniciansKeys.list(params),
     queryFn: () => techniciansService.list(params),
+    enabled: options?.enabled ?? true,
   })
 
-export const useTechnician = (id: string) =>
+export const useTechnician = (id: string, options?: { enabled?: boolean }) =>
   useQuery({
     queryKey: techniciansKeys.detail(id),
     queryFn: () => techniciansService.getById(id),
-    enabled: Boolean(id),
+    enabled: Boolean(id) && (options?.enabled ?? true),
   })
 
 export const useCreateTechnician = () => {

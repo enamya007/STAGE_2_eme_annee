@@ -1,4 +1,5 @@
 import * as v from 'valibot'
+import { phoneSchema } from '@/schema/phone.schema'
 
 export const technicianSkillInputSchema = v.object({
   skillId: v.pipe(
@@ -47,12 +48,7 @@ export const createTechnicianSchema = v.object({
       v.maxLength(80, 'Le nom ne doit pas dépasser 80 caractères'),
     ),
   ),
-  phone: v.optional(
-    v.pipe(
-      v.string('Le numéro de téléphone est invalide'),
-      v.maxLength(30, 'Le numéro de téléphone ne doit pas dépasser 30 caractères'),
-    ),
-  ),
+  phone: phoneSchema,
   isAvailable: v.optional(v.boolean('La disponibilité est invalide')),
   maxConcurrentTickets: v.optional(
     v.pipe(

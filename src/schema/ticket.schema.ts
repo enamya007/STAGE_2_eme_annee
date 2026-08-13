@@ -29,11 +29,11 @@ export const createTicketSchema = v.object({
     v.nonEmpty('La catégorie est requise'),
     v.uuid('Identifiant invalide'),
   ),
-  siteLabel: v.optional(
-    v.pipe(
-      v.string('Le libellé du site est invalide'),
-      v.maxLength(150, 'Le libellé du site ne doit pas dépasser 150 caractères'),
-    ),
+  siteLabel: v.pipe(
+    v.string('Le site est requis'),
+    v.nonEmpty("Indiquez le lieu d'intervention"),
+    v.minLength(2, 'Le site doit contenir au moins 2 caractères'),
+    v.maxLength(150, 'Le libellé du site ne doit pas dépasser 150 caractères'),
   ),
   siteAddress: v.optional(
     v.pipe(
@@ -107,6 +107,7 @@ export const assignTicketSchema = v.object({
   technicianId: v.pipe(
     v.string('Le technicien est requis'),
     v.nonEmpty('Le technicien est requis'),
+    v.uuid('Identifiant invalide'),
   ),
   reason: v.optional(
     v.pipe(

@@ -1,4 +1,5 @@
 import * as v from 'valibot'
+import { phoneSchema } from '@/schema/phone.schema'
 
 export const registerSchema = v.object({
   username: v.pipe(
@@ -18,15 +19,7 @@ export const registerSchema = v.object({
   ),
   firstName: v.optional(v.string('Le prénom est invalide')),
   lastName: v.optional(v.string('Le nom est invalide')),
-  phone: v.optional(
-    v.pipe(
-      v.string('Le numéro de téléphone est invalide'),
-      v.regex(
-        /^[789]\d{7}$/,
-        'Le numéro doit contenir 8 chiffres et commencer par 7, 8 ou 9',
-      ),
-    ),
-  ),
+  phone: phoneSchema,
 })
 
 export type RegisterInput = v.InferInput<typeof registerSchema>
@@ -64,17 +57,23 @@ export const forgotPasswordSchema = v.object({
 
 export type ForgotPasswordInput = v.InferInput<typeof forgotPasswordSchema>
 
+const strongPassword = v.pipe(
+  v.string('Le nouveau mot de passe est requis'),
+  v.nonEmpty('Le nouveau mot de passe est requis'),
+  v.minLength(10, 'Le mot de passe doit contenir au moins 10 caractères'),
+  v.maxLength(72, 'Le mot de passe ne doit pas dépasser 72 caractères'),
+  v.regex(
+    /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+    'Le mot de passe doit contenir une minuscule, une majuscule et un chiffre',
+  ),
+)
+
 export const resetPasswordSchema = v.object({
   token: v.pipe(
     v.string('Le jeton est requis'),
     v.nonEmpty('Le jeton est requis'),
   ),
-  newPassword: v.pipe(
-    v.string('Le nouveau mot de passe est requis'),
-    v.nonEmpty('Le nouveau mot de passe est requis'),
-    v.minLength(10, 'Le nouveau mot de passe doit contenir au moins 10 caractères'),
-    v.maxLength(72, 'Le nouveau mot de passe ne doit pas dépasser 72 caractères'),
-  ),
+  newPassword: strongPassword,
 })
 
 export type ResetPasswordInput = v.InferInput<typeof resetPasswordSchema>

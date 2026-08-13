@@ -4,9 +4,11 @@ import { useState } from 'react'
 import { Wrench, Plus } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
+import RequireRole from '@/components/RequireRole'
 import { useTechnicians, useCreateTechnician } from '@/hooks/useTechnicians'
 import { useSkills, useCreateSkill } from '@/hooks/useSkills'
 import type { Technician } from '@/types/technician'
+import { isValidPhone } from '@/schema/phone.schema'
 
 const inputClass =
     'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/40 focus:border-moon-violet focus:outline-none'
@@ -35,11 +37,12 @@ const emptyCreateForm = {
     password: '',
     firstName: '',
     lastName: '',
+    phone: '',
     maxConcurrentTickets: '5',
     skillIds: [] as string[],
 }
 
-export default function TechniciansPage() {
+function TechniciansPageContent() {
     const techniciansQuery = useTechnicians({ page: 1, limit: 100 })
     const skillsQuery = useSkills()
     const createTechnician = useCreateTechnician()
@@ -87,7 +90,8 @@ export default function TechniciansPage() {
         if (
             !createForm.username.trim() ||
             !createForm.email.trim() ||
-            !createForm.password
+            !createForm.password ||
+            !isValidPhone(createForm.phone)
         ) {
             return
         }
@@ -99,6 +103,7 @@ export default function TechniciansPage() {
                 password: createForm.password,
                 firstName: createForm.firstName.trim() || undefined,
                 lastName: createForm.lastName.trim() || undefined,
+                phone: createForm.phone.trim(),
                 maxConcurrentTickets: Number(createForm.maxConcurrentTickets) || 5,
                 skills: createForm.skillIds.map((skillId) => ({ skillId })),
             },
@@ -365,6 +370,21 @@ export default function TechniciansPage() {
                         </div>
                     </div>
                     <div>
+                        <label htmlFor="tech-phone" className={labelClass}>
+                            Téléphone
+                        </label>
+                        <input
+                            id="tech-phone"
+                            type="tel"
+                            value={createForm.phone}
+                            onChange={(e) =>
+                                setCreateForm((f) => ({ ...f, phone: e.target.value }))
+                            }
+                            placeholder="90 00 00 00"
+                            className={inputClass}
+                        />
+                    </div>
+                    <div>
                         <label htmlFor="tech-capacity" className={labelClass}>
                             Charge max
                         </label>
@@ -427,6 +447,7 @@ export default function TechniciansPage() {
                                 !createForm.username.trim() ||
                                 !createForm.email.trim() ||
                                 createForm.password.length < 10 ||
+                                !isValidPhone(createForm.phone) ||
                                 createTechnician.isPending
                             }
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
@@ -437,5 +458,13 @@ export default function TechniciansPage() {
                 </div>
             </Modal>
         </div>
+    )
+}
+
+export default function TechniciansPage() {
+    return (
+        <RequireRole roles={['ADMIN']}>
+            <TechniciansPageContent />
+        </RequireRole>
     )
 }

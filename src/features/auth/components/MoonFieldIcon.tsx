@@ -2,9 +2,9 @@
 
 import Box from '@mui/material/Box'
 import InputAdornment from '@mui/material/InputAdornment'
-import { KeyRound, Lock, Mail, UserRound } from 'lucide-react'
+import { KeyRound, Lock, Mail, Phone, UserRound } from 'lucide-react'
 
-export type MoonFieldIconType = 'user' | 'mail' | 'lock' | 'key'
+export type MoonFieldIconType = 'user' | 'mail' | 'lock' | 'key' | 'phone'
 
 type Props = {
     type: MoonFieldIconType
@@ -23,6 +23,7 @@ const MoonFieldIcon = ({ type }: Props) => {
     const Icon = {
         user: UserRound,
         mail: Mail,
+        phone: Phone,
         lock: Lock,
         key: KeyRound,
     }[type]

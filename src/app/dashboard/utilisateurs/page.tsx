@@ -1,20 +1,28 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Search, Plus, Pencil, Ban, AlertCircle } from 'lucide-react'
+import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { Search, Plus, Pencil, Ban, Trash2, AlertCircle } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
-import {
-    mockUsers as initialUsers,
-    mockSkills as initialSkills,
-    type AppUser,
-    type UserRole,
-} from './mockUsers'
+import RequireRole from '@/components/RequireRole'
+import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers'
+import type { User, UserRole } from '@/types/auth'
+import type { AdminAssignableRole } from '@/schema/user.schema'
+import { isValidPhone } from '@/schema/phone.schema'
+import { displayPersonName, formatDate, initialsOf } from '@/features/tickets/ticketUi'
 
 const roleStyles: Record<UserRole, string> = {
     ADMIN: 'bg-moon-abyss text-moon-rose',
-    TECHNICIEN: 'bg-moon-violet/12 text-moon-violet',
+    TECHNICIAN: 'bg-moon-violet/12 text-moon-violet',
     CLIENT: 'bg-moon-lavande/12 text-moon-lavande',
+}
+
+const roleLabels: Record<UserRole, string> = {
+    ADMIN: 'ADMIN',
+    TECHNICIAN: 'TECHNICIEN',
+    CLIENT: 'CLIENT',
 }
 
 const inputClass =
@@ -23,99 +31,142 @@ const inputClass =
 const labelClass =
     'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/45'
 
-const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+const emptyCreate = {
+    username: '',
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    role: 'CLIENT' as AdminAssignableRole,
+}
 
-export default function UsersPage() {
-    const [users, setUsers] = useState<AppUser[]>(initialUsers)
+const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+
+const isStrongPassword = (password: string) =>
+    password.length >= 10 &&
+    password.length <= 72 &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /\d/.test(password)
+
+function UsersPageContent() {
+    const { data: session } = useSession()
+    const myId = session?.user?.id
+
     const [query, setQuery] = useState('')
+    const usersQuery = useUsers({ page: 1, limit: 100, search: query || undefined })
+    const createUser = useCreateUser()
+    const updateUser = useUpdateUser()
+    const deleteUser = useDeleteUser()
+
+    const users = useMemo(() => usersQuery.data?.data ?? [], [usersQuery.data?.data])
 
     const [addOpen, setAddOpen] = useState(false)
-    const [editing, setEditing] = useState<AppUser | null>(null)
-    const [deactivating, setDeactivating] = useState<AppUser | null>(null)
-
-    const [form, setForm] = useState({ name: '', email: '', role: 'CLIENT' as UserRole })
-    const [editSkills, setEditSkills] = useState<string[]>([])
-
-    const filtered = useMemo(
-        () =>
-            users.filter(
-                (u) =>
-                    !query || `${u.name} ${u.email}`.toLowerCase().includes(query.toLowerCase())
-            ),
-        [users, query]
-    )
+    const [editing, setEditing] = useState<User | null>(null)
+    const [deactivating, setDeactivating] = useState<User | null>(null)
+    const [deleting, setDeleting] = useState<User | null>(null)
+    const [createForm, setCreateForm] = useState(emptyCreate)
+    const [editForm, setEditForm] = useState({
+        username: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        role: 'CLIENT' as AdminAssignableRole,
+        isActive: true,
+    })
+    const [editPhoneError, setEditPhoneError] = useState<string | null>(null)
 
     const admins = users.filter((u) => u.role === 'ADMIN').length
-    const techs = users.filter((u) => u.role === 'TECHNICIEN').length
+    const techs = users.filter((u) => u.role === 'TECHNICIAN').length
     const clients = users.filter((u) => u.role === 'CLIENT').length
-    const disabled = users.filter((u) => !u.active).length
+    const disabled = users.filter((u) => !u.isActive).length
+
+    const canSubmitCreate =
+        createForm.username.trim().length >= 3 &&
+        isValidEmail(createForm.email) &&
+        isStrongPassword(createForm.password) &&
+        isValidPhone(createForm.phone)
 
     const openAdd = () => {
-        setForm({ name: '', email: '', role: 'CLIENT' })
+        createUser.reset()
+        setCreateForm(emptyCreate)
         setAddOpen(true)
     }
 
-    const openEdit = (user: AppUser) => {
-        setForm({ name: user.name, email: user.email, role: user.role })
-        setEditSkills(user.role === 'TECHNICIEN' ? ['Linux', 'Cloud AWS', 'Virtualisation'] : [])
+    const closeEdit = () => {
+        setEditing(null)
+        setEditPhoneError(null)
+        updateUser.reset()
+    }
+
+    const openEdit = (user: User) => {
+        updateUser.reset()
+        setEditPhoneError(null)
+        setEditForm({
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName ?? '',
+            lastName: user.lastName ?? '',
+            phone: user.phone ?? '',
+            role: user.role === 'ADMIN' ? 'ADMIN' : 'CLIENT',
+            isActive: user.isActive,
+        })
         setEditing(user)
     }
 
-    const canCreateUser =
-        form.name.trim().length > 0 && isValidEmail(form.email) && !!form.role
-
-    const createUser = () => {
-        if (!canCreateUser) return
-
-        const initials = form.name
-            .split(' ')
-            .map((w) => w[0])
-            .join('')
-            .slice(0, 2)
-            .toUpperCase()
-
-        setUsers((prev) => [
-            ...prev,
+    const submitCreate = () => {
+        if (!canSubmitCreate) return
+        createUser.mutate(
             {
-                id: `u${Date.now()}`,
-                name: form.name.trim(),
-                initials,
-                email: form.email.trim(),
-                role: form.role,
-                active: true,
-                createdAt: new Date().toISOString().slice(0, 10),
+                username: createForm.username.trim(),
+                email: createForm.email.trim(),
+                password: createForm.password,
+                role: createForm.role,
+                firstName: createForm.firstName.trim() || undefined,
+                lastName: createForm.lastName.trim() || undefined,
+                phone: createForm.phone.trim(),
             },
-        ])
-        setAddOpen(false)
+            { onSuccess: () => setAddOpen(false) },
+        )
     }
 
-    const saveEdit = () => {
+    const submitEdit = () => {
         if (!editing) return
-
-        setUsers((prev) =>
-            prev.map((u) =>
-                u.id === editing.id
-                    ? { ...u, name: form.name.trim(), email: form.email.trim(), role: form.role }
-                    : u
-            )
+        if (!isValidPhone(editForm.phone)) {
+            setEditPhoneError('Le numéro de téléphone est requis')
+            return
+        }
+        setEditPhoneError(null)
+        const body = {
+            username: editForm.username.trim(),
+            email: editForm.email.trim(),
+            firstName: editForm.firstName.trim() || undefined,
+            lastName: editForm.lastName.trim() || undefined,
+            phone: editForm.phone.trim(),
+            isActive: editForm.isActive,
+            ...(editing.role !== 'TECHNICIAN' && editing.id !== myId
+                ? { role: editForm.role }
+                : {}),
+        }
+        updateUser.mutate(
+            { id: editing.id, body },
+            { onSuccess: closeEdit },
         )
-        setEditing(null)
     }
 
     const confirmDeactivate = () => {
         if (!deactivating) return
-
-        setUsers((prev) =>
-            prev.map((u) => (u.id === deactivating.id ? { ...u, active: false } : u))
+        updateUser.mutate(
+            { id: deactivating.id, body: { isActive: false } },
+            { onSuccess: () => setDeactivating(null) },
         )
-        setDeactivating(null)
     }
 
-    const toggleSkill = (skill: string) => {
-        setEditSkills((prev) =>
-            prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
-        )
+    const confirmDelete = () => {
+        if (!deleting) return
+        deleteUser.mutate(deleting.id, { onSuccess: () => setDeleting(null) })
     }
 
     return (
@@ -124,7 +175,7 @@ export default function UsersPage() {
                 <div>
                     <h1 className="text-2xl font-bold text-moon-abyss">Utilisateurs</h1>
                     <p className="mt-0.5 text-sm text-moon-abyss/50">
-                        {users.length} comptes enregistrés
+                        {usersQuery.data?.meta.total ?? users.length} comptes enregistrés
                     </p>
                 </div>
                 <button
@@ -137,11 +188,19 @@ export default function UsersPage() {
                 </button>
             </div>
 
-            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                Cette liste est encore simulée : l’API Nest n’expose pas de{' '}
-                <code className="font-mono text-xs">GET /users</code>. Les comptes
-                techniciens se gèrent sur la page Techniciens.
+            <p className="rounded-lg border border-moon-abyss/10 bg-white px-3 py-2 text-sm text-moon-abyss/70">
+                Les comptes techniciens se créent et se gèrent sur{' '}
+                <Link href="/dashboard/techniciens" className="font-medium text-moon-violet hover:underline">
+                    Techniciens
+                </Link>
+                . Ici : clients et administrateurs (ajout, modification, désactivation, suppression).
             </p>
+
+            {usersQuery.isError && (
+                <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                    Impossible de charger les utilisateurs.
+                </p>
+            )}
 
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard value={admins} label="Administrateurs" tone="rose" />
@@ -174,104 +233,195 @@ export default function UsersPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filtered.map((u) => (
-                            <tr key={u.id} className="border-b border-moon-abyss/5 last:border-0 hover:bg-moon-rose/10">
-                                <td className="px-5 py-3.5">
-                                    <span className="flex items-center gap-2.5 font-semibold text-moon-abyss">
-                                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-moon-lavande/15 text-[11px] font-bold text-moon-lavande">
-                                            {u.initials}
-                                        </span>
-                                        {u.name}
-                                    </span>
-                                </td>
-                                <td className="px-5 py-3.5 font-mono text-xs text-moon-abyss/60">{u.email}</td>
-                                <td className="px-5 py-3.5">
-                                    <span className={`rounded-md px-2 py-1 text-[11px] font-bold tracking-wide ${roleStyles[u.role]}`}>
-                                        {u.role}
-                                    </span>
-                                </td>
-                                <td className="px-5 py-3.5">
-                                    <span
-                                        className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                                            u.active
-                                                ? 'bg-emerald-100 text-emerald-700'
-                                                : 'bg-moon-abyss/8 text-moon-abyss/50'
-                                        }`}
-                                    >
-                                        {u.active ? 'Actif' : 'Désactivé'}
-                                    </span>
-                                </td>
-                                <td className="px-5 py-3.5 font-mono text-xs text-moon-abyss/50">{u.createdAt}</td>
-                                <td className="px-5 py-3.5">
-                                    <div className="flex gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => openEdit(u)}
-                                            className="inline-flex items-center gap-1.5 rounded-lg border border-moon-lavande/30 px-3 py-1.5 text-xs font-medium text-moon-lavande transition-colors hover:bg-moon-lavande hover:text-white"
-                                        >
-                                            <Pencil size={12} />
-                                            Modifier
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setDeactivating(u)}
-                                            disabled={!u.active}
-                                            className="inline-flex items-center gap-1.5 rounded-lg border border-moon-abyss/15 px-3 py-1.5 text-xs font-medium text-moon-abyss/50 transition-colors hover:bg-moon-abyss/5 disabled:cursor-not-allowed disabled:opacity-40"
-                                        >
-                                            <Ban size={12} />
-                                            Désactiver
-                                        </button>
-                                    </div>
+                        {usersQuery.isLoading && (
+                            <tr>
+                                <td colSpan={6} className="px-5 py-8 text-sm text-moon-abyss/50">
+                                    Chargement…
                                 </td>
                             </tr>
-                        ))}
+                        )}
+                        {users.map((u) => {
+                            const name = displayPersonName(u.firstName, u.lastName, u.username)
+                            const isSelf = u.id === myId
+                            return (
+                                <tr
+                                    key={u.id}
+                                    className="border-b border-moon-abyss/5 last:border-0 hover:bg-moon-rose/10"
+                                >
+                                    <td className="px-5 py-3.5">
+                                        <span className="flex items-center gap-2.5 font-semibold text-moon-abyss">
+                                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-moon-lavande/15 text-[11px] font-bold text-moon-lavande">
+                                                {initialsOf(name)}
+                                            </span>
+                                            {name}
+                                        </span>
+                                    </td>
+                                    <td className="px-5 py-3.5 font-mono text-xs text-moon-abyss/60">
+                                        {u.email}
+                                    </td>
+                                    <td className="px-5 py-3.5">
+                                        <span
+                                            className={`rounded-md px-2 py-1 text-[11px] font-bold tracking-wide ${roleStyles[u.role]}`}
+                                        >
+                                            {roleLabels[u.role]}
+                                        </span>
+                                    </td>
+                                    <td className="px-5 py-3.5">
+                                        <span
+                                            className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
+                                                u.isActive
+                                                    ? 'bg-emerald-100 text-emerald-700'
+                                                    : 'bg-moon-abyss/8 text-moon-abyss/50'
+                                            }`}
+                                        >
+                                            {u.isActive ? 'Actif' : 'Désactivé'}
+                                        </span>
+                                    </td>
+                                    <td className="px-5 py-3.5 font-mono text-xs text-moon-abyss/50">
+                                        {formatDate(u.createdAt)}
+                                    </td>
+                                    <td className="px-5 py-3.5">
+                                        <div className="flex flex-wrap gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => openEdit(u)}
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-moon-lavande/30 px-3 py-1.5 text-xs font-medium text-moon-lavande transition-colors hover:bg-moon-lavande hover:text-white"
+                                            >
+                                                <Pencil size={12} />
+                                                Modifier
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setDeactivating(u)}
+                                                disabled={!u.isActive || isSelf}
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-moon-abyss/15 px-3 py-1.5 text-xs font-medium text-moon-abyss/50 transition-colors hover:bg-moon-abyss/5 disabled:cursor-not-allowed disabled:opacity-40"
+                                            >
+                                                <Ban size={12} />
+                                                Désactiver
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setDeleting(u)}
+                                                disabled={isSelf}
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                            >
+                                                <Trash2 size={12} />
+                                                Supprimer
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
 
-            {/* Modal ajouter */}
             <Modal open={addOpen} title="Ajouter un utilisateur" onClose={() => setAddOpen(false)}>
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="add-name" className={labelClass}>Nom complet</label>
+                        <label htmlFor="add-username" className={labelClass}>
+                            Nom d&apos;utilisateur
+                        </label>
                         <input
-                            id="add-name"
-                            type="text"
-                            value={form.name}
-                            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                            placeholder="Prénom Nom"
+                            id="add-username"
+                            value={createForm.username}
+                            onChange={(e) => setCreateForm((f) => ({ ...f, username: e.target.value }))}
                             className={inputClass}
                         />
                     </div>
                     <div>
-                        <label htmlFor="add-email" className={labelClass}>Email</label>
+                        <label htmlFor="add-email" className={labelClass}>
+                            Email
+                        </label>
                         <input
                             id="add-email"
                             type="email"
-                            value={form.email}
-                            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                            placeholder="email@exemple.fr"
+                            value={createForm.email}
+                            onChange={(e) => setCreateForm((f) => ({ ...f, email: e.target.value }))}
                             className={inputClass}
                         />
-                        {form.email.trim().length > 0 && !isValidEmail(form.email) && (
-                            <p className="mt-1.5 text-xs text-red-600">
-                                Entrez une adresse e-mail valide (ex. nom@gmail.com).
-                            </p>
-                        )}
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                        <div>
+                            <label htmlFor="add-firstname" className={labelClass}>
+                                Prénom
+                            </label>
+                            <input
+                                id="add-firstname"
+                                value={createForm.firstName}
+                                onChange={(e) =>
+                                    setCreateForm((f) => ({ ...f, firstName: e.target.value }))
+                                }
+                                className={inputClass}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="add-lastname" className={labelClass}>
+                                Nom
+                            </label>
+                            <input
+                                id="add-lastname"
+                                value={createForm.lastName}
+                                onChange={(e) =>
+                                    setCreateForm((f) => ({ ...f, lastName: e.target.value }))
+                                }
+                                className={inputClass}
+                            />
+                        </div>
                     </div>
                     <div>
-                        <label htmlFor="add-role" className={labelClass}>Rôle</label>
+                        <label htmlFor="add-phone" className={labelClass}>
+                            Téléphone
+                        </label>
+                        <input
+                            id="add-phone"
+                            type="tel"
+                            value={createForm.phone}
+                            onChange={(e) => setCreateForm((f) => ({ ...f, phone: e.target.value }))}
+                            placeholder="90 00 00 00"
+                            className={inputClass}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="add-password" className={labelClass}>
+                            Mot de passe
+                        </label>
+                        <input
+                            id="add-password"
+                            type="password"
+                            value={createForm.password}
+                            onChange={(e) => setCreateForm((f) => ({ ...f, password: e.target.value }))}
+                            placeholder="10 caractères, majuscule, minuscule, chiffre"
+                            className={inputClass}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="add-role" className={labelClass}>
+                            Rôle
+                        </label>
                         <select
                             id="add-role"
-                            value={form.role}
-                            onChange={(e) => setForm((f) => ({ ...f, role: e.target.value as UserRole }))}
+                            value={createForm.role}
+                            onChange={(e) =>
+                                setCreateForm((f) => ({
+                                    ...f,
+                                    role: e.target.value as AdminAssignableRole,
+                                }))
+                            }
                             className={inputClass}
                         >
                             <option value="CLIENT">Client</option>
-                            <option value="TECHNICIEN">Technicien</option>
                             <option value="ADMIN">Administrateur</option>
                         </select>
                     </div>
+                    {createUser.isError && (
+                        <p className="text-sm text-rose-700">
+                            {createUser.error instanceof Error
+                                ? createUser.error.message
+                                : 'Création impossible'}
+                        </p>
+                    )}
                     <div className="flex justify-end gap-2.5 pt-2">
                         <button
                             type="button"
@@ -282,132 +432,232 @@ export default function UsersPage() {
                         </button>
                         <button
                             type="button"
-                            onClick={createUser}
-                            disabled={!canCreateUser}
-                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
+                            onClick={submitCreate}
+                            disabled={!canSubmitCreate || createUser.isPending}
+                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:opacity-40"
                         >
-                            Créer le compte
+                            {createUser.isPending ? 'Création…' : 'Créer le compte'}
                         </button>
                     </div>
                 </div>
             </Modal>
 
-            {/* Modal modifier */}
-            <Modal open={!!editing} title="Modifier l'utilisateur" onClose={() => setEditing(null)}>
+            <Modal
+                open={!!editing}
+                title="Modifier l'utilisateur"
+                onClose={closeEdit}
+            >
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="edit-name" className={labelClass}>Nom complet</label>
+                        <label htmlFor="edit-username" className={labelClass}>
+                            Nom d&apos;utilisateur
+                        </label>
                         <input
-                            id="edit-name"
-                            type="text"
-                            value={form.name}
-                            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                            id="edit-username"
+                            value={editForm.username}
+                            onChange={(e) => setEditForm((f) => ({ ...f, username: e.target.value }))}
                             className={inputClass}
                         />
                     </div>
                     <div>
-                        <label htmlFor="edit-email" className={labelClass}>Email</label>
+                        <label htmlFor="edit-email" className={labelClass}>
+                            Email
+                        </label>
                         <input
                             id="edit-email"
                             type="email"
-                            value={form.email}
-                            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                            value={editForm.email}
+                            onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
                             className={inputClass}
                         />
                     </div>
-                    <div>
-                        <label htmlFor="edit-role" className={labelClass}>Rôle</label>
-                        <select
-                            id="edit-role"
-                            value={form.role}
-                            onChange={(e) => setForm((f) => ({ ...f, role: e.target.value as UserRole }))}
-                            className={inputClass}
-                        >
-                            <option value="CLIENT">Client</option>
-                            <option value="TECHNICIEN">Technicien</option>
-                            <option value="ADMIN">Administrateur</option>
-                        </select>
-                    </div>
-
-                    {form.role === 'TECHNICIEN' && (
+                    <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                            <p className={labelClass}>Compétences</p>
-                            <div className="flex flex-wrap gap-2">
-                                {initialSkills.map((s) => {
-                                    const selected = editSkills.includes(s)
-
-                                    return (
-                                        <button
-                                            key={s}
-                                            type="button"
-                                            onClick={() => toggleSkill(s)}
-                                            className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
-                                                selected
-                                                    ? 'bg-moon-violet-dark text-white'
-                                                    : 'bg-moon-rose/40 text-moon-abyss/60 hover:bg-moon-rose/70'
-                                            }`}
-                                        >
-                                            {s}
-                                        </button>
-                                    )
-                                })}
-                            </div>
+                            <label htmlFor="edit-firstname" className={labelClass}>
+                                Prénom
+                            </label>
+                            <input
+                                id="edit-firstname"
+                                value={editForm.firstName}
+                                onChange={(e) =>
+                                    setEditForm((f) => ({ ...f, firstName: e.target.value }))
+                                }
+                                className={inputClass}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="edit-lastname" className={labelClass}>
+                                Nom
+                            </label>
+                            <input
+                                id="edit-lastname"
+                                value={editForm.lastName}
+                                onChange={(e) => setEditForm((f) => ({ ...f, lastName: e.target.value }))}
+                                className={inputClass}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="edit-phone" className={labelClass}>
+                            Téléphone
+                        </label>
+                        <input
+                            id="edit-phone"
+                            type="tel"
+                            value={editForm.phone}
+                            onChange={(e) => {
+                                setEditPhoneError(null)
+                                setEditForm((f) => ({ ...f, phone: e.target.value }))
+                            }}
+                            className={inputClass}
+                        />
+                        {editPhoneError && (
+                            <p className="mt-1.5 text-sm text-rose-700">{editPhoneError}</p>
+                        )}
+                    </div>
+                    {editing?.role !== 'TECHNICIAN' && editing?.id !== myId && (
+                        <div>
+                            <label htmlFor="edit-role" className={labelClass}>
+                                Rôle
+                            </label>
+                            <select
+                                id="edit-role"
+                                value={editForm.role}
+                                onChange={(e) =>
+                                    setEditForm((f) => ({
+                                        ...f,
+                                        role: e.target.value as AdminAssignableRole,
+                                    }))
+                                }
+                                className={inputClass}
+                            >
+                                <option value="CLIENT">Client</option>
+                                <option value="ADMIN">Administrateur</option>
+                            </select>
                         </div>
                     )}
-
+                    {editing?.role === 'TECHNICIAN' && (
+                        <p className="text-xs text-moon-abyss/50">
+                            Le rôle technicien ne peut pas être changé ici. Charge et compétences : page
+                            Techniciens.
+                        </p>
+                    )}
+                    {updateUser.isError && (
+                        <p className="text-sm text-rose-700">
+                            {updateUser.error instanceof Error
+                                ? updateUser.error.message
+                                : 'Modification impossible'}
+                        </p>
+                    )}
                     <div className="flex justify-end gap-2.5 pt-2">
                         <button
                             type="button"
-                            onClick={() => setEditing(null)}
+                            onClick={closeEdit}
                             className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70 hover:bg-moon-rose/20"
                         >
                             Annuler
                         </button>
                         <button
                             type="button"
-                            onClick={saveEdit}
-                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet"
+                            onClick={submitEdit}
+                            disabled={updateUser.isPending}
+                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:opacity-40"
                         >
-                            Enregistrer
+                            {updateUser.isPending ? 'Enregistrement…' : 'Enregistrer'}
                         </button>
                     </div>
                 </div>
             </Modal>
 
-            {/* Modal confirmation désactivation */}
             <Modal
                 open={!!deactivating}
                 title={
                     <span className="flex items-center gap-2">
                         <AlertCircle size={19} className="text-moon-violet" />
-                        Confirmation
+                        Désactiver le compte
                     </span>
                 }
                 onClose={() => setDeactivating(null)}
                 maxWidth={420}
             >
                 <p className="text-sm leading-relaxed text-moon-abyss/70">
-                    Voulez-vous vraiment désactiver ce compte ?
-                    <br />
-                    L&apos;utilisateur ne pourra plus se connecter.
+                    L&apos;utilisateur ne pourra plus se connecter. Vous pourrez le réactiver plus tard
+                    via Modifier.
                 </p>
+                {updateUser.isError && (
+                    <p className="mt-3 text-sm text-rose-700">
+                        {updateUser.error instanceof Error
+                            ? updateUser.error.message
+                            : 'Action impossible'}
+                    </p>
+                )}
                 <div className="mt-5 flex justify-end gap-2.5">
                     <button
                         type="button"
                         onClick={() => setDeactivating(null)}
-                        className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70 hover:bg-moon-rose/20"
+                        className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70"
                     >
                         Annuler
                     </button>
                     <button
                         type="button"
                         onClick={confirmDeactivate}
-                        className="rounded-lg bg-moon-violet px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet-dark"
+                        disabled={updateUser.isPending}
+                        className="rounded-lg bg-moon-violet px-4 py-2.5 text-sm font-medium text-white"
                     >
                         Confirmer
                     </button>
                 </div>
             </Modal>
+
+            <Modal
+                open={!!deleting}
+                title={
+                    <span className="flex items-center gap-2">
+                        <AlertCircle size={19} className="text-rose-600" />
+                        Supprimer le compte
+                    </span>
+                }
+                onClose={() => setDeleting(null)}
+                maxWidth={420}
+            >
+                <p className="text-sm leading-relaxed text-moon-abyss/70">
+                    Suppression logique : le compte disparaît de la liste. Impossible si des tickets
+                    ouverts lui sont encore assignés.
+                </p>
+                {deleteUser.isError && (
+                    <p className="mt-3 text-sm text-rose-700">
+                        {deleteUser.error instanceof Error
+                            ? deleteUser.error.message
+                            : 'Suppression impossible'}
+                    </p>
+                )}
+                <div className="mt-5 flex justify-end gap-2.5">
+                    <button
+                        type="button"
+                        onClick={() => setDeleting(null)}
+                        className="rounded-lg border border-moon-abyss/15 px-4 py-2.5 text-sm font-medium text-moon-abyss/70"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="button"
+                        onClick={confirmDelete}
+                        disabled={deleteUser.isPending}
+                        className="rounded-lg bg-rose-600 px-4 py-2.5 text-sm font-medium text-white"
+                    >
+                        {deleteUser.isPending ? 'Suppression…' : 'Supprimer'}
+                    </button>
+                </div>
+            </Modal>
         </div>
+    )
+}
+
+export default function UsersPage() {
+    return (
+        <RequireRole roles={['ADMIN']}>
+            <UsersPageContent />
+        </RequireRole>
     )
 }
