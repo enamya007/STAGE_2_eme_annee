@@ -59,19 +59,15 @@ Le compte créé est un compte **client**. Les comptes **technicien** et **admin
 Après connexion, l’interface se compose de :
 
 - **Barre latérale gauche** : navigation et bouton **Se déconnecter**.
-- **Barre du haut** : fil d’Ariane (rôle / page), **recherche de tickets**, **cloche de notifications**.
+- **Barre du haut** : fil d’Ariane (rôle / page) et **cloche de notifications**.
 - **Zone centrale** : contenu de la page.
 
-### 3.1 Recherche globale
-
-Dans la barre du haut, tapez un mot-clé puis validez. Vous êtes redirigé vers **Tickets**, avec les résultats filtrés.
-
-### 3.2 Notifications
+### 3.1 Notifications
 
 La cloche affiche les alertes liées à vos tickets (affectation, commentaires, etc.).  
 Cliquez sur une notification pour ouvrir le ticket concerné. **Tout lu** marque toutes les notifications comme lues.
 
-### 3.3 Menu selon le rôle
+### 3.2 Menu selon le rôle
 
 | Menu | Client | Technicien | Administrateur |
 | --- | :---: | :---: | :---: |
@@ -201,7 +197,7 @@ L’admin voit **tous** les tickets. Il peut :
 
 - **créer** un ticket (comme un client) ;
 - **filtrer** par statut, priorité, technicien ;
-- **rechercher** (barre de la page ou recherche globale) ;
+- **rechercher** (barre de la page Tickets) ;
 - **affecter** ou **réaffecter** un technicien (statuts Ouvert ou Affecté) ;
 - **prendre en charge** un ticket déjà affecté ;
 - **annuler** un ticket Ouvert, Affecté ou En cours ;

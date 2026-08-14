@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Search, Bell, ChevronDown } from 'lucide-react'
+import { Bell, ChevronDown } from 'lucide-react'
 import type { UserRole } from '@/types/auth'
 import {
     useNotifications,
@@ -31,9 +31,7 @@ const roleLabels: Record<UserRole, string> = {
 
 export default function Topbar() {
     const pathname = usePathname()
-    const router = useRouter()
     const { data } = useSession()
-    const [search, setSearch] = useState('')
     const roleLabel = data?.user?.role ? roleLabels[data.user.role] : 'Compte'
     const section = pathname.startsWith('/dashboard/tickets/')
         ? 'Détail ticket'
@@ -73,27 +71,6 @@ export default function Topbar() {
             </div>
 
             <div className="flex items-center gap-3">
-                <form
-                    className="flex items-center gap-2 rounded-full border border-moon-rose/50 bg-moon-rose/30 px-3.5 py-1.5"
-                    onSubmit={(e) => {
-                        e.preventDefault()
-                        const q = search.trim()
-                        router.push(
-                            q
-                                ? `/dashboard/tickets?q=${encodeURIComponent(q)}`
-                                : '/dashboard/tickets',
-                        )
-                    }}
-                >
-                    <Search size={15} className="text-moon-violet" />
-                    <input
-                        type="search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Recherche de tickets..."
-                        className="w-44 bg-transparent text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:outline-none"
-                    />
-                </form>
                 <div className="relative" ref={panelRef}>
                     <button
                         type="button"
