@@ -38,8 +38,8 @@ export const ALL_NAV_HREFS: Record<NavItemKey, string> = {
 export function navKeysForRole(role: UserRole | undefined): NavItemKey[] {
   if (role === 'ADMIN') {
     return [
-      'tickets',
       'dashboard',
+      'tickets',
       'techniciens',
       'utilisateurs',
       'statistiques',
@@ -47,5 +47,5 @@ export function navKeysForRole(role: UserRole | undefined): NavItemKey[] {
     ]
   }
 
-  return ['tickets', 'dashboard', 'parametres']
+  return ['dashboard', 'tickets', 'parametres']
 }
