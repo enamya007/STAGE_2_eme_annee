@@ -39,6 +39,11 @@ export const moonLabelSx = {
     '&:hover': { color: moon.magenta },
 } as const
 
+export const moonRequiredMarkSx = {
+    color: '#d32f2f',
+    marginLeft: 2,
+} as const
+
 export const moonFieldGroupSx = {
     '&:focus-within .moon-field-label': {
         color: moon.magenta,

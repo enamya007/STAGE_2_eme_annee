@@ -1,17 +1,25 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Search, Plus, Pencil, Ban, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
 import RequireRole from '@/components/RequireRole'
+import RequiredMark from '@/components/RequiredMark'
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers'
 import type { User, UserRole } from '@/types/auth'
 import type { AdminAssignableRole } from '@/schema/user.schema'
 import { isValidPhone } from '@/schema/phone.schema'
 import { displayPersonName, formatDate, initialsOf } from '@/features/tickets/ticketUi'
+import {
+    isValidEmail,
+    isStrongPassword,
+    isValidOptionalName,
+    isValidUsername,
+    NAME_MAX_LENGTH,
+    USERNAME_MAX_LENGTH,
+} from '@/lib/validators'
 
 const roleStyles: Record<UserRole, string> = {
     ADMIN: 'bg-moon-abyss text-moon-rose',
@@ -40,15 +48,6 @@ const emptyCreate = {
     phone: '',
     role: 'CLIENT' as AdminAssignableRole,
 }
-
-const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
-
-const isStrongPassword = (password: string) =>
-    password.length >= 10 &&
-    password.length <= 72 &&
-    /[a-z]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /\d/.test(password)
 
 function UsersPageContent() {
     const { data: session } = useSession()
@@ -85,10 +84,18 @@ function UsersPageContent() {
     const disabled = users.filter((u) => !u.isActive).length
 
     const canSubmitCreate =
-        createForm.username.trim().length >= 3 &&
+        isValidUsername(createForm.username) &&
         isValidEmail(createForm.email) &&
         isStrongPassword(createForm.password) &&
-        isValidPhone(createForm.phone)
+        isValidPhone(createForm.phone) &&
+        isValidOptionalName(createForm.firstName) &&
+        isValidOptionalName(createForm.lastName)
+
+    const canSubmitEdit =
+        isValidUsername(editForm.username) &&
+        isValidEmail(editForm.email) &&
+        isValidOptionalName(editForm.firstName) &&
+        isValidOptionalName(editForm.lastName)
 
     const openAdd = () => {
         createUser.reset()
@@ -134,7 +141,7 @@ function UsersPageContent() {
     }
 
     const submitEdit = () => {
-        if (!editing) return
+        if (!editing || !canSubmitEdit) return
         if (!isValidPhone(editForm.phone)) {
             setEditPhoneError('Le numéro de téléphone est requis')
             return
@@ -197,14 +204,6 @@ function UsersPageContent() {
                 </button>
             </div>
 
-            <p className="rounded-lg border border-moon-abyss/10 bg-white px-3 py-2 text-sm text-moon-abyss/70">
-                Les comptes techniciens se créent et se gèrent sur{' '}
-                <Link href="/dashboard/techniciens" className="font-medium text-moon-violet hover:underline">
-                    Techniciens
-                </Link>
-                . Ici : clients et administrateurs (ajout, modification, désactivation, suppression).
-            </p>
-
             {usersQuery.isError && (
                 <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
                     Impossible de charger les utilisateurs.
@@ -215,7 +214,7 @@ function UsersPageContent() {
                 <StatCard value={admins} label="Administrateurs" tone="rose" />
                 <StatCard value={techs} label="Techniciens" tone="violet" />
                 <StatCard value={clients} label="Clients" tone="lavande" />
-                <StatCard value={disabled} label="Désactivés" tone="neutral" />
+                <StatCard value={disabled} label="Désactivés" tone="green" />
             </div>
 
             <div className="flex w-72 items-center gap-2 rounded-lg border border-moon-rose/40 bg-moon-rose/25 px-3 py-2 shadow-sm">
@@ -345,18 +344,19 @@ function UsersPageContent() {
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="add-username" className={labelClass}>
-                            Nom d&apos;utilisateur
+                            Nom d&apos;utilisateur<RequiredMark />
                         </label>
                         <input
                             id="add-username"
                             value={createForm.username}
                             onChange={(e) => setCreateForm((f) => ({ ...f, username: e.target.value }))}
+                            maxLength={USERNAME_MAX_LENGTH}
                             className={inputClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="add-email" className={labelClass}>
-                            Email
+                            Email<RequiredMark />
                         </label>
                         <input
                             id="add-email"
@@ -377,6 +377,7 @@ function UsersPageContent() {
                                 onChange={(e) =>
                                     setCreateForm((f) => ({ ...f, firstName: e.target.value }))
                                 }
+                                maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
@@ -390,13 +391,14 @@ function UsersPageContent() {
                                 onChange={(e) =>
                                     setCreateForm((f) => ({ ...f, lastName: e.target.value }))
                                 }
+                                maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
                     </div>
                     <div>
                         <label htmlFor="add-phone" className={labelClass}>
-                            Téléphone
+                            Téléphone<RequiredMark />
                         </label>
                         <input
                             id="add-phone"
@@ -404,12 +406,13 @@ function UsersPageContent() {
                             value={createForm.phone}
                             onChange={(e) => setCreateForm((f) => ({ ...f, phone: e.target.value }))}
                             placeholder="90 00 00 00"
+                            maxLength={30}
                             className={inputClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="add-password" className={labelClass}>
-                            Mot de passe
+                            Mot de passe<RequiredMark />
                         </label>
                         <input
                             id="add-password"
@@ -417,6 +420,7 @@ function UsersPageContent() {
                             value={createForm.password}
                             onChange={(e) => setCreateForm((f) => ({ ...f, password: e.target.value }))}
                             placeholder="10 caractères, majuscule, minuscule, chiffre"
+                            maxLength={72}
                             className={inputClass}
                         />
                     </div>
@@ -474,18 +478,19 @@ function UsersPageContent() {
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="edit-username" className={labelClass}>
-                            Nom d&apos;utilisateur
+                            Nom d&apos;utilisateur<RequiredMark />
                         </label>
                         <input
                             id="edit-username"
                             value={editForm.username}
                             onChange={(e) => setEditForm((f) => ({ ...f, username: e.target.value }))}
+                            maxLength={USERNAME_MAX_LENGTH}
                             className={inputClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="edit-email" className={labelClass}>
-                            Email
+                            Email<RequiredMark />
                         </label>
                         <input
                             id="edit-email"
@@ -506,6 +511,7 @@ function UsersPageContent() {
                                 onChange={(e) =>
                                     setEditForm((f) => ({ ...f, firstName: e.target.value }))
                                 }
+                                maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
@@ -517,13 +523,14 @@ function UsersPageContent() {
                                 id="edit-lastname"
                                 value={editForm.lastName}
                                 onChange={(e) => setEditForm((f) => ({ ...f, lastName: e.target.value }))}
+                                maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
                     </div>
                     <div>
                         <label htmlFor="edit-phone" className={labelClass}>
-                            Téléphone
+                            Téléphone<RequiredMark />
                         </label>
                         <input
                             id="edit-phone"
@@ -533,6 +540,7 @@ function UsersPageContent() {
                                 setEditPhoneError(null)
                                 setEditForm((f) => ({ ...f, phone: e.target.value }))
                             }}
+                            maxLength={30}
                             className={inputClass}
                         />
                         {editPhoneError && (
@@ -609,8 +617,8 @@ function UsersPageContent() {
                         <button
                             type="button"
                             onClick={submitEdit}
-                            disabled={updateUser.isPending}
-                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:opacity-40"
+                            disabled={!canSubmitEdit || updateUser.isPending}
+                            className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             {updateUser.isPending ? 'Enregistrement…' : 'Enregistrer'}
                         </button>

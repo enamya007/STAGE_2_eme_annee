@@ -1,0 +1,132 @@
+<mxfile host="Electron">
+  <diagram name="Activité - Créer un ticket" id="actCreerTicket">
+    <mxGraphModel dx="645" dy="470" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1120" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="su_user" parent="1" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=none;strokeColor=#666666;fontStyle=1;" value="Utilisateur (Client / Administrateur)" vertex="1">
+          <mxGeometry height="1030" width="340" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_init" parent="su_user" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1">
+          <mxGeometry height="24" width="24" x="150" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="note_pre" parent="su_user" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF9E6;strokeColor=#D6B656;size=12;fontSize=10;align=left;" value="Pré-condition : utilisateur authentifié (Client ou Administrateur)." vertex="1">
+          <mxGeometry height="60" width="130" x="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_open" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Ouvrir le formulaire de création" vertex="1">
+          <mxGeometry height="50" width="210" x="55" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="u_merge" parent="su_user" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="140" y="175" as="geometry" />
+        </mxCell>
+        <mxCell id="u_fill" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Saisir titre, description et priorité" vertex="1">
+          <mxGeometry height="50" width="210" x="55" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="u_cat" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Choisir une catégorie" vertex="1">
+          <mxGeometry height="50" width="210" x="55" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="u_loc" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Renseigner le lieu d&#39;intervention" vertex="1">
+          <mxGeometry height="50" width="210" x="55" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="u_submit" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Soumettre le formulaire" vertex="1">
+          <mxGeometry height="50" width="210" x="55" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="u_display" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Consulter le ticket créé" vertex="1">
+          <mxGeometry height="50" width="210" x="55" y="855" as="geometry" />
+        </mxCell>
+        <mxCell id="u_final" parent="su_user" style="shape=endState;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="150" y="945" as="geometry" />
+        </mxCell>
+        <mxCell id="su_sys" parent="1" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=none;strokeColor=#666666;fontStyle=1;" value="Système Rapid Response" vertex="1">
+          <mxGeometry height="1030" width="450" x="380" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_check" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Vérifier les champs obligatoires" vertex="1">
+          <mxGeometry height="50" width="220" x="100" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="s_dec" parent="su_sys" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="Champs valides ?" vertex="1">
+          <mxGeometry height="70" width="130" x="145" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="s_error" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#F8CECC;strokeColor=#B85450;" value="Signaler les champs à corriger" vertex="1">
+          <mxGeometry height="60" width="130" x="300" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="s_create" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Créer le ticket (statut « Ouvert ») et l&#39;associer au propriétaire" vertex="1">
+          <mxGeometry height="60" width="220" x="30" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="s_obj" parent="su_sys" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" value=": Ticket [Ouvert]" vertex="1">
+          <mxGeometry height="44" width="170" x="55" y="785" as="geometry" />
+        </mxCell>
+        <mxCell id="s_fork" parent="su_sys" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="8" width="160" x="60" y="855" as="geometry" />
+        </mxCell>
+        <mxCell id="s_event" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Émettre l&#39;événement de création + notifier (notification / e-mail)" vertex="1">
+          <mxGeometry height="60" width="200" x="230" y="885" as="geometry" />
+        </mxCell>
+        <mxCell id="s_flowfinal" parent="su_sys" style="ellipse;html=1;fillColor=none;strokeColor=#000000;fontSize=16;verticalAlign=middle;" value="✕" vertex="1">
+          <mxGeometry height="30" width="30" x="315" y="965" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_ff" parent="su_sys" style="text;html=1;align=left;fontSize=9;fontColor=#666666;" value="fin de flot (la notification&#xa;n&#39;arrête pas l&#39;activité)" vertex="1">
+          <mxGeometry height="34" width="95" x="350" y="963" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" edge="1" parent="1" source="u_init" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_open">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" edge="1" parent="1" source="u_open" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_merge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" edge="1" parent="1" source="u_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_fill">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" edge="1" parent="1" source="u_fill" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_cat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t5" edge="1" parent="1" source="u_cat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_loc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t6" edge="1" parent="1" source="u_loc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_submit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t7" edge="1" parent="1" source="u_submit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t8" edge="1" parent="1" source="s_check" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_dec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t9" edge="1" parent="1" source="s_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_create" value="[valide]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t10" edge="1" parent="1" source="s_dec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_error" value="[champs invalides]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t11" edge="1" parent="1" source="s_error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_merge" value="corriger">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="420" />
+              <mxPoint x="410" y="235" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t12" edge="1" parent="1" source="s_create" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_obj">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t13" edge="1" parent="1" source="s_obj" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_fork">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t14" edge="1" parent="1" source="s_fork" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t15" edge="1" parent="1" source="s_event" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_flowfinal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t16" edge="1" parent="1" source="s_fork" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_display">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t17" edge="1" parent="1" source="u_display" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_final">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tpre" edge="1" parent="1" source="note_pre" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#D6B656;" target="u_init">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

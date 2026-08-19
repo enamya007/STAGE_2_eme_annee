@@ -1,12 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useMe } from '@/hooks/useAuth'
 import { useUpdateUser } from '@/hooks/useUsers'
 import { logoutCurrentSession } from '@/lib/logout'
 import { displayPersonName } from '@/features/tickets/ticketUi'
 import { isValidPhone } from '@/schema/phone.schema'
+import RequiredMark from '@/components/RequiredMark'
+import {
+    isValidEmail,
+    isValidOptionalName,
+    isValidUsername,
+    NAME_MAX_LENGTH,
+    USERNAME_MAX_LENGTH,
+} from '@/lib/validators'
 
 const roleLabels = {
     ADMIN: 'Administrateur',
@@ -33,9 +41,10 @@ export default function SettingsPage() {
         lastName: '',
         phone: '',
     })
+    const [loadedForId, setLoadedForId] = useState<string | null>(null)
 
-    useEffect(() => {
-        if (!me) return
+    if (me && loadedForId !== me.id) {
+        setLoadedForId(me.id)
         setForm({
             username: me.username,
             email: me.email,
@@ -43,12 +52,14 @@ export default function SettingsPage() {
             lastName: me.lastName ?? '',
             phone: me.phone ?? '',
         })
-    }, [me])
+    }
 
     const canSave =
-        form.username.trim().length >= 3 &&
-        form.email.includes('@') &&
-        isValidPhone(form.phone)
+        isValidUsername(form.username) &&
+        isValidEmail(form.email) &&
+        isValidPhone(form.phone) &&
+        isValidOptionalName(form.firstName) &&
+        isValidOptionalName(form.lastName)
 
     const save = () => {
         if (!me || !canSave) return
@@ -114,7 +125,7 @@ export default function SettingsPage() {
                         <div className="grid gap-4 sm:grid-cols-2">
                             <div>
                                 <label htmlFor="me-username" className={labelClass}>
-                                    Identifiant
+                                    Identifiant<RequiredMark />
                                 </label>
                                 <input
                                     id="me-username"
@@ -122,12 +133,13 @@ export default function SettingsPage() {
                                     onChange={(e) =>
                                         setForm((f) => ({ ...f, username: e.target.value }))
                                     }
+                                    maxLength={USERNAME_MAX_LENGTH}
                                     className={inputClass}
                                 />
                             </div>
                             <div>
                                 <label htmlFor="me-email" className={labelClass}>
-                                    Email
+                                    Email<RequiredMark />
                                 </label>
                                 <input
                                     id="me-email"
@@ -149,6 +161,7 @@ export default function SettingsPage() {
                                     onChange={(e) =>
                                         setForm((f) => ({ ...f, firstName: e.target.value }))
                                     }
+                                    maxLength={NAME_MAX_LENGTH}
                                     className={inputClass}
                                 />
                             </div>
@@ -162,12 +175,13 @@ export default function SettingsPage() {
                                     onChange={(e) =>
                                         setForm((f) => ({ ...f, lastName: e.target.value }))
                                     }
+                                    maxLength={NAME_MAX_LENGTH}
                                     className={inputClass}
                                 />
                             </div>
                             <div className="sm:col-span-2">
                                 <label htmlFor="me-phone" className={labelClass}>
-                                    Téléphone
+                                    Téléphone<RequiredMark />
                                 </label>
                                 <input
                                     id="me-phone"
@@ -176,6 +190,7 @@ export default function SettingsPage() {
                                     onChange={(e) =>
                                         setForm((f) => ({ ...f, phone: e.target.value }))
                                     }
+                                    maxLength={30}
                                     className={inputClass}
                                 />
                             </div>

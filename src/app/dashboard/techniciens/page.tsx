@@ -5,10 +5,21 @@ import { Wrench, Plus } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
 import RequireRole from '@/components/RequireRole'
+import RequiredMark from '@/components/RequiredMark'
 import { useTechnicians, useCreateTechnician } from '@/hooks/useTechnicians'
 import { useSkills, useCreateSkill } from '@/hooks/useSkills'
 import type { Technician } from '@/types/technician'
 import { isValidPhone } from '@/schema/phone.schema'
+import {
+    isValidEmail,
+    isStrongPassword,
+    isValidOptionalName,
+    isValidUsername,
+    NAME_MAX_LENGTH,
+    USERNAME_MAX_LENGTH,
+    SKILL_NAME_MIN_LENGTH,
+    SKILL_NAME_MAX_LENGTH,
+} from '@/lib/validators'
 
 const inputClass =
     'w-full rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none'
@@ -60,9 +71,13 @@ function TechniciansPageContent() {
     const busy = technicians.filter((t) => !t.isAvailable).length
     const activeTickets = technicians.reduce((sum, t) => sum + t.currentLoad, 0)
 
+    const canSubmitSkill =
+        newSkill.trim().length >= SKILL_NAME_MIN_LENGTH &&
+        newSkill.trim().length <= SKILL_NAME_MAX_LENGTH
+
     const addSkill = () => {
         const value = newSkill.trim()
-        if (!value || createSkill.isPending) return
+        if (!canSubmitSkill || createSkill.isPending) return
 
         createSkill.mutate(
             { name: value },
@@ -86,15 +101,16 @@ function TechniciansPageContent() {
         }))
     }
 
+    const canSubmitCreate =
+        isValidUsername(createForm.username) &&
+        isValidEmail(createForm.email) &&
+        isStrongPassword(createForm.password) &&
+        isValidPhone(createForm.phone) &&
+        isValidOptionalName(createForm.firstName) &&
+        isValidOptionalName(createForm.lastName)
+
     const submitCreate = () => {
-        if (
-            !createForm.username.trim() ||
-            !createForm.email.trim() ||
-            !createForm.password ||
-            !isValidPhone(createForm.phone)
-        ) {
-            return
-        }
+        if (!canSubmitCreate) return
 
         createTechnician.mutate(
             {
@@ -271,12 +287,13 @@ function TechniciansPageContent() {
                         onChange={(e) => setNewSkill(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && addSkill()}
                         placeholder="Nouvelle compétence..."
+                        maxLength={SKILL_NAME_MAX_LENGTH}
                         className="flex-1 rounded-lg border border-moon-abyss/12 px-3.5 py-2.5 text-sm text-moon-abyss placeholder:text-moon-abyss/55 focus:border-moon-violet focus:outline-none"
                     />
                     <button
                         type="button"
                         onClick={addSkill}
-                        disabled={!newSkill.trim() || createSkill.isPending}
+                        disabled={!canSubmitSkill || createSkill.isPending}
                         className="flex items-center gap-1.5 rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                     >
                         <Plus size={15} />
@@ -295,7 +312,7 @@ function TechniciansPageContent() {
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label htmlFor="tech-username" className={labelClass}>
-                                Nom d&apos;utilisateur
+                                Nom d&apos;utilisateur<RequiredMark />
                             </label>
                             <input
                                 id="tech-username"
@@ -305,12 +322,13 @@ function TechniciansPageContent() {
                                     setCreateForm((f) => ({ ...f, username: e.target.value }))
                                 }
                                 placeholder="jtech"
+                                maxLength={USERNAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
                         <div>
                             <label htmlFor="tech-email" className={labelClass}>
-                                E-mail
+                                E-mail<RequiredMark />
                             </label>
                             <input
                                 id="tech-email"
@@ -326,7 +344,7 @@ function TechniciansPageContent() {
                     </div>
                     <div>
                         <label htmlFor="tech-password" className={labelClass}>
-                            Mot de passe
+                            Mot de passe<RequiredMark />
                         </label>
                         <input
                             id="tech-password"
@@ -336,13 +354,14 @@ function TechniciansPageContent() {
                                 setCreateForm((f) => ({ ...f, password: e.target.value }))
                             }
                             placeholder="10 caractères, majuscule, minuscule, chiffre"
+                            maxLength={72}
                             className={inputClass}
                         />
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label htmlFor="tech-firstname" className={labelClass}>
-                                Prénom (optionnel)
+                                Prénom
                             </label>
                             <input
                                 id="tech-firstname"
@@ -351,12 +370,13 @@ function TechniciansPageContent() {
                                 onChange={(e) =>
                                     setCreateForm((f) => ({ ...f, firstName: e.target.value }))
                                 }
+                                maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
                         <div>
                             <label htmlFor="tech-lastname" className={labelClass}>
-                                Nom (optionnel)
+                                Nom
                             </label>
                             <input
                                 id="tech-lastname"
@@ -365,13 +385,14 @@ function TechniciansPageContent() {
                                 onChange={(e) =>
                                     setCreateForm((f) => ({ ...f, lastName: e.target.value }))
                                 }
+                                maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
                         </div>
                     </div>
                     <div>
                         <label htmlFor="tech-phone" className={labelClass}>
-                            Téléphone
+                            Téléphone<RequiredMark />
                         </label>
                         <input
                             id="tech-phone"
@@ -381,6 +402,7 @@ function TechniciansPageContent() {
                                 setCreateForm((f) => ({ ...f, phone: e.target.value }))
                             }
                             placeholder="90 00 00 00"
+                            maxLength={30}
                             className={inputClass}
                         />
                     </div>
@@ -443,13 +465,7 @@ function TechniciansPageContent() {
                         <button
                             type="button"
                             onClick={submitCreate}
-                            disabled={
-                                !createForm.username.trim() ||
-                                !createForm.email.trim() ||
-                                createForm.password.length < 10 ||
-                                !isValidPhone(createForm.phone) ||
-                                createTechnician.isPending
-                            }
+                            disabled={!canSubmitCreate || createTechnician.isPending}
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             {createTechnician.isPending ? 'Création…' : 'Créer'}

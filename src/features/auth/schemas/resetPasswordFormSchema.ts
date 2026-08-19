@@ -26,6 +26,7 @@ export const resetPasswordFormSchema = pipe(
         confirmPassword: pipe(
             string('Veuillez confirmer le mot de passe'),
             minLength(10, 'Entrez un minimum de 10 caractères'),
+            maxLength(72, 'Le mot de passe ne doit pas dépasser 72 caractères'),
         ),
     }),
     forward(

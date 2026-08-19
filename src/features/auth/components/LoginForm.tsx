@@ -93,6 +93,7 @@ export default function LoginForm() {
                         placeholder="name@exemple.com"
                         type="text"
                         autoComplete="username"
+                        required
                         rounded="pill"
                         error={!!errors.email}
                         helperText={errors.email?.message}
@@ -116,6 +117,7 @@ export default function LoginForm() {
                         placeholder="Mot de passe"
                         type={showPassword ? 'text' : 'password'}
                         autoComplete="current-password"
+                        required
                         rounded="pill"
                         error={!!errors.password}
                         helperText={errors.password?.message}

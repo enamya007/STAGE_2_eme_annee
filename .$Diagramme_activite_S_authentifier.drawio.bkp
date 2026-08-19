@@ -1,0 +1,140 @@
+<mxfile host="Electron">
+  <diagram name="Activité - S&#39;authentifier" id="actSauthentifier">
+    <mxGraphModel dx="1290" dy="940" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1000" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="su_user" parent="1" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=none;strokeColor=#666666;fontStyle=1;" value="Utilisateur (Client / Technicien / Administrateur)" vertex="1">
+          <mxGeometry height="940" width="350" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_init" parent="su_user" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1">
+          <mxGeometry height="24" width="24" x="155" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="note_pre" parent="su_user" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF9E6;strokeColor=#D6B656;size=12;fontSize=10;align=left;" value="Pré-condition : l&#39;utilisateur possède un compte." vertex="1">
+          <mxGeometry height="55" width="130" x="210" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_open" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Ouvrir la page de connexion" vertex="1">
+          <mxGeometry height="50" width="210" x="60" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="u_merge" parent="su_user" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="145" y="175" as="geometry" />
+        </mxCell>
+        <mxCell id="u_input" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Saisir l&#39;identifiant (nom d&#39;utilisateur ou e-mail) et le mot de passe" vertex="1">
+          <mxGeometry height="60" width="230" x="50" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="note_sec" parent="su_user" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF9E6;strokeColor=#D6B656;size=12;fontSize=10;align=left;" value="NFR : le mot de passe n&#39;apparaît jamais en clair à l&#39;écran." vertex="1">
+          <mxGeometry height="55" width="170" x="40" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="u_submit" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Soumettre" vertex="1">
+          <mxGeometry height="50" width="210" x="60" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="u_dash" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Accéder au tableau de bord" vertex="1">
+          <mxGeometry height="50" width="210" x="60" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="u_final" parent="su_user" style="shape=endState;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="155" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="su_sys" parent="1" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=none;strokeColor=#666666;fontStyle=1;" value="Système Rapid Response" vertex="1">
+          <mxGeometry height="940" width="470" x="390" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_verify" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Vérifier les identifiants" vertex="1">
+          <mxGeometry height="50" width="220" x="110" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="s_dec1" parent="su_sys" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="Identifiants valides ?" vertex="1">
+          <mxGeometry height="70" width="140" x="150" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="s_msgbad" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#F8CECC;strokeColor=#B85450;" value="Signaler l&#39;échec de connexion" vertex="1">
+          <mxGeometry height="60" width="140" x="280" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="note_rate" parent="su_sys" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF9E6;strokeColor=#D6B656;size=12;fontSize=10;align=left;" value="Tentatives limitées (protection anti-force brute)." vertex="1">
+          <mxGeometry height="50" width="130" x="290" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="s_dec2" parent="su_sys" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" value="Compte actif ?" vertex="1">
+          <mxGeometry height="70" width="140" x="150" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="s_msgdisabled" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#F8CECC;strokeColor=#B85450;" value="Refuser : compte désactivé" vertex="1">
+          <mxGeometry height="60" width="140" x="330" y="577" as="geometry" />
+        </mxCell>
+        <mxCell id="s_final_fail" parent="su_sys" style="shape=endState;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="385" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="cX9bTI4i4i80Lv2iB_ks-1" edge="1" parent="su_sys" source="lbl_fail" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="s_msgdisabled" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_fail" parent="su_sys" style="text;html=1;align=left;fontSize=10;fontColor=#B85450;" value="échec" vertex="1">
+          <mxGeometry height="20" width="50" x="410" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="s_token" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Générer les jetons (accès + rafraîchissement) et appliquer le rôle" vertex="1">
+          <mxGeometry height="60" width="240" x="80" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="s_redirect" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#FFE6CC;strokeColor=#D79B00;" value="Ouvrir la session et rediriger vers le tableau de bord" vertex="1">
+          <mxGeometry height="60" width="240" x="80" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" edge="1" parent="1" source="u_init" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_open">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" edge="1" parent="1" source="u_open" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_merge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" edge="1" parent="1" source="u_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_input">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" edge="1" parent="1" source="u_input" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_submit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t5" edge="1" parent="1" source="u_submit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_verify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t6" edge="1" parent="1" source="s_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_dec1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t7" edge="1" parent="1" source="s_dec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_msgbad" value="[invalides]">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="495" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8" edge="1" parent="1" source="s_msgbad" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_merge" value="réessayer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t9" edge="1" parent="1" source="s_dec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_dec2" value="[valides]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t10" edge="1" parent="1" source="s_dec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_msgdisabled" value="[compte inactif]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t11" edge="1" parent="1" source="s_msgdisabled" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="810" />
+              <mxPoint x="790" y="810" />
+            </Array>
+            <mxPoint x="790" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t12" edge="1" parent="1" source="s_dec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_token" value="[compte actif]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t13" edge="1" parent="1" source="s_token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_redirect">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t14" edge="1" parent="1" source="s_redirect" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_dash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t15" edge="1" parent="1" source="u_dash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_final">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tpre" edge="1" parent="1" source="note_pre" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#D6B656;" target="u_init">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tsec" edge="1" parent="1" source="note_sec" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#D6B656;" target="u_input">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="trate" edge="1" parent="1" source="note_rate" style="edgeStyle=none;html=1;endArrow=none;dashed=1;strokeColor=#D6B656;" target="s_msgbad">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

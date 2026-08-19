@@ -144,6 +144,7 @@ export default function ForgotPasswordCard() {
                                         placeholder="name@exemple.com"
                                         type="email"
                                         autoComplete="email"
+                                        required
                                         rounded="pill"
                                         error={!!errors.email}
                                         helperText={errors.email?.message}

@@ -1,0 +1,131 @@
+<mxfile host="Electron">
+  <diagram name="Activité - S&#39;authentifier" id="actSauthentifier">
+    <mxGraphModel dx="1290" dy="940" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1000" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="su_user" parent="1" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=#eeeeee;strokeColor=#36393d;fontStyle=1;" value="Utilisateur (Client / Technicien / Administrateur)" vertex="1">
+          <mxGeometry height="940" width="350" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u_init" parent="su_user" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1">
+          <mxGeometry height="24" width="24" x="155" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="u_open" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Ouvrir la page de connexion" vertex="1">
+          <mxGeometry height="50" width="210" x="62" y="97" as="geometry" />
+        </mxCell>
+        <mxCell id="u_merge" parent="su_user" style="rhombus;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="147" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="u_input" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Saisir les informations de connexion" vertex="1">
+          <mxGeometry height="60" width="230" x="52" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="u_submit" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;gradientColor=#b3b3b3;strokeColor=#666666;" value="Soumettre" vertex="1">
+          <mxGeometry height="50" width="210" x="60" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="u_dash" parent="su_user" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Accéder au tableau de bord" vertex="1">
+          <mxGeometry height="50" width="210" x="40" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="u_final" parent="su_user" style="shape=endState;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="130" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="su_sys" parent="1" style="swimlane;html=1;startSize=30;horizontal=1;fillColor=#eeeeee;strokeColor=#36393d;fontStyle=1;" value="Système Rapid Response" vertex="1">
+          <mxGeometry height="940" width="470" x="390" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s_verify" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Vérifier les identifiants" vertex="1">
+          <mxGeometry height="50" width="220" x="10" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="s_dec1" parent="su_sys" style="rhombus;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Identifiants valides ?" vertex="1">
+          <mxGeometry height="70" width="140" x="165" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="s_msgbad" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Signaler l&#39;échec de connexion" vertex="1">
+          <mxGeometry height="60" width="140" x="280" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="s_dec2" parent="su_sys" style="rhombus;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Compte actif ?" vertex="1">
+          <mxGeometry height="70" width="140" x="10" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="s_msgdisabled" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Refuser : compte désactivé" vertex="1">
+          <mxGeometry height="60" width="140" x="330" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="s_final_fail" parent="su_sys" style="shape=endState;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="385" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="s_token" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Générer les jetons (accès + rafraîchissement) et appliquer le rôle" vertex="1">
+          <mxGeometry height="60" width="240" x="80" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="s_redirect" parent="su_sys" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Ouvrir la session et rediriger vers le tableau de bord" vertex="1">
+          <mxGeometry height="60" width="240" x="10" y="795" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" edge="1" parent="1" source="u_init" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="u_open">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="207" y="130" />
+              <mxPoint x="207" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t2" edge="1" parent="1" source="u_open" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="u_merge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" edge="1" parent="1" source="u_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="u_input">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" edge="1" parent="1" source="u_input" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="u_submit">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="390" />
+              <mxPoint x="210" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t5" edge="1" parent="1" source="u_submit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="s_verify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t6" edge="1" parent="1" source="s_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="s_dec1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t7" edge="1" parent="1" source="s_dec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="s_msgbad" value="&lt;b&gt;NON&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="535.07" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8" edge="1" parent="1" source="s_msgbad" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="u_merge" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t9" edge="1" parent="1" source="s_dec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;" target="s_dec2" value="&lt;b&gt;OUI&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t10" edge="1" parent="1" source="s_dec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="s_msgdisabled" value="&lt;b&gt;NON&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t11" edge="1" parent="1" source="s_msgdisabled" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="810" />
+              <mxPoint x="790" y="810" />
+            </Array>
+            <mxPoint x="790" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t12" edge="1" parent="1" source="s_dec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="s_token" value="&lt;b&gt;OUI&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t13" edge="1" parent="1" source="s_token" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="s_redirect">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="820" />
+              <mxPoint x="590" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t14" edge="1" parent="1" source="s_redirect" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="u_dash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t15" edge="1" parent="1" source="u_dash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="u_final">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

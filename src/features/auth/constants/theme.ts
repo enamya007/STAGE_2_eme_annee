@@ -14,7 +14,7 @@ export const authColors = {
     iconAccent: '#C9A227',
     submitBg: '#420D4B',
     linkColor: '#7B337E',
-    pageBg: '#ede8f3',
+    pageBg: '#ffffff',
 } as const
 
 /** Dimensions compactes — pas de scroll vertical dans la carte */

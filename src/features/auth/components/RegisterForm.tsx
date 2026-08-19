@@ -96,9 +96,11 @@ export default function RegisterForm() {
                         fieldId="register-fullname"
                         placeholder="KOLA Balakiyém"
                         autoComplete="name"
+                        required
                         error={!!errors.fullName}
                         helperText={errors.fullName?.message}
                         slotProps={{
+                            htmlInput: { maxLength: 80 },
                             input: {
                                 startAdornment: <MoonFieldIcon type="user" />,
                             },
@@ -118,6 +120,7 @@ export default function RegisterForm() {
                         placeholder="name@exemple.com"
                         type="email"
                         autoComplete="email"
+                        required
                         error={!!errors.email}
                         helperText={errors.email?.message}
                         slotProps={{
@@ -140,9 +143,11 @@ export default function RegisterForm() {
                         placeholder="90 00 00 00"
                         type="tel"
                         autoComplete="tel"
+                        required
                         error={!!errors.phone}
                         helperText={errors.phone?.message}
                         slotProps={{
+                            htmlInput: { maxLength: 30 },
                             input: {
                                 startAdornment: <MoonFieldIcon type="phone" />,
                             },
@@ -162,9 +167,11 @@ export default function RegisterForm() {
                         placeholder="Mot de passe"
                         type={showPassword ? 'text' : 'password'}
                         autoComplete="new-password"
+                        required
                         error={!!errors.password}
                         helperText={errors.password?.message}
                         slotProps={{
+                            htmlInput: { maxLength: 72 },
                             input: {
                                 startAdornment: <MoonFieldIcon type="lock" />,
                                 endAdornment: (
@@ -190,9 +197,11 @@ export default function RegisterForm() {
                         placeholder="Confirmer le mot de passe"
                         type={showConfirm ? 'text' : 'password'}
                         autoComplete="new-password"
+                        required
                         error={!!errors.confirmPassword}
                         helperText={errors.confirmPassword?.message}
                         slotProps={{
+                            htmlInput: { maxLength: 72 },
                             input: {
                                 startAdornment: <MoonFieldIcon type="key" />,
                                 endAdornment: (

@@ -5,6 +5,8 @@ import { useTicketComments, useCreateComment } from '@/hooks/useTickets'
 import type { UserRole } from '@/types/auth'
 import type { CommentVisibility } from '@/types/comment'
 import { formatDate, ticketFieldClass, ticketLabelClass } from '@/features/tickets/ticketUi'
+import RequiredMark from '@/components/RequiredMark'
+import { COMMENT_BODY_MAX_LENGTH } from '@/lib/validators'
 
 export default function TicketComments({
   ticketId,
@@ -88,13 +90,14 @@ export default function TicketComments({
           </div>
         )}
         <label htmlFor="comment-body" className={ticketLabelClass}>
-          Nouveau commentaire
+          Nouveau commentaire<RequiredMark />
         </label>
         <textarea
           id="comment-body"
           value={body}
           onChange={(e) => setBody(e.target.value)}
           rows={3}
+          maxLength={COMMENT_BODY_MAX_LENGTH}
           className={`${ticketFieldClass} resize-none`}
           placeholder="Écrire un commentaire…"
         />

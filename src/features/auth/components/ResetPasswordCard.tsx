@@ -213,10 +213,12 @@ export default function ResetPasswordCard() {
                             placeholder="Nouveau mot de passe"
                             type={showPassword ? 'text' : 'password'}
                             autoComplete="new-password"
+                            required
                             rounded="pill"
                             error={!!errors.newPassword}
                             helperText={errors.newPassword?.message}
                             slotProps={{
+                                htmlInput: { maxLength: 72 },
                                 input: {
                                     startAdornment: <MoonFieldIcon type="lock" />,
                                     endAdornment: (
@@ -242,10 +244,12 @@ export default function ResetPasswordCard() {
                             placeholder="Confirmer le mot de passe"
                             type={showConfirm ? 'text' : 'password'}
                             autoComplete="new-password"
+                            required
                             rounded="pill"
                             error={!!errors.confirmPassword}
                             helperText={errors.confirmPassword?.message}
                             slotProps={{
+                                htmlInput: { maxLength: 72 },
                                 input: {
                                     startAdornment: <MoonFieldIcon type="key" />,
                                     endAdornment: (

@@ -9,6 +9,15 @@ import Modal from '@/features/dashboard/components/Modal'
 import AssignTicketModal from '@/features/tickets/AssignTicketModal'
 import TicketComments from '@/features/tickets/TicketComments'
 import TicketAttachments from '@/features/tickets/TicketAttachments'
+import RequiredMark from '@/components/RequiredMark'
+import {
+    TICKET_TITLE_MIN_LENGTH,
+    TICKET_TITLE_MAX_LENGTH,
+    SITE_LABEL_MAX_LENGTH,
+    DESCRIPTION_MAX_LENGTH,
+    RESOLUTION_NOTE_MAX_LENGTH,
+    REASON_MAX_LENGTH,
+} from '@/lib/validators'
 import {
     useTicket,
     useUpdateTicket,
@@ -99,8 +108,14 @@ export default function TicketDetailPage() {
         setEditOpen(true)
     }
 
+    const canSubmitEdit =
+        editForm.title.trim().length >= TICKET_TITLE_MIN_LENGTH &&
+        editForm.title.trim().length <= TICKET_TITLE_MAX_LENGTH &&
+        editForm.description.trim().length > 0 &&
+        editForm.description.trim().length <= DESCRIPTION_MAX_LENGTH
+
     const submitEdit = () => {
-        if (!ticket) return
+        if (!ticket || !canSubmitEdit) return
         updateTicket.mutate(
             {
                 id: ticket.id,
@@ -330,18 +345,19 @@ export default function TicketDetailPage() {
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="edit-title" className={ticketLabelClass}>
-                            Titre
+                            Titre<RequiredMark />
                         </label>
                         <input
                             id="edit-title"
                             value={editForm.title}
                             onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))}
+                            maxLength={TICKET_TITLE_MAX_LENGTH}
                             className={ticketFieldClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="edit-category" className={ticketLabelClass}>
-                            Catégorie
+                            Catégorie<RequiredMark />
                         </label>
                         <select
                             id="edit-category"
@@ -385,12 +401,13 @@ export default function TicketDetailPage() {
                             id="edit-site"
                             value={editForm.siteLabel}
                             onChange={(e) => setEditForm((f) => ({ ...f, siteLabel: e.target.value }))}
+                            maxLength={SITE_LABEL_MAX_LENGTH}
                             className={ticketFieldClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="edit-description" className={ticketLabelClass}>
-                            Description
+                            Description<RequiredMark />
                         </label>
                         <textarea
                             id="edit-description"
@@ -399,6 +416,7 @@ export default function TicketDetailPage() {
                                 setEditForm((f) => ({ ...f, description: e.target.value }))
                             }
                             rows={4}
+                            maxLength={DESCRIPTION_MAX_LENGTH}
                             className={`${ticketFieldClass} resize-none`}
                         />
                     </div>
@@ -413,11 +431,7 @@ export default function TicketDetailPage() {
                         <button
                             type="button"
                             onClick={submitEdit}
-                            disabled={
-                                !editForm.title.trim() ||
-                                !editForm.description.trim() ||
-                                updateTicket.isPending
-                            }
+                            disabled={!canSubmitEdit || updateTicket.isPending}
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:opacity-40"
                         >
                             {updateTicket.isPending ? 'Enregistrement…' : 'Enregistrer'}
@@ -437,13 +451,15 @@ export default function TicketDetailPage() {
                 onClose={() => setReasonOpen(null)}
             >
                 <label htmlFor="ticket-reason" className={ticketLabelClass}>
-                    Motif {reasonOpen === 'reopen' ? '(obligatoire)' : '(optionnel)'}
+                    Motif
+                    {reasonOpen === 'reopen' && <RequiredMark />}
                 </label>
                 <textarea
                     id="ticket-reason"
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     rows={3}
+                    maxLength={REASON_MAX_LENGTH}
                     className={`${ticketFieldClass} resize-none`}
                 />
                 <div className="mt-5 flex justify-end gap-2.5">
@@ -471,13 +487,14 @@ export default function TicketDetailPage() {
 
             <Modal open={resolveOpen} title="Résoudre le ticket" onClose={() => setResolveOpen(false)}>
                 <label htmlFor="resolution-note" className={ticketLabelClass}>
-                    Note de résolution
+                    Note de résolution<RequiredMark />
                 </label>
                 <textarea
                     id="resolution-note"
                     value={resolutionNote}
                     onChange={(e) => setResolutionNote(e.target.value)}
                     rows={4}
+                    maxLength={RESOLUTION_NOTE_MAX_LENGTH}
                     className={`${ticketFieldClass} resize-none`}
                     placeholder="Décrivez la solution apportée…"
                 />

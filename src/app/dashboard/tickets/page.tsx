@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -8,6 +8,14 @@ import { Search, Filter, Plus, ArrowRight, List, LayoutGrid } from 'lucide-react
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
 import AssignTicketModal from '@/features/tickets/AssignTicketModal'
+import RequiredMark from '@/components/RequiredMark'
+import {
+    TICKET_TITLE_MIN_LENGTH,
+    TICKET_TITLE_MAX_LENGTH,
+    SITE_LABEL_MIN_LENGTH,
+    SITE_LABEL_MAX_LENGTH,
+    DESCRIPTION_MAX_LENGTH,
+} from '@/lib/validators'
 import { useTickets, useCreateTicket } from '@/hooks/useTickets'
 import { useTechnicians } from '@/hooks/useTechnicians'
 import { useCategories } from '@/hooks/useCategories'
@@ -35,15 +43,18 @@ function TicketsContent() {
     const isTechnician = role === 'TECHNICIAN'
     const canCreate = role === 'ADMIN' || role === 'CLIENT'
 
-    const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
+    const urlQuery = searchParams.get('q') ?? ''
+    const [query, setQuery] = useState(urlQuery)
+    const [syncedUrlQuery, setSyncedUrlQuery] = useState(urlQuery)
     const [status, setStatus] = useState<'Tous' | TicketStatus>('Tous')
     const [priority, setPriority] = useState<'Toutes' | TicketPriority>('Toutes')
     const [technicianFilter, setTechnicianFilter] = useState('Tous')
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
 
-    useEffect(() => {
-        setQuery(searchParams.get('q') ?? '')
-    }, [searchParams])
+    if (urlQuery !== syncedUrlQuery) {
+        setSyncedUrlQuery(urlQuery)
+        setQuery(urlQuery)
+    }
 
     const listQuery = useMemo(
         () => ({
@@ -111,15 +122,17 @@ function TicketsContent() {
         setCreateRequested(true)
     }
 
+    const canSubmitCreate =
+        createForm.title.trim().length >= TICKET_TITLE_MIN_LENGTH &&
+        createForm.title.trim().length <= TICKET_TITLE_MAX_LENGTH &&
+        createForm.description.trim().length > 0 &&
+        createForm.description.trim().length <= DESCRIPTION_MAX_LENGTH &&
+        !!createForm.categoryId &&
+        createForm.siteLabel.trim().length >= SITE_LABEL_MIN_LENGTH &&
+        createForm.siteLabel.trim().length <= SITE_LABEL_MAX_LENGTH
+
     const submitCreate = () => {
-        if (
-            !createForm.title.trim() ||
-            !createForm.description.trim() ||
-            !createForm.categoryId ||
-            !createForm.siteLabel.trim()
-        ) {
-            return
-        }
+        if (!canSubmitCreate) return
 
         createTicket.mutate(
             {
@@ -434,7 +447,7 @@ function TicketsContent() {
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="ticket-title" className={ticketLabelClass}>
-                            Titre
+                            Titre<RequiredMark />
                         </label>
                         <input
                             id="ticket-title"
@@ -442,12 +455,13 @@ function TicketsContent() {
                             value={createForm.title}
                             onChange={(e) => setCreateForm((f) => ({ ...f, title: e.target.value }))}
                             placeholder="Ex : Panne réseau au 2e étage"
+                            maxLength={TICKET_TITLE_MAX_LENGTH}
                             className={ticketFieldClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="ticket-site" className={ticketLabelClass}>
-                            Site / lieu d&apos;intervention
+                            Site / lieu d&apos;intervention<RequiredMark />
                         </label>
                         <input
                             id="ticket-site"
@@ -457,12 +471,13 @@ function TicketsContent() {
                                 setCreateForm((f) => ({ ...f, siteLabel: e.target.value }))
                             }
                             placeholder="Ex : Agence Lomé Centre, 2e étage"
+                            maxLength={SITE_LABEL_MAX_LENGTH}
                             className={ticketFieldClass}
                         />
                     </div>
                     <div>
                         <label htmlFor="ticket-category" className={ticketLabelClass}>
-                            Catégorie
+                            Catégorie<RequiredMark />
                         </label>
                         <select
                             id="ticket-category"
@@ -513,7 +528,7 @@ function TicketsContent() {
                     </div>
                     <div>
                         <label htmlFor="ticket-description" className={ticketLabelClass}>
-                            Description
+                            Description<RequiredMark />
                         </label>
                         <textarea
                             id="ticket-description"
@@ -523,6 +538,7 @@ function TicketsContent() {
                             }
                             placeholder="Décrivez le problème..."
                             rows={3}
+                            maxLength={DESCRIPTION_MAX_LENGTH}
                             className={`${ticketFieldClass} resize-none`}
                         />
                     </div>
@@ -544,13 +560,7 @@ function TicketsContent() {
                         <button
                             type="button"
                             onClick={submitCreate}
-                            disabled={
-                                !createForm.title.trim() ||
-                                !createForm.description.trim() ||
-                                !createForm.categoryId ||
-                                !createForm.siteLabel.trim() ||
-                                createTicket.isPending
-                            }
+                            disabled={!canSubmitCreate || createTicket.isPending}
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             {createTicket.isPending ? 'Création…' : 'Créer le ticket'}
