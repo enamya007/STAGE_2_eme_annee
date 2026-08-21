@@ -1,0 +1,364 @@
+<mxfile host="Electron" agent="5.0">
+  <diagram id="plan-nav-rr" name="Plan de navigation Rapid Response">
+    <mxGraphModel dx="1340" dy="752" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="titre" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=18;fontStyle=1;" value="Plan de navigation — Rapid Response" vertex="1">
+          <mxGeometry height="30" width="900" x="400" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="accueil" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;fontStyle=1;" value="Page d&#39;accueil&#xa;/" vertex="1">
+          <mxGeometry height="50" width="200" x="750" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="login" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Page de connexion&#xa;/login" vertex="1">
+          <mxGeometry height="50" width="180" x="520" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="register" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Page d&#39;inscription&#xa;/register" vertex="1">
+          <mxGeometry height="50" width="180" x="1000" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="forgot" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Mot de passe oublié&#xa;/forgot-password" vertex="1">
+          <mxGeometry height="50" width="200" x="250" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="reset" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Réinitialiser le mot de passe&#xa;/reset-password" vertex="1">
+          <mxGeometry height="50" width="220" x="40" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="role" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;fontStyle=1;" value="Rôle ?" vertex="1">
+          <mxGeometry height="80" width="140" x="780" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="colClient" parent="1" style="swimlane;horizontal=0;startSize=32;fillColor=#eeeeee;strokeColor=#36393d;fontStyle=1;whiteSpace=wrap;html=1;" value="Interface Client" vertex="1">
+          <mxGeometry height="980" width="500" x="40" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="cDash" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Tableau de bord&#xa;/dashboard" vertex="1">
+          <mxGeometry height="50" width="200" x="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cTick" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Page Tickets&#xa;/dashboard/tickets" vertex="1">
+          <mxGeometry height="50" width="200" x="160" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="cCreate" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Créer un ticket" vertex="1">
+          <mxGeometry height="44" width="180" x="50" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="cDet" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Consulter un ticket&#xa;/dashboard/tickets/:id" vertex="1">
+          <mxGeometry height="50" width="200" x="260" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="cCom" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Commenter / joindre un fichier" vertex="1">
+          <mxGeometry height="44" width="220" x="250" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="cEdit" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Modifier ou annuler&#xa;(si le ticket est ouvert)" vertex="1">
+          <mxGeometry height="50" width="220" x="250" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="cClose" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Réouvrir / clôturer&#xa;(si le ticket est résolu)" vertex="1">
+          <mxGeometry height="50" width="220" x="250" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-2" edge="1" parent="colClient" source="cPar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="fSMb-uWw_i5N4EaWMQm2-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cPar" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Paramètres (consultation)&#xa;/dashboard/parametres" vertex="1">
+          <mxGeometry height="50" width="220" x="60" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="cNotif" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Notifications (cloche)" vertex="1">
+          <mxGeometry height="44" width="220" x="60" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="cOut" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Se déconnecter → /login" vertex="1">
+          <mxGeometry height="44" width="220" x="60" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="ec1" edge="1" parent="colClient" source="cDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cTick">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec2" edge="1" parent="colClient" source="cTick" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cCreate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec3" edge="1" parent="colClient" source="cTick" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cDet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec4" edge="1" parent="colClient" source="cDet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cCom">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec5" edge="1" parent="colClient" source="cDet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cEdit">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240.05" y="270" />
+              <mxPoint x="240.05" y="415.05" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ec6" edge="1" parent="colClient" source="cDet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cClose">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490.05" y="255.05" />
+              <mxPoint x="490.05" y="495.05" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ec7" edge="1" parent="colClient" source="cDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cPar">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="40.05" y="75.05" />
+              <mxPoint x="40.05" y="595.05" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ec8" edge="1" parent="colClient" source="cPar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cNotif">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec9" edge="1" parent="colClient" source="cNotif" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="cOut">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-1" parent="colClient" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Profil (Lecture seule)" vertex="1">
+          <mxGeometry height="50" width="120" x="350" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="colTech" parent="1" style="swimlane;horizontal=0;startSize=32;fillColor=#eeeeee;strokeColor=#36393d;fontStyle=1;whiteSpace=wrap;html=1;" value="Interface Technicien" vertex="1">
+          <mxGeometry height="980" width="530" x="580" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="tDash" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Tableau de bord&#xa;/dashboard" vertex="1">
+          <mxGeometry height="50" width="200" x="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tDisp" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Changer ma disponibilité" vertex="1">
+          <mxGeometry height="44" width="220" x="150" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tTick" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Tickets qui me sont affectés&#xa;/dashboard/tickets" vertex="1">
+          <mxGeometry height="50" width="240" x="140" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="tDet" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Consulter un ticket affecté" vertex="1">
+          <mxGeometry height="44" width="220" x="150" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="tStart" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Démarrer l&#39;intervention" vertex="1">
+          <mxGeometry height="44" width="200" x="40" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="tRes" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Marquer le ticket résolu" vertex="1">
+          <mxGeometry height="44" width="200" x="270" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="tCom" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Commenter (public / interne)&#xa;Joindre un fichier" vertex="1">
+          <mxGeometry height="50" width="240" x="140" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-4" edge="1" parent="colTech" source="tPar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="fSMb-uWw_i5N4EaWMQm2-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tPar" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Paramètres (consultation)&#xa;/dashboard/parametres" vertex="1">
+          <mxGeometry height="50" width="220" x="240" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="tNotif" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Notifications (cloche)" vertex="1">
+          <mxGeometry height="44" width="220" x="240" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="tOut" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Se déconnecter → /login" vertex="1">
+          <mxGeometry height="44" width="220" x="240" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="et1" edge="1" parent="colTech" source="tDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tDisp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="et2" edge="1" parent="colTech" source="tDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tTick">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="80" />
+              <mxPoint x="120" y="235" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="et3" edge="1" parent="colTech" source="tTick" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tDet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="et4" edge="1" parent="colTech" source="tDet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tStart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="et5" edge="1" parent="colTech" source="tDet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tRes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="et6" edge="1" parent="colTech" source="tDet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tCom">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="322" />
+              <mxPoint x="480" y="485.07" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="et7" edge="1" parent="colTech" source="tDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="tPar">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="75.07" />
+              <mxPoint x="500" y="615.07" />
+            </Array>
+            <mxPoint x="480" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="et8" edge="1" parent="colTech" source="tPar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tNotif">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="et9" edge="1" parent="colTech" source="tNotif" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="tOut">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-3" parent="colTech" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Profil (Lecture seule)" vertex="1">
+          <mxGeometry height="50" width="120" x="60" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="colAdmin" parent="1" style="swimlane;horizontal=0;startSize=32;fillColor=#eeeeee;strokeColor=#36393d;fontStyle=1;whiteSpace=wrap;html=1;" value="Interface Administrateur" vertex="1">
+          <mxGeometry height="980" width="590" x="1150" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="aDash" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Tableau de bord&#xa;/dashboard" vertex="1">
+          <mxGeometry height="50" width="200" x="210" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aTick" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Tous les tickets&#xa;/dashboard/tickets" vertex="1">
+          <mxGeometry height="50" width="200" x="80" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-10" edge="1" parent="colAdmin" source="aAssign" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="aSkills" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="aAssign" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Affecter / réaffecter" vertex="1">
+          <mxGeometry height="40" width="200" x="80" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="aDet" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Détail / commenter / PJ" vertex="1">
+          <mxGeometry height="40" width="200" x="100" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="aSkills" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Référentiel de compétences" vertex="1">
+          <mxGeometry height="40" width="210" x="320" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="aUsers" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Utilisateurs&#xa;/dashboard/utilisateurs" vertex="1">
+          <mxGeometry height="50" width="200" x="70" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="aCrud" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Créer / modifier / désactiver" vertex="1">
+          <mxGeometry height="44" width="200" x="70" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="aStat" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Statistiques&#xa;/dashboard/statistiques" vertex="1">
+          <mxGeometry height="50" width="210" x="310" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="aPar" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Paramètres (édition)&#xa;/dashboard/parametres" vertex="1">
+          <mxGeometry height="50" width="220" x="220" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="aNotif" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Notifications (cloche)" vertex="1">
+          <mxGeometry height="44" width="220" x="220" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="aOut" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Se déconnecter → /login" vertex="1">
+          <mxGeometry height="44" width="220" x="220" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="ea1" edge="1" parent="colAdmin" source="aDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aTick">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="100" />
+              <mxPoint x="180" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea2" edge="1" parent="colAdmin" source="aDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aTech">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="100" />
+              <mxPoint x="425.07" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea3" edge="1" parent="colAdmin" source="aTick" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aCreate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea4" edge="1" parent="colAdmin" source="aCreate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aAssign">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea5" edge="1" parent="colAdmin" source="aTick" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="aDet">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="70" y="150" />
+              <mxPoint x="70" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea6" edge="1" parent="colAdmin" source="aTech" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aAddT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea7" edge="1" parent="colAdmin" source="aAddT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aSkills">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea8" edge="1" parent="colAdmin" source="aDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aUsers">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="50" y="55" />
+              <mxPoint x="50" y="495" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea9" edge="1" parent="colAdmin" source="aUsers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aCrud">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea10" edge="1" parent="colAdmin" source="aAddT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="aStat">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550.03" y="240" />
+              <mxPoint x="550.03" y="415.03" />
+            </Array>
+            <mxPoint x="530" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea11" edge="1" parent="colAdmin" source="aDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="aPar">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="55" />
+              <mxPoint x="570" y="695" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ea12" edge="1" parent="colAdmin" source="aPar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aNotif">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea13" edge="1" parent="colAdmin" source="aNotif" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aOut">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-8" edge="1" parent="colAdmin" source="aTech" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aAddT" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1605" y="570" as="sourcePoint" />
+            <mxPoint x="1555" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-9" edge="1" parent="colAdmin" source="aTick" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aCreate" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1340" y="570" as="sourcePoint" />
+            <mxPoint x="1290" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aCreate" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Créer un ticket" vertex="1">
+          <mxGeometry height="40" width="200" x="80" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="fSMb-uWw_i5N4EaWMQm2-12" edge="1" parent="colAdmin" source="aTech" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="aAddT" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1460" y="480" as="sourcePoint" />
+            <mxPoint x="1555" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aAddT" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Ajouter un technicien" vertex="1">
+          <mxGeometry height="40" width="210" x="320" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="aTech" parent="colAdmin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;" value="Techniciens&#xa;/dashboard/techniciens" vertex="1">
+          <mxGeometry height="50" width="210" x="320" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="accueil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="accueil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="register">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="forgot">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="forgot" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="reset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="role">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="register" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="role">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="role" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;align=center;verticalAlign=middle;" target="colClient" value="&lt;b&gt;Client&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="role" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="colTech" value="&lt;b&gt;Technicien&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="380" />
+              <mxPoint x="850" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="role" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#000000;" target="colAdmin" value="&lt;b&gt;Administrateur&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

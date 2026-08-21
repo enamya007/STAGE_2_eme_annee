@@ -10,13 +10,14 @@ import RequiredMark from '@/components/RequiredMark'
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers'
 import type { User, UserRole } from '@/types/auth'
 import type { AdminAssignableRole } from '@/schema/user.schema'
-import { isValidPhone } from '@/schema/phone.schema'
+import { isPhoneEmpty, isValidPhone } from '@/schema/phone.schema'
 import { displayPersonName, formatDate, initialsOf } from '@/features/tickets/ticketUi'
 import {
     isValidEmail,
     isStrongPassword,
     isValidOptionalName,
     isValidUsername,
+    requiredFieldMessage,
     NAME_MAX_LENGTH,
     USERNAME_MAX_LENGTH,
 } from '@/lib/validators'
@@ -39,13 +40,15 @@ const inputClass =
 const labelClass =
     'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/70'
 
+const errorTextClass = 'mt-1 text-xs text-rose-700'
+
 const emptyCreate = {
     username: '',
     email: '',
     password: '',
     firstName: '',
     lastName: '',
-    phone: '',
+    phone: '+228',
     role: 'CLIENT' as AdminAssignableRole,
 }
 
@@ -67,6 +70,7 @@ function UsersPageContent() {
     const [reactivating, setReactivating] = useState<User | null>(null)
     const [deleting, setDeleting] = useState<User | null>(null)
     const [createForm, setCreateForm] = useState(emptyCreate)
+    const [showCreateErrors, setShowCreateErrors] = useState(false)
     const [editForm, setEditForm] = useState({
         username: '',
         email: '',
@@ -100,6 +104,7 @@ function UsersPageContent() {
     const openAdd = () => {
         createUser.reset()
         setCreateForm(emptyCreate)
+        setShowCreateErrors(false)
         setAddOpen(true)
     }
 
@@ -117,7 +122,7 @@ function UsersPageContent() {
             email: user.email,
             firstName: user.firstName ?? '',
             lastName: user.lastName ?? '',
-            phone: user.phone ?? '',
+            phone: user.phone ?? '+228',
             role: user.role === 'ADMIN' ? 'ADMIN' : 'CLIENT',
             isActive: user.isActive,
         })
@@ -125,7 +130,10 @@ function UsersPageContent() {
     }
 
     const submitCreate = () => {
-        if (!canSubmitCreate) return
+        if (!canSubmitCreate) {
+            setShowCreateErrors(true)
+            return
+        }
         createUser.mutate(
             {
                 username: createForm.username.trim(),
@@ -353,6 +361,15 @@ function UsersPageContent() {
                             maxLength={USERNAME_MAX_LENGTH}
                             className={inputClass}
                         />
+                        {showCreateErrors && !isValidUsername(createForm.username) && (
+                            <p className={errorTextClass}>
+                                {requiredFieldMessage(
+                                    createForm.username,
+                                    "Le nom d'utilisateur est requis.",
+                                    "Le nom d'utilisateur doit contenir entre 3 et 50 caractères.",
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="add-email" className={labelClass}>
@@ -365,6 +382,15 @@ function UsersPageContent() {
                             onChange={(e) => setCreateForm((f) => ({ ...f, email: e.target.value }))}
                             className={inputClass}
                         />
+                        {showCreateErrors && !isValidEmail(createForm.email) && (
+                            <p className={errorTextClass}>
+                                {requiredFieldMessage(
+                                    createForm.email,
+                                    "L'e-mail est requis.",
+                                    'Adresse e-mail invalide.',
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div>
@@ -380,6 +406,9 @@ function UsersPageContent() {
                                 maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
+                            {showCreateErrors && !isValidOptionalName(createForm.firstName) && (
+                                <p className={errorTextClass}>Prénom invalide.</p>
+                            )}
                         </div>
                         <div>
                             <label htmlFor="add-lastname" className={labelClass}>
@@ -394,6 +423,9 @@ function UsersPageContent() {
                                 maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
+                            {showCreateErrors && !isValidOptionalName(createForm.lastName) && (
+                                <p className={errorTextClass}>Nom invalide.</p>
+                            )}
                         </div>
                     </div>
                     <div>
@@ -405,10 +437,17 @@ function UsersPageContent() {
                             type="tel"
                             value={createForm.phone}
                             onChange={(e) => setCreateForm((f) => ({ ...f, phone: e.target.value }))}
-                            placeholder="90 00 00 00"
+                            placeholder="+228 90 00 00 00"
                             maxLength={30}
                             className={inputClass}
                         />
+                        {showCreateErrors && !isValidPhone(createForm.phone) && (
+                            <p className={errorTextClass}>
+                                {isPhoneEmpty(createForm.phone)
+                                    ? 'Le numéro de téléphone est requis.'
+                                    : 'Le numéro doit contenir au moins 8 chiffres.'}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="add-password" className={labelClass}>
@@ -423,6 +462,15 @@ function UsersPageContent() {
                             maxLength={72}
                             className={inputClass}
                         />
+                        {showCreateErrors && !isStrongPassword(createForm.password) && (
+                            <p className={errorTextClass}>
+                                {requiredFieldMessage(
+                                    createForm.password,
+                                    'Le mot de passe est requis.',
+                                    '10 caractères minimum, avec majuscule, minuscule et un chiffre.',
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="add-role" className={labelClass}>
@@ -461,7 +509,7 @@ function UsersPageContent() {
                         <button
                             type="button"
                             onClick={submitCreate}
-                            disabled={!canSubmitCreate || createUser.isPending}
+                            disabled={createUser.isPending}
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:opacity-40"
                         >
                             {createUser.isPending ? 'Création…' : 'Créer le compte'}
@@ -635,7 +683,7 @@ function UsersPageContent() {
                     </span>
                 }
                 onClose={() => setDeactivating(null)}
-                maxWidth={420}
+                size="sm"
             >
                 <p className="text-sm leading-relaxed text-moon-abyss/70">
                     L&apos;utilisateur ne pourra plus se connecter. Vous pourrez le réactiver plus tard
@@ -676,7 +724,7 @@ function UsersPageContent() {
                     </span>
                 }
                 onClose={() => setReactivating(null)}
-                maxWidth={420}
+                size="sm"
             >
                 <p className="text-sm leading-relaxed text-moon-abyss/70">
                     L&apos;utilisateur pourra de nouveau se connecter.
@@ -716,7 +764,7 @@ function UsersPageContent() {
                     </span>
                 }
                 onClose={() => setDeleting(null)}
-                maxWidth={420}
+                size="sm"
             >
                 <p className="text-sm leading-relaxed text-moon-abyss/70">
                     Suppression logique : le compte disparaît de la liste. Impossible si des tickets

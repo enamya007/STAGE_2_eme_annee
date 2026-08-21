@@ -11,3 +11,9 @@ export function isValidPhone(phone: string) {
   const trimmed = phone.trim()
   return trimmed.length >= 8 && trimmed.length <= 30
 }
+
+// Treat the bare "+228" country-code prefix (no digits typed yet) as empty
+export function isPhoneEmpty(phone: string) {
+  const trimmed = phone.trim()
+  return trimmed.length === 0 || trimmed === '+228'
+}

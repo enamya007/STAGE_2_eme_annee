@@ -15,6 +15,7 @@ import {
     SITE_LABEL_MIN_LENGTH,
     SITE_LABEL_MAX_LENGTH,
     DESCRIPTION_MAX_LENGTH,
+    requiredFieldMessage,
 } from '@/lib/validators'
 import { useTickets, useCreateTicket } from '@/hooks/useTickets'
 import { useTechnicians } from '@/hooks/useTechnicians'
@@ -111,6 +112,8 @@ function TicketsContent() {
             t.status !== 'CANCELLED',
     ).length
 
+    const [showCreateErrors, setShowCreateErrors] = useState(false)
+
     const openCreate = () => {
         setCreateForm({
             title: '',
@@ -119,20 +122,28 @@ function TicketsContent() {
             categoryId: categories[0]?.id ?? '',
             siteLabel: '',
         })
+        setShowCreateErrors(false)
         setCreateRequested(true)
     }
 
-    const canSubmitCreate =
+    const isValidTitle =
         createForm.title.trim().length >= TICKET_TITLE_MIN_LENGTH &&
-        createForm.title.trim().length <= TICKET_TITLE_MAX_LENGTH &&
-        createForm.description.trim().length > 0 &&
-        createForm.description.trim().length <= DESCRIPTION_MAX_LENGTH &&
-        !!createForm.categoryId &&
+        createForm.title.trim().length <= TICKET_TITLE_MAX_LENGTH
+    const isValidSite =
         createForm.siteLabel.trim().length >= SITE_LABEL_MIN_LENGTH &&
         createForm.siteLabel.trim().length <= SITE_LABEL_MAX_LENGTH
+    const isValidDescription =
+        createForm.description.trim().length > 0 &&
+        createForm.description.trim().length <= DESCRIPTION_MAX_LENGTH
+
+    const canSubmitCreate =
+        isValidTitle && isValidDescription && !!createForm.categoryId && isValidSite
 
     const submitCreate = () => {
-        if (!canSubmitCreate) return
+        if (!canSubmitCreate) {
+            setShowCreateErrors(true)
+            return
+        }
 
         createTicket.mutate(
             {
@@ -458,6 +469,15 @@ function TicketsContent() {
                             maxLength={TICKET_TITLE_MAX_LENGTH}
                             className={ticketFieldClass}
                         />
+                        {showCreateErrors && !isValidTitle && (
+                            <p className="mt-1 text-xs text-rose-700">
+                                {requiredFieldMessage(
+                                    createForm.title,
+                                    'Le titre est requis.',
+                                    `Le titre doit contenir entre ${TICKET_TITLE_MIN_LENGTH} et ${TICKET_TITLE_MAX_LENGTH} caractères.`,
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="ticket-site" className={ticketLabelClass}>
@@ -474,6 +494,15 @@ function TicketsContent() {
                             maxLength={SITE_LABEL_MAX_LENGTH}
                             className={ticketFieldClass}
                         />
+                        {showCreateErrors && !isValidSite && (
+                            <p className="mt-1 text-xs text-rose-700">
+                                {requiredFieldMessage(
+                                    createForm.siteLabel,
+                                    'Le site est requis.',
+                                    `Le site doit contenir entre ${SITE_LABEL_MIN_LENGTH} et ${SITE_LABEL_MAX_LENGTH} caractères.`,
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="ticket-category" className={ticketLabelClass}>
@@ -503,6 +532,9 @@ function TicketsContent() {
                             <p className="mt-1 text-xs text-moon-abyss/70">
                                 Aucune catégorie active. Un administrateur doit en créer une.
                             </p>
+                        )}
+                        {showCreateErrors && !categoriesQuery.isError && categories.length > 0 && !createForm.categoryId && (
+                            <p className="mt-1 text-xs text-rose-700">Choisissez une catégorie.</p>
                         )}
                     </div>
                     <div>
@@ -541,6 +573,9 @@ function TicketsContent() {
                             maxLength={DESCRIPTION_MAX_LENGTH}
                             className={`${ticketFieldClass} resize-none`}
                         />
+                        {showCreateErrors && !isValidDescription && (
+                            <p className="mt-1 text-xs text-rose-700">La description est requise.</p>
+                        )}
                     </div>
                     {createTicket.isError && (
                         <p className="text-sm text-rose-700">
@@ -560,7 +595,7 @@ function TicketsContent() {
                         <button
                             type="button"
                             onClick={submitCreate}
-                            disabled={!canSubmitCreate || createTicket.isPending}
+                            disabled={createTicket.isPending}
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             {createTicket.isPending ? 'Création…' : 'Créer le ticket'}

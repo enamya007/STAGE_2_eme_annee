@@ -9,12 +9,13 @@ import RequiredMark from '@/components/RequiredMark'
 import { useTechnicians, useCreateTechnician } from '@/hooks/useTechnicians'
 import { useSkills, useCreateSkill } from '@/hooks/useSkills'
 import type { Technician } from '@/types/technician'
-import { isValidPhone } from '@/schema/phone.schema'
+import { isPhoneEmpty, isValidPhone } from '@/schema/phone.schema'
 import {
     isValidEmail,
     isStrongPassword,
     isValidOptionalName,
     isValidUsername,
+    requiredFieldMessage,
     NAME_MAX_LENGTH,
     USERNAME_MAX_LENGTH,
     SKILL_NAME_MIN_LENGTH,
@@ -26,6 +27,8 @@ const inputClass =
 
 const labelClass =
     'mb-1.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-moon-abyss/70'
+
+const errorTextClass = 'mt-1 text-xs text-rose-700'
 
 function displayName(tech: Technician) {
     const full = [tech.firstName, tech.lastName].filter(Boolean).join(' ').trim()
@@ -48,7 +51,7 @@ const emptyCreateForm = {
     password: '',
     firstName: '',
     lastName: '',
-    phone: '',
+    phone: '+228',
     maxConcurrentTickets: '5',
     skillIds: [] as string[],
 }
@@ -66,6 +69,7 @@ function TechniciansPageContent() {
     const [newSkill, setNewSkill] = useState('')
     const [createOpen, setCreateOpen] = useState(false)
     const [createForm, setCreateForm] = useState(emptyCreateForm)
+    const [showCreateErrors, setShowCreateErrors] = useState(false)
 
     const available = technicians.filter((t) => t.isAvailable).length
     const busy = technicians.filter((t) => !t.isAvailable).length
@@ -89,6 +93,7 @@ function TechniciansPageContent() {
 
     const openCreate = () => {
         setCreateForm(emptyCreateForm)
+        setShowCreateErrors(false)
         setCreateOpen(true)
     }
 
@@ -110,7 +115,10 @@ function TechniciansPageContent() {
         isValidOptionalName(createForm.lastName)
 
     const submitCreate = () => {
-        if (!canSubmitCreate) return
+        if (!canSubmitCreate) {
+            setShowCreateErrors(true)
+            return
+        }
 
         createTechnician.mutate(
             {
@@ -306,7 +314,7 @@ function TechniciansPageContent() {
                 open={createOpen}
                 title="Ajouter un technicien"
                 onClose={() => setCreateOpen(false)}
-                maxWidth={560}
+                size="lg"
             >
                 <div className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -325,6 +333,15 @@ function TechniciansPageContent() {
                                 maxLength={USERNAME_MAX_LENGTH}
                                 className={inputClass}
                             />
+                            {showCreateErrors && !isValidUsername(createForm.username) && (
+                                <p className={errorTextClass}>
+                                    {requiredFieldMessage(
+                                        createForm.username,
+                                        "Le nom d'utilisateur est requis.",
+                                        "Le nom d'utilisateur doit contenir entre 3 et 50 caractères.",
+                                    )}
+                                </p>
+                            )}
                         </div>
                         <div>
                             <label htmlFor="tech-email" className={labelClass}>
@@ -340,6 +357,15 @@ function TechniciansPageContent() {
                                 placeholder="jtech@exemple.com"
                                 className={inputClass}
                             />
+                            {showCreateErrors && !isValidEmail(createForm.email) && (
+                                <p className={errorTextClass}>
+                                    {requiredFieldMessage(
+                                        createForm.email,
+                                        "L'e-mail est requis.",
+                                        'Adresse e-mail invalide.',
+                                    )}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <div>
@@ -357,6 +383,15 @@ function TechniciansPageContent() {
                             maxLength={72}
                             className={inputClass}
                         />
+                        {showCreateErrors && !isStrongPassword(createForm.password) && (
+                            <p className={errorTextClass}>
+                                {requiredFieldMessage(
+                                    createForm.password,
+                                    'Le mot de passe est requis.',
+                                    '10 caractères minimum, avec majuscule, minuscule et un chiffre.',
+                                )}
+                            </p>
+                        )}
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div>
@@ -373,6 +408,9 @@ function TechniciansPageContent() {
                                 maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
+                            {showCreateErrors && !isValidOptionalName(createForm.firstName) && (
+                                <p className={errorTextClass}>Prénom invalide.</p>
+                            )}
                         </div>
                         <div>
                             <label htmlFor="tech-lastname" className={labelClass}>
@@ -388,6 +426,9 @@ function TechniciansPageContent() {
                                 maxLength={NAME_MAX_LENGTH}
                                 className={inputClass}
                             />
+                            {showCreateErrors && !isValidOptionalName(createForm.lastName) && (
+                                <p className={errorTextClass}>Nom invalide.</p>
+                            )}
                         </div>
                     </div>
                     <div>
@@ -401,10 +442,17 @@ function TechniciansPageContent() {
                             onChange={(e) =>
                                 setCreateForm((f) => ({ ...f, phone: e.target.value }))
                             }
-                            placeholder="90 00 00 00"
+                            placeholder="+228 90 00 00 00"
                             maxLength={30}
                             className={inputClass}
                         />
+                        {showCreateErrors && !isValidPhone(createForm.phone) && (
+                            <p className={errorTextClass}>
+                                {isPhoneEmpty(createForm.phone)
+                                    ? 'Le numéro de téléphone est requis.'
+                                    : 'Le numéro doit contenir au moins 8 chiffres.'}
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="tech-capacity" className={labelClass}>
@@ -465,7 +513,7 @@ function TechniciansPageContent() {
                         <button
                             type="button"
                             onClick={submitCreate}
-                            disabled={!canSubmitCreate || createTechnician.isPending}
+                            disabled={createTechnician.isPending}
                             className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             {createTechnician.isPending ? 'Création…' : 'Créer'}

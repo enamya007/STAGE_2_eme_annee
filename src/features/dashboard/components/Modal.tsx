@@ -3,18 +3,23 @@
 import { useEffect } from 'react'
 import { X } from 'lucide-react'
 
+// sm: confirmation dialogs (message + actions, no fields)
+// md: single-column forms (default)
+// lg: forms with side-by-side field grids or chip pickers
+const MODAL_SIZES = { sm: 400, md: 480, lg: 560 } as const
+
 export default function Modal({
     open,
     title,
     onClose,
     children,
-    maxWidth = 480,
+    size = 'md',
 }: {
     open: boolean
     title: React.ReactNode
     onClose: () => void
     children: React.ReactNode
-    maxWidth?: number
+    size?: keyof typeof MODAL_SIZES
 }) {
     useEffect(() => {
         if (!open) return
@@ -39,7 +44,7 @@ export default function Modal({
         >
             <div
                 className="w-full rounded-2xl bg-white p-6 shadow-2xl"
-                style={{ maxWidth }}
+                style={{ maxWidth: MODAL_SIZES[size] }}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="mb-4 flex items-center justify-between">

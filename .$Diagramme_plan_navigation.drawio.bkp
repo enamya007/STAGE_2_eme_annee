@@ -1,0 +1,183 @@
+<mxfile host="Electron">
+  <diagram id="navRapidResponse" name="Plan de navigation">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=16;fontStyle=1;align=center;" value="Plan de navigation — Rapid Response" vertex="1">
+          <mxGeometry x="40" y="16" width="1520" height="28" as="geometry" />
+        </mxCell>
+
+        <mxCell id="home" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;" value="Page d&apos;accueil&#xa;/" vertex="1">
+          <mxGeometry x="680" y="52" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="login" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#000000;" value="Page de connexion&#xa;/login" vertex="1">
+          <mxGeometry x="430" y="140" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="register" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#000000;" value="Page d&apos;inscription&#xa;/register" vertex="1">
+          <mxGeometry x="950" y="140" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="forgot" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#000000;" value="Mot de passe oublié&#xa;/forgot-password" vertex="1">
+          <mxGeometry x="200" y="140" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="reset" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#000000;" value="Réinitialiser le mot de passe&#xa;/reset-password" vertex="1">
+          <mxGeometry x="20" y="220" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="role" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;" value="Rôle ?" vertex="1">
+          <mxGeometry x="710" y="240" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ifClient" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#f5f5f5;strokeColor=#000000;fontStyle=1;" value="Interface Client" vertex="1">
+          <mxGeometry x="80" y="380" width="420" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="ifTech" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#f5f5f5;strokeColor=#000000;fontStyle=1;" value="Interface Technicien" vertex="1">
+          <mxGeometry x="560" y="380" width="440" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="ifAdmin" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#f5f5f5;strokeColor=#000000;fontStyle=1;" value="Interface Administrateur" vertex="1">
+          <mxGeometry x="1060" y="380" width="500" height="44" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cDash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Tableau de bord&#xa;/dashboard" vertex="1">
+          <mxGeometry x="90" y="450" width="190" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="cTick" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Page Tickets&#xa;/dashboard/tickets" vertex="1">
+          <mxGeometry x="300" y="450" width="190" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="cPar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Paramètres (lecture)&#xa;/dashboard/parametres" vertex="1">
+          <mxGeometry x="90" y="720" width="190" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="cNotif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Notifications (cloche)" vertex="1">
+          <mxGeometry x="300" y="720" width="190" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="cCreate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Créer un ticket" vertex="1">
+          <mxGeometry x="300" y="520" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cDet" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Détail d&apos;un ticket&#xa;/dashboard/tickets/:id" vertex="1">
+          <mxGeometry x="300" y="580" width="190" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="cAct" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;align=left;spacingLeft=8;fontSize=11;" value="Commenter / joindre un fichier&#xa;Modifier ou annuler (si ouvert)&#xa;Réouvrir / clôturer (si résolu)" vertex="1">
+          <mxGeometry x="300" y="640" width="190" height="62" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tDash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Tableau de bord&#xa;/dashboard" vertex="1">
+          <mxGeometry x="570" y="450" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="tTick" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Tickets qui me sont affectés&#xa;/dashboard/tickets" vertex="1">
+          <mxGeometry x="790" y="450" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="tDisp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Basculer ma disponibilité" vertex="1">
+          <mxGeometry x="570" y="520" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="tDet" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Détail d&apos;un ticket affecté" vertex="1">
+          <mxGeometry x="790" y="520" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="tAct" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;align=left;spacingLeft=8;fontSize=11;" value="Démarrer l&apos;intervention&#xa;Marquer résolu (technicien assigné)&#xa;Commenter (public / interne)&#xa;Joindre un fichier" vertex="1">
+          <mxGeometry x="790" y="580" width="200" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="tPar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Paramètres (lecture)" vertex="1">
+          <mxGeometry x="570" y="680" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="tNotif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Notifications (cloche)" vertex="1">
+          <mxGeometry x="790" y="680" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aDash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Tableau de bord&#xa;/dashboard" vertex="1">
+          <mxGeometry x="1070" y="450" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="aTick" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Tous les tickets&#xa;/dashboard/tickets" vertex="1">
+          <mxGeometry x="1235" y="450" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="aTech" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Techniciens&#xa;/dashboard/techniciens" vertex="1">
+          <mxGeometry x="1400" y="450" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="aUsers" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Utilisateurs&#xa;/dashboard/utilisateurs" vertex="1">
+          <mxGeometry x="1070" y="620" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="aStat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Statistiques&#xa;/dashboard/statistiques" vertex="1">
+          <mxGeometry x="1235" y="620" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="aPar" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Paramètres (édition)&#xa;/dashboard/parametres" vertex="1">
+          <mxGeometry x="1400" y="620" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="aCreate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="Créer un ticket" vertex="1">
+          <mxGeometry x="1235" y="510" width="150" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="aAssign" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="Affecter / réaffecter" vertex="1">
+          <mxGeometry x="1235" y="556" width="150" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="aAddT" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="Ajouter un technicien" vertex="1">
+          <mxGeometry x="1400" y="510" width="150" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="aSkills" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="Référentiel compétences" vertex="1">
+          <mxGeometry x="1400" y="556" width="150" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="aCrud" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="Créer / modifier / désactiver" vertex="1">
+          <mxGeometry x="1070" y="680" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="aNotif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;" value="Notifications (cloche)" vertex="1">
+          <mxGeometry x="1235" y="680" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="aLogout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="Se déconnecter → /login" vertex="1">
+          <mxGeometry x="80" y="800" width="1480" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" edge="1" parent="1" source="home" target="login" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" />
+        <mxCell id="e2" edge="1" parent="1" source="home" target="register" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" />
+        <mxCell id="e3" edge="1" parent="1" source="login" target="forgot" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" />
+        <mxCell id="e4" edge="1" parent="1" source="forgot" target="reset" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" />
+        <mxCell id="e5" edge="1" parent="1" source="login" target="role" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" />
+        <mxCell id="e6" edge="1" parent="1" source="register" target="role" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" />
+
+        <mxCell id="e7" edge="1" parent="1" source="role" target="ifClient" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" value="Client">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="role" target="ifTech" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" value="Technicien">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="role" target="ifAdmin" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;rounded=0;" value="Administrateur">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e10" edge="1" parent="1" source="ifClient" target="cDash" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e11" edge="1" parent="1" source="ifClient" target="cTick" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e12" edge="1" parent="1" source="cTick" target="cCreate" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e13" edge="1" parent="1" source="cTick" target="cDet" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e14" edge="1" parent="1" source="cDet" target="cAct" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e15" edge="1" parent="1" source="cDash" target="cPar" style="endArrow=none;html=1;strokeColor=#000000;dashed=1;" />
+        <mxCell id="e16" edge="1" parent="1" source="ifClient" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" target="cNotif">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="402" />
+              <mxPoint x="510" y="742" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16b" edge="1" parent="1" source="ifClient" target="cPar" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+
+        <mxCell id="e17" edge="1" parent="1" source="ifTech" target="tDash" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e18" edge="1" parent="1" source="ifTech" target="tTick" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e19" edge="1" parent="1" source="tDash" target="tDisp" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e20" edge="1" parent="1" source="tTick" target="tDet" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e21" edge="1" parent="1" source="tDet" target="tAct" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e22" edge="1" parent="1" source="ifTech" target="tPar" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e23" edge="1" parent="1" source="ifTech" target="tNotif" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+
+        <mxCell id="e24" edge="1" parent="1" source="ifAdmin" target="aDash" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e25" edge="1" parent="1" source="ifAdmin" target="aTick" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e26" edge="1" parent="1" source="ifAdmin" target="aTech" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e27" edge="1" parent="1" source="ifAdmin" target="aUsers" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e28" edge="1" parent="1" source="ifAdmin" target="aStat" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e29" edge="1" parent="1" source="ifAdmin" target="aPar" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e30" edge="1" parent="1" source="aTick" target="aCreate" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e31" edge="1" parent="1" source="aTick" target="aAssign" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e32" edge="1" parent="1" source="aTech" target="aAddT" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e33" edge="1" parent="1" source="aTech" target="aSkills" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e34" edge="1" parent="1" source="aUsers" target="aCrud" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+        <mxCell id="e35" edge="1" parent="1" source="ifAdmin" target="aNotif" style="endArrow=block;endFill=1;html=1;strokeColor=#000000;" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

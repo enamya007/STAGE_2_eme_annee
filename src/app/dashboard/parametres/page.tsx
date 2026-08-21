@@ -50,7 +50,7 @@ export default function SettingsPage() {
             email: me.email,
             firstName: me.firstName ?? '',
             lastName: me.lastName ?? '',
-            phone: me.phone ?? '',
+            phone: me.phone ?? '+228',
         })
     }
 

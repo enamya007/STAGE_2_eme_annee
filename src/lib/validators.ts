@@ -40,6 +40,10 @@ export function isValidEmail(value: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
 }
 
+export function requiredFieldMessage(value: string, requiredMessage: string, invalidMessage: string) {
+    return value.trim().length === 0 ? requiredMessage : invalidMessage
+}
+
 export function isStrongPassword(value: string) {
     return (
         value.length >= PASSWORD_MIN_LENGTH &&

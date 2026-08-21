@@ -27,7 +27,7 @@ export default function RegisterForm() {
         formState: { errors },
     } = useForm<RegisterFormValues>({
         resolver: valibotResolver(registerSchema),
-        defaultValues: { fullName: '', email: '', phone: '', password: '', confirmPassword: '' },
+        defaultValues: { fullName: '', email: '', phone: '+228', password: '', confirmPassword: '' },
     })
 
     const registerMutation = useRegister()
@@ -140,7 +140,7 @@ export default function RegisterForm() {
                         {...field}
                         label="Numéro de téléphone"
                         fieldId="register-phone"
-                        placeholder="90 00 00 00"
+                        placeholder="+228 90 00 00 00"
                         type="tel"
                         autoComplete="tel"
                         required
