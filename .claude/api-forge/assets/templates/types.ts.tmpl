@@ -1,0 +1,19 @@
+// types/{{resource}}.ts — modèles purs de la ressource {{Resource}}.
+// Généré par api-forge à partir du manifeste. Éditable.
+//
+// Un type par entité / schéma nommé, + types de réponse.
+// readOnly -> présent ici (réponse). writeOnly -> exclu (voir le schéma d'input).
+//
+// FORME PAR DÉFAUT : `type` (alias). Utiliser `interface` UNIQUEMENT si l'utilisateur le
+// demande ou si le projet hôte utilise déjà des interfaces pour ses modèles (cf. conventions.md §4).
+// Variante interface : `export interface {{Resource}} { ... }` (même contenu de champs).
+
+export type {{Resource}} = {
+  // {{#each properties}} → mapper chaque propriété du TypeNode
+  // <name>: <TsType>            (required, non nullable)
+  // <name>?: <TsType>           (optional)
+  // <name>: <TsType> | null     (nullable)
+}
+
+// Réponse de liste (adapter si l'API enveloppe dans { data, meta }).
+export type {{Resource}}ListResponse = {{Resource}}[]

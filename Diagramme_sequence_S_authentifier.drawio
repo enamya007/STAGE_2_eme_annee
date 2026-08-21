@@ -1,0 +1,237 @@
+<mxfile host="Electron">
+  <diagram id="seqSauthentifier" name="Séquence - S&apos;authentifier">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="sd" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=175;pointerEvents=0;recursiveResize=0;container=0;collapsible=0;fillColor=none;strokeColor=#000000;fontStyle=1;align=left;verticalAlign=top;" value="sd S&apos;authentifier" vertex="1">
+          <mxGeometry x="20" y="16" width="1560" height="1260" as="geometry" />
+        </mxCell>
+
+        <mxCell id="opt" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=40;pointerEvents=0;recursiveResize=0;container=0;collapsible=0;fillColor=none;strokeColor=#000000;align=left;verticalAlign=top;" value="opt" vertex="1">
+          <mxGeometry x="250" y="218" width="520" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="optGuard" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=2;" value="[mot de passe oublié]" vertex="1">
+          <mxGeometry x="300" y="222" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ref" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=40;pointerEvents=0;fillColor=#ffffff;strokeColor=#000000;align=left;verticalAlign=top;" value="ref" vertex="1">
+          <mxGeometry x="300" y="246" width="430" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="refTxt" parent="1" style="text;html=1;align=center;fontSize=12;fontStyle=2;" value="Réinitialiser le mot de passe" vertex="1">
+          <mxGeometry x="340" y="262" width="360" height="22" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=40;pointerEvents=0;recursiveResize=0;container=0;collapsible=0;fillColor=none;strokeColor=#000000;align=left;verticalAlign=top;" value="alt" vertex="1">
+          <mxGeometry x="150" y="520" width="1390" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="g1" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=2;" value="[identifiants incorrects]" vertex="1">
+          <mxGeometry x="200" y="528" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sep1" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="670" as="sourcePoint" />
+            <mxPoint x="1540" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g2" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=2;" value="[compte désactivé]" vertex="1">
+          <mxGeometry x="200" y="678" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sep2" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="820" as="sourcePoint" />
+            <mxPoint x="1540" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=2;" value="[else]" vertex="1">
+          <mxGeometry x="200" y="828" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="noteSA1" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffff;strokeColor=#000000;align=left;spacing=6;fontSize=10;" value="SA1 — Mot de passe oublié.&lt;br&gt;Extension : le cas Réinitialiser le mot de passe s&apos;exécute." vertex="1">
+          <mxGeometry x="790" y="230" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="noteSE1" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffff;strokeColor=#000000;align=left;spacing=6;fontSize=10;" value="SE1 — Identifiants incorrects.&lt;br&gt;La connexion est refusée. Aucune session n&apos;est ouverte." vertex="1">
+          <mxGeometry x="1260" y="545" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="noteSE2" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffff;strokeColor=#000000;align=left;spacing=6;fontSize=10;" value="SE2 — Compte désactivé.&lt;br&gt;L&apos;accès est refusé même si le mot de passe est correct." vertex="1">
+          <mxGeometry x="1260" y="700" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="noteENF" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffff;strokeColor=#000000;align=left;spacing=6;fontSize=10;" value="ENF : le mot de passe ne s&apos;affiche pas en clair." vertex="1">
+          <mxGeometry x="1260" y="1165" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lActor" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="125" as="sourcePoint" />
+            <mxPoint x="90" y="1235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lBound" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="115" as="sourcePoint" />
+            <mxPoint x="380" y="1235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lCtrl" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="710" y="115" as="sourcePoint" />
+            <mxPoint x="710" y="1235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lEnt" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1035" y="115" as="sourcePoint" />
+            <mxPoint x="1035" y="1235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lSess" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#000000;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1350" y="885" as="sourcePoint" />
+            <mxPoint x="1350" y="1235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="actA1" parent="1" style="rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1">
+          <mxGeometry x="84" y="155" width="12" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="actB" parent="1" style="rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1">
+          <mxGeometry x="374" y="155" width="12" height="990" as="geometry" />
+        </mxCell>
+        <mxCell id="actC" parent="1" style="rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1">
+          <mxGeometry x="704" y="350" width="12" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="actE" parent="1" style="rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1">
+          <mxGeometry x="1029" y="385" width="12" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="actS" parent="1" style="rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1">
+          <mxGeometry x="1344" y="885" width="12" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="actA2" parent="1" style="rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1">
+          <mxGeometry x="84" y="1095" width="12" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pActor" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" value="Utilisateur" vertex="1">
+          <mxGeometry x="70" y="50" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pBound" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;fontStyle=0;" value="&lt;&lt;boundary&gt;&gt;&lt;br&gt;&lt;u&gt;:EcranConnexion&lt;/u&gt;" vertex="1">
+          <mxGeometry x="300" y="55" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pCtrl" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="&lt;&lt;control&gt;&gt;&lt;br&gt;&lt;u&gt;:ControleAuthentification&lt;/u&gt;" vertex="1">
+          <mxGeometry x="615" y="55" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pEnt" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="&lt;&lt;entity&gt;&gt;&lt;br&gt;&lt;u&gt;:Utilisateur&lt;/u&gt;" vertex="1">
+          <mxGeometry x="960" y="55" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pSess" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;" value="&lt;&lt;entity&gt;&gt;&lt;br&gt;&lt;u&gt;:Session&lt;/u&gt;" vertex="1">
+          <mxGeometry x="1280" y="835" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m1" edge="1" parent="1" style="endArrow=open;endFill=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="1 : ouvrirEcranConnexion()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="165" as="sourcePoint" />
+            <mxPoint x="374" y="165" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="endArrow=open;endFill=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="2 : saisirIdentifiants(identifiant, motDePasse)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="200" as="sourcePoint" />
+            <mxPoint x="374" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="endArrow=open;endFill=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="3 : soumettre()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="330" as="sourcePoint" />
+            <mxPoint x="374" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="4 : authentifier(identifiant, motDePasse)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="386" y="360" as="sourcePoint" />
+            <mxPoint x="704" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="5 : trouver(identifiant)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="716" y="395" as="sourcePoint" />
+            <mxPoint x="1029" y="395" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5r" edge="1" parent="1" style="endArrow=open;dashed=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="utilisateur">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1029" y="425" as="sourcePoint" />
+            <mxPoint x="716" y="425" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="6 : authentifier(motDePasse)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="716" y="460" as="sourcePoint" />
+            <mxPoint x="1029" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6r" edge="1" parent="1" style="endArrow=open;dashed=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="resultat">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1029" y="490" as="sourcePoint" />
+            <mxPoint x="716" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m7a" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="7 : afficherErreur(&quot;Identifiants incorrects&quot;)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="704" y="575" as="sourcePoint" />
+            <mxPoint x="386" y="575" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8a" edge="1" parent="1" style="endArrow=open;dashed=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="8 : messageErreur">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="374" y="615" as="sourcePoint" />
+            <mxPoint x="96" y="615" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m7b" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="7 : afficherErreur(&quot;Compte désactivé&quot;)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="704" y="725" as="sourcePoint" />
+            <mxPoint x="386" y="725" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8b" edge="1" parent="1" style="endArrow=open;dashed=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="8 : messageErreur">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="374" y="765" as="sourcePoint" />
+            <mxPoint x="96" y="765" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m7c" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="&lt;&lt;create&gt;&gt;  7 : Session(utilisateur)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="716" y="860" as="sourcePoint" />
+            <mxPoint x="1280" y="860" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8c" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="8 : ouvrir()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="716" y="930" as="sourcePoint" />
+            <mxPoint x="1344" y="930" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8cr" edge="1" parent="1" style="endArrow=open;dashed=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="session">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1344" y="960" as="sourcePoint" />
+            <mxPoint x="716" y="960" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9c" edge="1" parent="1" style="endArrow=block;endFill=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="9 : afficherTableauDeBord()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="704" y="1020" as="sourcePoint" />
+            <mxPoint x="386" y="1020" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10c" edge="1" parent="1" style="endArrow=open;dashed=1;html=1;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#000000;" value="10 : tableauDeBord">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="374" y="1110" as="sourcePoint" />
+            <mxPoint x="96" y="1110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

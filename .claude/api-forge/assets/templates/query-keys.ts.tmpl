@@ -1,0 +1,10 @@
+// keys/{{resource}}.keys.ts — query keys centralisées pour {{Resource}}.
+// Généré par api-forge (si TanStack Query). Éditable.
+
+export const {{resource}}Keys = {
+  all: ['{{resource}}'] as const,
+  lists: () => [...{{resource}}Keys.all, 'list'] as const,
+  list: (params?: Record<string, unknown>) => [...{{resource}}Keys.lists(), params ?? {}] as const,
+  details: () => [...{{resource}}Keys.all, 'detail'] as const,
+  detail: (id: string) => [...{{resource}}Keys.details(), id] as const
+}

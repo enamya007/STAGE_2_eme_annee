@@ -1,0 +1,34 @@
+// Instance axios partagée — générée par api-forge, éditable.
+// Placeholders: {{BASE_URL_ENV}} = variable d'env de baseURL (ex. NEXT_PUBLIC_BACKEND_API_URL)
+
+// Axios Imports
+import axios from 'axios'
+import type { AxiosError, AxiosInstance } from 'axios'
+
+const baseURL = process.env.{{BASE_URL_ENV}} ?? '{{BASE_URL_FALLBACK}}'
+
+export const http: AxiosInstance = axios.create({
+  baseURL,
+  timeout: 15000,
+  headers: { 'Content-Type': 'application/json' }
+})
+
+// Intercepteur requête — injecter le token d'auth si présent.
+http.interceptors.request.use(config => {
+  // TODO: adapter à votre source de token (NextAuth session, cookie, store…)
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : null
+
+  if (token) config.headers.Authorization = `Bearer ${token}`
+
+  return config
+})
+
+// Intercepteur réponse — normaliser l'erreur API.
+http.interceptors.response.use(
+  response => response,
+  (error: AxiosError<{ message?: string }>) => {
+    const message = error.response?.data?.message ?? error.message ?? 'Erreur réseau'
+
+    return Promise.reject(new Error(message))
+  }
+)

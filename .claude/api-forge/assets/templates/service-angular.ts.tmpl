@@ -1,0 +1,46 @@
+// services/{{resource}}.service.ts — service Angular pour {{Resource}}.
+// Généré par api-forge. Une méthode par endpoint du manifeste. Renvoie des Observable. Éditable.
+//
+// Placeholders: {{ENV_IMPORT}} = chemin relatif vers environments/environment
+//               {{ENV_KEY}}    = clé baseURL (ex. apiUrl)
+
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '{{ENV_IMPORT}}';
+import type { Create{{Resource}}Input } from '../schemas/{{resource}}.schema';
+import type { {{Resource}} } from '../types/{{resource}}.type';
+
+@Injectable({ providedIn: 'root' })
+export class {{Resource}}Service {
+  private readonly http = inject(HttpClient);
+  private readonly base = environment.{{ENV_KEY}};
+
+  /** GET /{{resource}} */
+  list{{Resource}}(opts?: { query?: Record<string, unknown> }): Observable<{{Resource}}[]> {
+    return this.http.get<{{Resource}}[]>(`${this.base}/{{resource}}`, { params: (opts?.query ?? {}) as Record<string, string | number | boolean> });
+  }
+
+  /** GET /{{resource}}/{id} */
+  get{{Resource}}(id: string): Observable<{{Resource}}> {
+    return this.http.get<{{Resource}}>(`${this.base}/{{resource}}/${id}`);
+  }
+
+  /** POST /{{resource}} */
+  create{{Resource}}(opts: { body: Create{{Resource}}Input }): Observable<{{Resource}}> {
+    return this.http.post<{{Resource}}>(`${this.base}/{{resource}}`, opts.body);
+  }
+
+  /** PATCH /{{resource}}/{id} */
+  update{{Resource}}(id: string, opts: { body: Partial<Create{{Resource}}Input> }): Observable<{{Resource}}> {
+    return this.http.patch<{{Resource}}>(`${this.base}/{{resource}}/${id}`, opts.body);
+  }
+
+  /** DELETE /{{resource}}/{id} */
+  delete{{Resource}}(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/{{resource}}/${id}`);
+  }
+}
+
+// NB: les valeurs null/undefined/'' des query params sont nettoyées par
+// stripEmptyParamsInterceptor (cf. interceptors). Sans interceptor, filtrer via HttpParams.

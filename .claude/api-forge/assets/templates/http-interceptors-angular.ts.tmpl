@@ -1,0 +1,31 @@
+// interceptors/*.interceptor.ts — functional interceptors Angular (HttpInterceptorFn, Angular ≥ 15).
+// Générés par api-forge UNIQUEMENT si aucun équivalent n'existe et que l'utilisateur en veut.
+// Enregistrer dans app.config.ts :
+//   provideHttpClient(withInterceptors([authInterceptor, stripEmptyParamsInterceptor]))
+
+// ─── interceptors/strip-empty-params.interceptor.ts ───────────────────────────
+// Retire les query params null / undefined / '' avant chaque requête.
+import { HttpInterceptorFn } from '@angular/common/http';
+
+export const stripEmptyParamsInterceptor: HttpInterceptorFn = (req, next) => {
+  let params = req.params;
+  for (const key of params.keys()) {
+    const value = params.get(key);
+    if (value === null || value === undefined || value === '') {
+      params = params.delete(key);
+    }
+  }
+  return next(params === req.params ? req : req.clone({ params }));
+};
+
+// ─── interceptors/auth.interceptor.ts ─────────────────────────────────────────
+// Injecte le token Bearer si présent. TODO: adapter la source du token (store/signal/service).
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // Exemple: const token = inject(AuthStateService).token();
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null;
+  if (!token) return next(req);
+  return next(req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }));
+};

@@ -1,0 +1,67 @@
+// queries/{{resource}}.query.ts — fonctions inject* TanStack Angular Query pour {{Resource}}.
+// Généré par api-forge. À APPELER dans un contexte d'injection (champ de composant/service). Éditable.
+//
+// Les services renvoient des Observable -> convertis en Promise via lastValueFrom dans queryFn/mutationFn.
+// Params réactifs passés en fonctions/signals () => T pour que la query se ré-exécute au changement.
+
+import { inject } from '@angular/core';
+import { injectMutation, injectQuery, QueryClient } from '@tanstack/angular-query-experimental';
+import { lastValueFrom } from 'rxjs';
+import { {{resource}}Keys } from '../keys/{{resource}}.key';
+import { {{Resource}}Service } from '../services/{{resource}}.service';
+import type { Create{{Resource}}Input } from '../schemas/{{resource}}.schema';
+
+/** Liste — params réactifs optionnels. */
+export function inject{{Resource}}List(params?: () => Record<string, unknown> | undefined) {
+  const service = inject({{Resource}}Service);
+
+  return injectQuery(() => ({
+    queryKey: {{resource}}Keys.list(params?.()),
+    queryFn: () => lastValueFrom(service.list{{Resource}}({ query: params?.() })),
+  }));
+}
+
+/** Détail — id réactif requis. */
+export function inject{{Resource}}(id: () => string) {
+  const service = inject({{Resource}}Service);
+
+  return injectQuery(() => ({
+    queryKey: {{resource}}Keys.detail(id()),
+    queryFn: () => lastValueFrom(service.get{{Resource}}(id())),
+    enabled: Boolean(id()),
+  }));
+}
+
+export function injectCreate{{Resource}}() {
+  const service = inject({{Resource}}Service);
+  const queryClient = inject(QueryClient);
+
+  return injectMutation(() => ({
+    mutationFn: (body: Create{{Resource}}Input) => lastValueFrom(service.create{{Resource}}({ body })),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: {{resource}}Keys.lists() }),
+  }));
+}
+
+export function injectUpdate{{Resource}}() {
+  const service = inject({{Resource}}Service);
+  const queryClient = inject(QueryClient);
+
+  return injectMutation(() => ({
+    mutationFn: ({ id, body }: { id: string; body: Partial<Create{{Resource}}Input> }) =>
+      lastValueFrom(service.update{{Resource}}(id, { body })),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: {{resource}}Keys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: {{resource}}Keys.lists() });
+    },
+  }));
+}
+
+export function injectDelete{{Resource}}() {
+  const service = inject({{Resource}}Service);
+  const queryClient = inject(QueryClient);
+
+  return injectMutation(() => ({
+    mutationFn: (id: string) => lastValueFrom(service.delete{{Resource}}(id)),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: {{resource}}Keys.lists() }),
+  }));
+}

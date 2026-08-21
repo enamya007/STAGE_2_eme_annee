@@ -1,0 +1,58 @@
+'use client'
+
+// hooks/use{{Resource}}.ts — hooks TanStack Query pour {{Resource}}.
+// Généré par api-forge (si TanStack Query). Éditable.
+
+// React Query Imports
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+// Service & Keys Imports
+import { {{resource}}Service } from '@/services/{{resource}}.service'
+import { {{resource}}Keys } from '@/keys/{{resource}}.keys'
+
+// Type Imports
+import type { Create{{Resource}}Input } from '@/schema/{{resource}}.schema'
+
+export const use{{Resource}}List = (params?: Record<string, unknown>) =>
+  useQuery({
+    queryKey: {{resource}}Keys.list(params),
+    queryFn: () => {{resource}}Service.list(params)
+  })
+
+export const use{{Resource}} = (id: string) =>
+  useQuery({
+    queryKey: {{resource}}Keys.detail(id),
+    queryFn: () => {{resource}}Service.getById(id),
+    enabled: Boolean(id)
+  })
+
+export const useCreate{{Resource}} = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (body: Create{{Resource}}Input) => {{resource}}Service.create(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: {{resource}}Keys.lists() })
+  })
+}
+
+export const useUpdate{{Resource}} = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, body }: { id: string; body: Partial<Create{{Resource}}Input> }) =>
+      {{resource}}Service.update(id, body),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: {{resource}}Keys.detail(id) })
+      queryClient.invalidateQueries({ queryKey: {{resource}}Keys.lists() })
+    }
+  })
+}
+
+export const useDelete{{Resource}} = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) => {{resource}}Service.remove(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: {{resource}}Keys.lists() })
+  })
+}

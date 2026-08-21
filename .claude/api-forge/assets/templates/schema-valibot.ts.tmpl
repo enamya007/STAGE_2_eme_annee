@@ -1,0 +1,24 @@
+// schema/{{resource}}.schema.ts — validation valibot pour {{Resource}}.
+// Généré par api-forge. Porte TOUTES les contraintes du manifeste. Éditable.
+//
+// Chaque règle porte un message d'erreur FR par champ (cf. generation-react.md §1bis) :
+// - string requis : v.pipe(v.string('Le X est requis'), v.nonEmpty('Le X est requis'), ...)
+// - le message du type de base couvre la valeur manquante/mauvais type ; nonEmpty couvre ''.
+
+// Valibot Imports
+import * as v from 'valibot'
+
+// Schéma d'entrée (payload de création) — exemple à adapter par propriété.
+export const create{{Resource}}Schema = v.object({
+  // email: v.pipe(v.string('L\'email est requis'), v.nonEmpty('L\'email est requis'), v.email('Adresse email invalide')),
+  // password: v.pipe(v.string('Le mot de passe est requis'), v.minLength(8, 'Le mot de passe doit contenir au moins 8 caractères')),
+  // name: v.optional(v.string('Le nom est invalide')),
+  // role: v.picklist(['ADMIN', 'USER'], 'Valeur invalide pour le rôle')
+})
+
+// Schéma de mise à jour — souvent toutes les clés en optionnel.
+export const update{{Resource}}Schema = v.partial(create{{Resource}}Schema)
+
+// Types inférés — à utiliser avec react-hook-form (valibotResolver) et les services.
+export type Create{{Resource}}Input = v.InferInput<typeof create{{Resource}}Schema>
+export type Update{{Resource}}Input = v.InferInput<typeof update{{Resource}}Schema>

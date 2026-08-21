@@ -1,0 +1,47 @@
+// services/{{resource}}.service.ts — appels API pour {{Resource}}.
+// Généré par api-forge. Une méthode par endpoint du manifeste. Éditable.
+//
+// Placeholders: {{httpImport}} (chemin de l'instance http), {{schemaLib}} (valibot|zod)
+
+// HTTP Imports
+// {{httpImport}} = chemin de l'instance. Si le projet expose une instance en EXPORT DEFAULT
+// (ex. `export default api`), importer `import http from '{{httpImport}}'` (sans accolades) —
+// on peut garder l'alias `http` localement. Réutiliser l'instance existante, ne pas en recréer.
+import { http } from '{{httpImport}}'
+
+// Schema Imports
+import { create{{Resource}}Schema } from '@/schema/{{resource}}.schema'
+import type { Create{{Resource}}Input } from '@/schema/{{resource}}.schema'
+
+// Type Imports
+import type { {{Resource}} } from '@/types/{{resource}}'
+
+// --- Variante valibot ---
+import * as v from 'valibot'
+
+export const {{resource}}Service = {
+  // GET /{{resource}}
+  list: (params?: Record<string, unknown>) =>
+    http.get<{{Resource}}[]>('/{{resource}}', { params }).then(r => r.data),
+
+  // GET /{{resource}}/{id}
+  getById: (id: string) =>
+    http.get<{{Resource}}>(`/{{resource}}/${id}`).then(r => r.data),
+
+  // POST /{{resource}}  (valide le payload avant envoi)
+  create: (body: Create{{Resource}}Input) =>
+    http.post<{{Resource}}>('/{{resource}}', v.parse(create{{Resource}}Schema, body)).then(r => r.data),
+
+  // PATCH /{{resource}}/{id}
+  update: (id: string, body: Partial<Create{{Resource}}Input>) =>
+    http.patch<{{Resource}}>(`/{{resource}}/${id}`, body).then(r => r.data),
+
+  // DELETE /{{resource}}/{id}
+  remove: (id: string) =>
+    http.delete<void>(`/{{resource}}/${id}`).then(r => r.data)
+}
+
+// NB (fetch): si le client est le wrapper fetch, retirer `.then(r => r.data)`
+// (le wrapper renvoie déjà le payload typé) et appeler http.post(path, body).
+// NB (zod): remplacer `v.parse(create{{Resource}}Schema, body)` par
+// `create{{Resource}}Schema.parse(body)`.

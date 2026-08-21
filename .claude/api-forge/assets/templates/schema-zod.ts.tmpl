@@ -1,0 +1,24 @@
+// schema/{{resource}}.schema.ts — validation zod pour {{Resource}}.
+// Généré par api-forge. Porte TOUTES les contraintes du manifeste. Éditable.
+//
+// Chaque règle porte un message d'erreur FR par champ (cf. generation-react.md §1bis) :
+// - string requis : message du constructeur (clé absente/mauvais type) + .min(1, …) pour ''.
+// - zod 3 : z.string({ required_error, invalid_type_error })  |  zod 4 : z.string({ error })
+
+// Zod Imports
+import { z } from 'zod'
+
+// Schéma d'entrée (payload de création) — exemple à adapter par propriété.
+export const create{{Resource}}Schema = z.object({
+  // email: z.string({ required_error: 'L\'email est requis' }).min(1, 'L\'email est requis').email('Adresse email invalide'),
+  // password: z.string({ required_error: 'Le mot de passe est requis' }).min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+  // name: z.string('Le nom est invalide').optional(),
+  // role: z.enum(['ADMIN', 'USER'], { message: 'Valeur invalide pour le rôle' })
+})
+
+// Schéma de mise à jour — souvent toutes les clés en optionnel.
+export const update{{Resource}}Schema = create{{Resource}}Schema.partial()
+
+// Types inférés — à utiliser avec react-hook-form (zodResolver) et les services.
+export type Create{{Resource}}Input = z.infer<typeof create{{Resource}}Schema>
+export type Update{{Resource}}Input = z.infer<typeof update{{Resource}}Schema>
