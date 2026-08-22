@@ -57,7 +57,15 @@ function displayName(tech: Technician) {
     return full || tech.username
 }
 
-function DonutChart({ slices }: { slices: { label: string; value: number; color: string }[] }) {
+function DonutChart({
+    slices,
+    hovered,
+    onHoverChange,
+}: {
+    slices: { label: string; value: number; color: string }[]
+    hovered: string | null
+    onHoverChange: (label: string | null) => void
+}) {
     const total = slices.reduce((sum, s) => sum + s.value, 0)
     const radius = 70
     const circumference = 2 * Math.PI * radius
@@ -90,27 +98,59 @@ function DonutChart({ slices }: { slices: { label: string; value: number; color:
         )
     }
 
+    const active = hovered ? (segments.find((s) => s.label === hovered) ?? null) : null
+    const centerValue = active ? active.value : total
+    const centerCaption = active
+        ? `${active.label} · ${Math.round((active.value / total) * 100)}%`
+        : `ticket${total > 1 ? 's' : ''} au total`
+
     return (
         <svg viewBox="0 0 180 180" className="h-44 w-44">
-            {segments.map((s) => (
-                <circle
-                    key={s.label}
-                    cx="90"
-                    cy="90"
-                    r={radius}
-                    fill="none"
-                    stroke={s.color}
-                    strokeWidth="24"
-                    strokeDasharray={`${Math.max(s.dash - 3, 0)} ${circumference - s.dash + 3}`}
-                    strokeDashoffset={-s.offset}
-                    transform="rotate(-90 90 90)"
-                />
-            ))}
+            {segments.map((s) => {
+                const isHovered = hovered === s.label
+                return (
+                    <circle
+                        key={s.label}
+                        cx="90"
+                        cy="90"
+                        r={radius}
+                        fill="none"
+                        stroke={s.color}
+                        strokeWidth={isHovered ? 28 : 24}
+                        strokeOpacity={hovered && !isHovered ? 0.45 : 1}
+                        strokeDasharray={`${Math.max(s.dash - 3, 0)} ${circumference - s.dash + 3}`}
+                        strokeDashoffset={-s.offset}
+                        transform="rotate(-90 90 90)"
+                        tabIndex={0}
+                        aria-label={`${s.label} : ${s.value} ticket${s.value > 1 ? 's' : ''}`}
+                        className="cursor-pointer outline-none transition-[stroke-width,stroke-opacity]"
+                        onPointerEnter={() => onHoverChange(s.label)}
+                        onPointerLeave={() => onHoverChange(null)}
+                        onFocus={() => onHoverChange(s.label)}
+                        onBlur={() => onHoverChange(null)}
+                    />
+                )
+            })}
+            <text
+                x="90"
+                y="86"
+                textAnchor="middle"
+                fontSize="22"
+                fontWeight="700"
+                fill="#210635"
+                pointerEvents="none"
+            >
+                {centerValue}
+            </text>
+            <text x="90" y="102" textAnchor="middle" fontSize="8.5" fill="#21063580" pointerEvents="none">
+                {centerCaption}
+            </text>
         </svg>
     )
 }
 
 function TrendChart({ points }: { points: { day: string; value: number }[] }) {
+    const [hoverIndex, setHoverIndex] = useState<number | null>(null)
     const width = 460
     const height = 170
     const padX = 30
@@ -136,6 +176,33 @@ function TrendChart({ points }: { points: { day: string; value: number }[] }) {
     const area = `${path} L ${coords[coords.length - 1].x} ${height - padY} L ${coords[0].x} ${height - padY} Z`
     const gridMax = Math.max(4, Math.ceil(max))
     const ticks = Array.from({ length: 5 }, (_, i) => Math.round((gridMax * i) / 4))
+
+    const nearestIndex = (localX: number) => {
+        let best = 0
+        let bestDist = Infinity
+        coords.forEach((c, i) => {
+            const d = Math.abs(c.x - localX)
+            if (d < bestDist) {
+                bestDist = d
+                best = i
+            }
+        })
+        return best
+    }
+
+    const hoveredPoint = hoverIndex != null ? points[hoverIndex] : null
+    const hoveredCoord = hoverIndex != null ? coords[hoverIndex] : null
+    const tipWidth = 76
+    const tipHeight = 38
+    const tipX = hoveredCoord
+        ? Math.min(Math.max(hoveredCoord.x - tipWidth / 2, padX), width - padX - tipWidth)
+        : 0
+    const tipBelow = hoveredCoord ? hoveredCoord.y - tipHeight - 12 < 0 : false
+    const tipY = hoveredCoord
+        ? tipBelow
+            ? hoveredCoord.y + 12
+            : hoveredCoord.y - tipHeight - 10
+        : 0
 
     return (
         <svg viewBox={`0 0 ${width} ${height + 20}`} className="w-full">
@@ -169,16 +236,91 @@ function TrendChart({ points }: { points: { day: string; value: number }[] }) {
             <path d={area} fill="url(#trendFill)" />
             <path d={path} fill="none" stroke="#6667AB" strokeWidth="2.5" strokeLinejoin="round" />
 
+            {hoveredCoord && (
+                <line
+                    x1={hoveredCoord.x}
+                    y1={padY}
+                    x2={hoveredCoord.x}
+                    y2={height - padY}
+                    stroke="#210635"
+                    strokeOpacity="0.2"
+                    strokeDasharray="3 3"
+                    pointerEvents="none"
+                />
+            )}
+
             {coords.map((p, i) => (
                 <g key={`${points[i].day}-${i}`}>
-                    <circle cx={p.x} cy={p.y} r="4" fill="#6667AB" stroke="#fff" strokeWidth="1.5" />
+                    <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={hoverIndex === i ? 6 : 4}
+                        fill="#6667AB"
+                        stroke="#fff"
+                        strokeWidth="1.5"
+                        pointerEvents="none"
+                        className="transition-[r]"
+                    />
                     {(points.length <= 8 || i % Math.ceil(points.length / 7) === 0) && (
                         <text x={p.x} y={height + 12} textAnchor="middle" fontSize="9" fill="#21063580">
                             {points[i].day}
                         </text>
                     )}
+                    <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r="12"
+                        fill="transparent"
+                        tabIndex={0}
+                        aria-label={`${points[i].day} : ${points[i].value} ticket${points[i].value > 1 ? 's' : ''}`}
+                        className="cursor-pointer outline-none"
+                        onFocus={() => setHoverIndex(i)}
+                        onBlur={() => setHoverIndex((h) => (h === i ? null : h))}
+                    />
                 </g>
             ))}
+
+            <rect
+                x={padX}
+                y={0}
+                width={Math.max(width - padX * 2, 1)}
+                height={height}
+                fill="transparent"
+                className="cursor-crosshair"
+                onPointerMove={(e) => {
+                    const svg = e.currentTarget.ownerSVGElement
+                    if (!svg) return
+                    const rect = svg.getBoundingClientRect()
+                    const localX = ((e.clientX - rect.left) / rect.width) * width
+                    setHoverIndex(nearestIndex(localX))
+                }}
+                onPointerLeave={() => setHoverIndex(null)}
+            />
+
+            {hoveredCoord && hoveredPoint && (
+                <g pointerEvents="none">
+                    <rect x={tipX} y={tipY} width={tipWidth} height={tipHeight} rx="6" fill="#210635" />
+                    <text
+                        x={tipX + tipWidth / 2}
+                        y={tipY + 17}
+                        textAnchor="middle"
+                        fontSize="14"
+                        fontWeight="700"
+                        fill="#fff"
+                    >
+                        {hoveredPoint.value}
+                    </text>
+                    <text
+                        x={tipX + tipWidth / 2}
+                        y={tipY + 30}
+                        textAnchor="middle"
+                        fontSize="9"
+                        fill="#ffffffb3"
+                    >
+                        {hoveredPoint.day}
+                    </text>
+                </g>
+            )}
         </svg>
     )
 }
@@ -231,6 +373,7 @@ function exportCsv(tickets: TicketListItem[]) {
 
 function StatisticsPageContent() {
     const [period, setPeriod] = useState<Period>('7 jours')
+    const [hoveredStatus, setHoveredStatus] = useState<string | null>(null)
     const ticketsQuery = useTickets({ page: 1, limit: 100 })
     const techniciansQuery = useTechnicians({ page: 1, limit: 100 })
 
@@ -336,10 +479,24 @@ function StatisticsPageContent() {
                     <h2 className="font-bold text-moon-violet-dark">Répartition par statut</h2>
                     <p className="text-xs text-moon-abyss/70">Tickets de la période</p>
                     <div className="mt-4 flex items-center gap-6">
-                        <DonutChart slices={statusBreakdown} />
-                        <ul className="flex-1 space-y-2.5">
+                        <DonutChart
+                            slices={statusBreakdown}
+                            hovered={hoveredStatus}
+                            onHoverChange={setHoveredStatus}
+                        />
+                        <ul className="flex-1 space-y-1">
                             {statusBreakdown.map((s) => (
-                                <li key={s.label} className="flex items-center gap-2.5 text-sm">
+                                <li
+                                    key={s.label}
+                                    tabIndex={0}
+                                    onMouseEnter={() => setHoveredStatus(s.label)}
+                                    onMouseLeave={() => setHoveredStatus(null)}
+                                    onFocus={() => setHoveredStatus(s.label)}
+                                    onBlur={() => setHoveredStatus(null)}
+                                    className={`flex cursor-default items-center gap-2.5 rounded-lg px-1.5 py-1.5 text-sm outline-none transition-colors ${
+                                        hoveredStatus === s.label ? 'bg-moon-rose/25' : ''
+                                    }`}
+                                >
                                     <span
                                         className="h-2.5 w-2.5 rounded-full"
                                         style={{ backgroundColor: s.color }}
