@@ -67,7 +67,7 @@ Ils sont stockés dans le JWT NextAuth (`session.user.role`) et utilisés pour :
 - Peut **modifier** titre / description / priorité / catégorie / lieu **uniquement si le ticket est Ouvert**.
 - Peut **annuler** un ticket Ouvert.
 - Peut **réouvrir** ou **clôturer** un ticket Résolu.
-- Profil en **lecture seule** (pas de `PATCH /auth/me` côté API).
+- Peut **modifier son propre profil** (identifiant, e-mail, prénom, nom, téléphone) via `PATCH /auth/me` — jamais le rôle ni l’activation.
 - Menu : Tableau de bord, Tickets, Paramètres.
 
 ### 3.2 Technicien
@@ -78,6 +78,7 @@ Ils sont stockés dans le JWT NextAuth (`session.user.role`) et utilisés pour :
 - Peut **Marquer résolu** s’il est l’assigné et que le ticket est En cours (note obligatoire).  
   Personne d’autre ne peut résoudre : sinon le ticket resterait bloqué (contrainte Nest).
 - Peut indiquer **Disponible / Indisponible** (`PATCH /technicians/me/availability`).
+- Peut **modifier son propre profil** (identifiant, e-mail, prénom, nom, téléphone) via `PATCH /auth/me` — jamais le rôle ni l’activation.
 - Menu : Tableau de bord, Tickets, Paramètres.
 
 ### 3.3 Administrateur
@@ -88,7 +89,7 @@ Ils sont stockés dans le JWT NextAuth (`session.user.role`) et utilisés pour :
 - Gère clients et admins sur **Utilisateurs** (`/users`).
 - Gère les techniciens sur **Techniciens** (`/technicians` + `/skills`) — **pas** via `/users`.
 - Accède à **Statistiques** (calculées côté front à partir des listes tickets / techniciens ; pas d’endpoint stats dédié).
-- Peut **modifier son propre profil** via `PATCH /users/:id` (pas le rôle ni l’activation ici).
+- Peut **modifier son propre profil** via `PATCH /auth/me` (pas le rôle ni l’activation ici) — `PATCH /users/:id` reste réservé à la gestion des *autres* comptes (rôle, activation compris).
 - Menu : Tableau de bord, Tickets, Techniciens, Utilisateurs, Statistiques, Paramètres.
 
 ### 3.4 Cycle de vie d’un ticket (important)
@@ -324,7 +325,7 @@ Le menu cache déjà ces liens. Le middleware empêche d’y aller en tapant l�
 
 Ces contrôles sont **volontaires côté UI / schémas front** :
 
-- Téléphone **obligatoire** à l’inscription, création user, création technicien, sauvegarde profil admin (`src/schema/phone.schema.ts`, 8–30 caractères).
+- Téléphone **obligatoire** à l’inscription, création user, création technicien, sauvegarde profil (`src/schema/phone.schema.ts`) : au moins **8 chiffres réels** (les espaces/`+` ne comptent pas), 30 caractères max. Champ prérempli avec l’indicatif `+228`.
 - **Site / lieu d’intervention** obligatoire à la création de ticket.
 - On ne crée **pas** un `TECHNICIAN` via `/users` (Nest refuse) : page Techniciens uniquement.
 - Un admin **ne peut pas** se désactiver / se supprimer lui-même.
@@ -337,8 +338,7 @@ Ces contrôles sont **volontaires côté UI / schémas front** :
 
 À connaître pour ne pas chercher une feature inexistante :
 
-- Pas de `PATCH /auth/me` : client et technicien ne peuvent pas modifier leur profil.
-- Pas de changement de mot de passe **connecté**.
+- Pas de changement de mot de passe **connecté** (uniquement via « mot de passe oublié »).
 - Pas d’écran d’admin pour les **politiques SLA** (`GET/PUT /sla-policies` existe côté API, pas d’UI).
 - Pas d’endpoint « statistiques » : la page calcule à partir de `GET /tickets` et `GET /technicians`.
 - Pas de WebSocket notifications dans ce front : liste + compteur HTTP (cloche).
@@ -467,8 +467,8 @@ Chaque domaine a son module Nest (`src/modules/`) :
 
 | Module | Responsabilité |
 | --- | --- |
-| `auth` | register, login, refresh, logout, forgot/reset, `GET /auth/me` |
-| `users` | CRUD admin ` /users` (`PATCH /users/:id` **ADMIN only** ; pas de `PATCH /auth/me`) |
+| `auth` | register, login, refresh, logout, forgot/reset, `GET /auth/me`, `PATCH /auth/me` (auto-édition, tout rôle authentifié) |
+| `users` | CRUD admin ` /users` (`PATCH /users/:id` **ADMIN only**, pour gérer les *autres* comptes — rôle et activation compris) |
 | `tickets` | CRUD + transitions + assignation + suggestions |
 | `ticket-comments` | Commentaires PUBLIC / INTERNAL |
 | `attachments` | Upload / liste / suppression, stockage S3 |
@@ -493,7 +493,7 @@ Ordre typique sur une route ticket sensible :
 
 Refresh : `POST /auth/refresh` **fait tourner** les tokens (l’ancien refresh ne peut plus être réutilisé). `POST /auth/logout` révoque le refresh. Access court (`JWT_ACCESS_EXPIRES_IN`, ex. 15 min), refresh plus long (ex. 7 j).
 
-Il n’existe **pas** d’endpoint pour qu’un client ou un technicien mette à jour son propre profil. Seul un **ADMIN** fait `PATCH /users/:id`.
+`PATCH /auth/me` permet à **tout utilisateur authentifié** (client, technicien, admin) de mettre à jour son propre profil (identifiant, e-mail, prénom, nom, téléphone — jamais rôle, activation ni mot de passe). `PATCH /users/:id` reste **ADMIN only**, pour gérer les comptes des *autres* utilisateurs (rôle et activation compris).
 
 ### 16.6 Machine à états (cœur métier)
 
@@ -547,7 +547,7 @@ Le front doit avoir `NEXT_PUBLIC_API_URL` = cette API **avec** le suffixe `/api`
 | Transitions ticket | XState + service (autorité) | Boutons selon le rôle (confort) |
 | Notifications temps réel | Gateway Socket.IO | Non branché (HTTP seulement) |
 | SLA admin | Routes REST | Pas d’UI |
-| Profil self-service | Inexistant | Lecture seule pour client/tech |
+| Profil self-service | `PATCH /auth/me`, tout rôle | Formulaire d’édition pour tout rôle (`/dashboard/parametres`) |
 | OpenAPI | Généré au boot depuis les décorateurs | Fichier `openapi.raw.json` optionnel, copie manuelle |
 
 ---

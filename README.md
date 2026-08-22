@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rapid Response
 
-## Getting Started
+Frontend Next.js (App Router) du système de gestion de tickets **Rapid Response** — trois rôles (Client, Technicien, Admin), tickets avec machine à états, affectation de techniciens, notifications, statistiques.
 
-First, run the development server:
+Ce repo est **le frontend uniquement**. Le navigateur ne parle jamais directement à la base de données : toutes les données transitent par l'API NestJS du repo backend séparé (`enamya-ticket-checker`).
+
+Pour l'architecture complète, les règles métier par rôle et le guide d'opération détaillé, voir :
+
+- [CLAUDE.md](CLAUDE.md) — guide condensé (commandes, structure, conventions).
+- [DOCUMENTATION_PROJET.md](DOCUMENTATION_PROJET.md) — documentation exhaustive (français), source de vérité pour les règles métier.
+
+## Prérequis
+
+- Node.js + [pnpm](https://pnpm.io) (gestionnaire de paquets du projet).
+- Le **backend NestJS** (`enamya-ticket-checker`) déjà démarré, généralement sur `http://localhost:4000`.
+- Un fichier `.env.local` à la racine avec au minimum :
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_API_URL=http://localhost:4000/api
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=une-valeur-secrete
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Démarrage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+pnpm dev          # serveur de dev (webpack)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ouvrir [http://localhost:3000](http://localhost:3000) — l'entrée réelle de l'app est `/login`, puis `/dashboard` une fois connecté (`/` reste la page de démo par défaut de Next.js et n'est pas utilisée).
 
-## Learn More
+## Commandes
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dev          # démarre le serveur de dev (webpack)
+pnpm dev:turbo    # démarre le serveur de dev avec Turbopack
+pnpm dev:clean    # supprime .next puis pnpm dev
+pnpm build        # build de production
+pnpm start        # lance le build de production
+pnpm lint         # eslint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Il n'y a pas de suite de tests dans ce repo.

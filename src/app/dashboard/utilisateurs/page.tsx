@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { Search, Plus, Pencil, Ban, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
+import { Search, Plus, Pencil, Ban, Trash2, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import Modal from '@/features/dashboard/components/Modal'
 import RequireRole from '@/components/RequireRole'
@@ -206,14 +206,32 @@ function UsersPageContent() {
                         {usersQuery.data?.meta.total ?? users.length} comptes enregistrés
                     </p>
                 </div>
-                <button
-                    type="button"
-                    onClick={openAdd}
-                    className="flex items-center gap-2 rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet"
-                >
-                    <Plus size={16} />
-                    Ajouter un utilisateur
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            void usersQuery.refetch()
+                            void allUsersQuery.refetch()
+                        }}
+                        disabled={usersQuery.isFetching || allUsersQuery.isFetching}
+                        aria-label="Actualiser"
+                        title="Actualiser"
+                        className="rounded-lg border border-moon-abyss/15 p-2.5 text-moon-abyss/70 transition-colors hover:bg-moon-rose/20 disabled:opacity-50"
+                    >
+                        <RefreshCw
+                            size={16}
+                            className={usersQuery.isFetching || allUsersQuery.isFetching ? 'animate-spin' : ''}
+                        />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={openAdd}
+                        className="flex items-center gap-2 rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-moon-violet"
+                    >
+                        <Plus size={16} />
+                        Ajouter un utilisateur
+                    </button>
+                </div>
             </div>
 
             {usersQuery.isError && (
