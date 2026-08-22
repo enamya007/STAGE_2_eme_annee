@@ -236,32 +236,36 @@ function TicketsContent() {
                         <option value="CANCELLED">Annulé</option>
                     </select>
                 </div>
-                <select
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value as typeof priority)}
-                    className="rounded-lg border border-moon-abyss/15 bg-transparent px-3 py-2 text-sm text-moon-abyss focus:outline-none"
-                    aria-label="Filtrer par priorité"
-                >
-                    <option value="Toutes">Priorité</option>
-                    <option value="CRITICAL">Urgente</option>
-                    <option value="HIGH">Haute</option>
-                    <option value="NORMAL">Moyenne</option>
-                    <option value="LOW">Basse</option>
-                </select>
-                {isAdmin && (
+                <div className="flex items-center gap-2 rounded-lg border border-moon-abyss/15 px-3 py-2 text-sm text-moon-abyss">
                     <select
-                        value={technicianFilter}
-                        onChange={(e) => setTechnicianFilter(e.target.value)}
-                        className="rounded-lg border border-moon-abyss/15 bg-transparent px-3 py-2 text-sm text-moon-abyss focus:outline-none"
-                        aria-label="Filtrer par technicien"
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value as typeof priority)}
+                        className="bg-transparent focus:outline-none"
+                        aria-label="Filtrer par priorité"
                     >
-                        <option value="Tous">Technicien</option>
-                        {technicians.map((t) => (
-                            <option key={t.id} value={t.id}>
-                                {technicianName(t)}
-                            </option>
-                        ))}
+                        <option value="Toutes">Priorité</option>
+                        <option value="CRITICAL">Urgente</option>
+                        <option value="HIGH">Haute</option>
+                        <option value="NORMAL">Moyenne</option>
+                        <option value="LOW">Basse</option>
                     </select>
+                </div>
+                {isAdmin && (
+                    <div className="flex items-center gap-2 rounded-lg border border-moon-abyss/15 px-3 py-2 text-sm text-moon-abyss">
+                        <select
+                            value={technicianFilter}
+                            onChange={(e) => setTechnicianFilter(e.target.value)}
+                            className="bg-transparent focus:outline-none"
+                            aria-label="Filtrer par technicien"
+                        >
+                            <option value="Tous">Technicien</option>
+                            {technicians.map((t) => (
+                                <option key={t.id} value={t.id}>
+                                    {technicianName(t)}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 )}
                 <div className="ml-auto flex gap-1">
                     <button

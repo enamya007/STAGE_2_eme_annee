@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { ALL_NAV_HREFS, navKeysForRole, type NavItemKey } from '@/lib/roles'
 import { logoutCurrentSession } from '@/lib/logout'
+import type { UserRole } from '@/types/auth'
 
 const navMeta: Record<NavItemKey, { label: string; icon: LucideIcon }> = {
     tickets: { label: 'Tickets', icon: Ticket },
@@ -24,11 +25,17 @@ const navMeta: Record<NavItemKey, { label: string; icon: LucideIcon }> = {
     parametres: { label: 'Paramètres', icon: Settings },
 }
 
+const roleLabels: Record<UserRole, string> = {
+    ADMIN: 'Administrateur',
+    TECHNICIAN: 'Technicien',
+    CLIENT: 'Client',
+}
+
 export default function Sidebar() {
     const pathname = usePathname()
     const { data } = useSession()
     const name = data?.user?.name ?? data?.user?.email ?? 'Utilisateur'
-    const email = data?.user?.email ?? ''
+    const roleLabel = data?.user?.role ? roleLabels[data.user.role] : ''
     const initials = name
         .split(' ')
         .map((w) => w[0])
@@ -86,7 +93,7 @@ export default function Sidebar() {
                     </div>
                     <div className="min-w-0">
                         <p className="truncate text-sm font-semibold">{name}</p>
-                        <p className="truncate text-[11px] text-white/50">{email}</p>
+                        <p className="truncate text-[11px] text-white/50">{roleLabel}</p>
                     </div>
                 </div>
                 <button

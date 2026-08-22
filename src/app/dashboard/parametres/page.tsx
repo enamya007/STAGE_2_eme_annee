@@ -2,10 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useMe } from '@/hooks/useAuth'
-import { useUpdateUser } from '@/hooks/useUsers'
+import { useMe, useUpdateMe } from '@/hooks/useAuth'
 import { logoutCurrentSession } from '@/lib/logout'
-import { displayPersonName } from '@/features/tickets/ticketUi'
 import { isValidPhone } from '@/schema/phone.schema'
 import RequiredMark from '@/components/RequiredMark'
 import {
@@ -31,8 +29,7 @@ const labelClass =
 export default function SettingsPage() {
     const meQuery = useMe()
     const me = meQuery.data
-    const updateUser = useUpdateUser()
-    const canEditProfile = me?.role === 'ADMIN'
+    const updateMe = useUpdateMe()
 
     const [form, setForm] = useState({
         username: '',
@@ -63,15 +60,12 @@ export default function SettingsPage() {
 
     const save = () => {
         if (!me || !canSave) return
-        updateUser.mutate({
-            id: me.id,
-            body: {
-                username: form.username.trim(),
-                email: form.email.trim(),
-                firstName: form.firstName.trim() || undefined,
-                lastName: form.lastName.trim() || undefined,
-                phone: form.phone.trim(),
-            },
+        updateMe.mutate({
+            username: form.username.trim(),
+            email: form.email.trim(),
+            firstName: form.firstName.trim() || undefined,
+            lastName: form.lastName.trim() || undefined,
+            phone: form.phone.trim(),
         })
     }
 
@@ -90,33 +84,7 @@ export default function SettingsPage() {
                 {meQuery.isError && (
                     <p className="mt-4 text-sm text-rose-700">Impossible de charger le profil.</p>
                 )}
-                {me && !canEditProfile && (
-                    <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                        <div>
-                            <dt className={labelClass}>Nom</dt>
-                            <dd className="text-moon-abyss">
-                                {displayPersonName(me.firstName, me.lastName, me.username)}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className={labelClass}>Identifiant</dt>
-                            <dd className="text-moon-abyss">{me.username}</dd>
-                        </div>
-                        <div>
-                            <dt className={labelClass}>Email</dt>
-                            <dd className="text-moon-abyss">{me.email}</dd>
-                        </div>
-                        <div>
-                            <dt className={labelClass}>Téléphone</dt>
-                            <dd className="text-moon-abyss">{me.phone ?? '—'}</dd>
-                        </div>
-                        <div>
-                            <dt className={labelClass}>Rôle</dt>
-                            <dd className="text-moon-abyss">{roleLabels[me.role]}</dd>
-                        </div>
-                    </dl>
-                )}
-                {me && canEditProfile && (
+                {me && (
                     <div className="mt-4 space-y-4">
                         <p className="text-xs text-moon-abyss/70">
                             Rôle : {roleLabels[me.role]} — vous ne pouvez pas changer votre propre
@@ -195,37 +163,36 @@ export default function SettingsPage() {
                                 />
                             </div>
                         </div>
-                        {updateUser.isError && (
+                        {updateMe.isError && (
                             <p className="text-sm text-rose-700">
-                                {updateUser.error instanceof Error
-                                    ? updateUser.error.message
+                                {updateMe.error instanceof Error
+                                    ? updateMe.error.message
                                     : 'Enregistrement impossible'}
                             </p>
                         )}
-                        {updateUser.isSuccess && (
+                        {updateMe.isSuccess && (
                             <p className="text-sm text-emerald-700">Profil mis à jour.</p>
                         )}
                         <div className="flex justify-end">
                             <button
                                 type="button"
                                 onClick={save}
-                                disabled={!canSave || updateUser.isPending}
+                                disabled={!canSave || updateMe.isPending}
                                 className="rounded-lg bg-moon-violet-dark px-4 py-2.5 text-sm font-medium text-white hover:bg-moon-violet disabled:opacity-40"
                             >
-                                {updateUser.isPending ? 'Enregistrement…' : 'Enregistrer'}
+                                {updateMe.isPending ? 'Enregistrement…' : 'Enregistrer'}
                             </button>
                         </div>
                     </div>
                 )}
             </div>
 
-            {canEditProfile && (
+            {me && (
                 <p className="text-sm text-moon-abyss/70">
-                    Changement de mot de passe une fois connecté : non disponible. Utilisez{' '}
                     <Link href="/forgot-password" className="font-medium text-moon-violet underline">
-                        Mot de passe oublié
+                        Cliquez ici
                     </Link>
-                    .
+                    , pour changer de mot de passe.
                 </p>
             )}
 

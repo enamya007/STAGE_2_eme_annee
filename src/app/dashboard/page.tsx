@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 import StatCard from '@/features/dashboard/components/StatCard'
 import { useTickets } from '@/hooks/useTickets'
 import { useTechnician, useTechnicians, useUpdateMyAvailability } from '@/hooks/useTechnicians'
-import { statusLabels } from '@/features/tickets/ticketUi'
+import { statusLabels, statusStyles } from '@/features/tickets/ticketUi'
 
 export default function DashboardHomePage() {
     const { data: session } = useSession()
@@ -142,7 +142,9 @@ export default function DashboardHomePage() {
                                 <span className="hidden text-sm text-moon-abyss/70 sm:block">
                                     {t.category.name}
                                 </span>
-                                <span className="shrink-0 rounded-md bg-moon-rose/50 px-2 py-1 text-[11px] font-bold text-moon-violet-dark">
+                                <span
+                                    className={`shrink-0 rounded-md px-2 py-1 text-[11px] font-bold ${statusStyles[t.status]}`}
+                                >
                                     {statusLabels[t.status]}
                                 </span>
                             </Link>

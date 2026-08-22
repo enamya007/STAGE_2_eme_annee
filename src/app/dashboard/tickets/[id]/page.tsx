@@ -168,6 +168,15 @@ export default function TicketDetailPage() {
     }
 
     if (ticketQuery.isError || !ticket) {
+        // 403 means the ticket exists but the caller lost access to it (e.g. a technician
+        // reassigned elsewhere) — distinct from a genuinely unknown id (404) or other failure.
+        const status =
+            ticketQuery.error instanceof Error
+                ? (ticketQuery.error as Error & { status?: number }).status
+                : undefined
+        const message =
+            status === 403 ? 'Ticket indisponible.' : 'Ticket introuvable ou accès refusé.'
+
         return (
             <div className="space-y-3">
                 <Link
@@ -177,9 +186,7 @@ export default function TicketDetailPage() {
                     <ArrowLeft size={14} />
                     Retour aux tickets
                 </Link>
-                <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
-                    Ticket introuvable ou accès refusé.
-                </p>
+                <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{message}</p>
             </div>
         )
     }

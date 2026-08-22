@@ -58,11 +58,15 @@ function UsersPageContent() {
 
     const [query, setQuery] = useState('')
     const usersQuery = useUsers({ page: 1, limit: 100, search: query || undefined })
+    // Separate, unfiltered query so the stat cards always reflect global totals — they must not
+    // shrink to "results within the search" just because the search box has a term in it.
+    const allUsersQuery = useUsers({ page: 1, limit: 100 })
     const createUser = useCreateUser()
     const updateUser = useUpdateUser()
     const deleteUser = useDeleteUser()
 
     const users = useMemo(() => usersQuery.data?.data ?? [], [usersQuery.data?.data])
+    const allUsers = useMemo(() => allUsersQuery.data?.data ?? [], [allUsersQuery.data?.data])
 
     const [addOpen, setAddOpen] = useState(false)
     const [editing, setEditing] = useState<User | null>(null)
@@ -82,10 +86,10 @@ function UsersPageContent() {
     })
     const [editPhoneError, setEditPhoneError] = useState<string | null>(null)
 
-    const admins = users.filter((u) => u.role === 'ADMIN').length
-    const techs = users.filter((u) => u.role === 'TECHNICIAN').length
-    const clients = users.filter((u) => u.role === 'CLIENT').length
-    const disabled = users.filter((u) => !u.isActive).length
+    const admins = allUsers.filter((u) => u.role === 'ADMIN').length
+    const techs = allUsers.filter((u) => u.role === 'TECHNICIAN').length
+    const clients = allUsers.filter((u) => u.role === 'CLIENT').length
+    const disabled = allUsers.filter((u) => !u.isActive).length
 
     const canSubmitCreate =
         isValidUsername(createForm.username) &&

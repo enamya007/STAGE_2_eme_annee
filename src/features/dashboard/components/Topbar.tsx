@@ -62,7 +62,7 @@ export default function Topbar() {
     return (
         <header className="flex items-center justify-between border-b border-moon-abyss/10 bg-white px-6 py-3">
             <div className="flex items-center gap-1.5 text-sm">
-                <span className="flex items-center gap-1 text-moon-abyss/70">
+                <span className="flex items-center gap-2 text-moon-abyss/70">
                     {roleLabel}
                     <ChevronDown size={14} />
                 </span>

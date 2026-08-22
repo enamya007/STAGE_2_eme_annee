@@ -81,3 +81,31 @@ export type ResetPasswordInput = v.InferInput<typeof resetPasswordSchema>
 /** Alias : logout nous renvoie le même body que refresh (RefreshTokenDto). */
 export const logoutSchema = refreshTokenSchema
 export type LogoutInput = RefreshTokenInput
+
+export const updateMeSchema = v.object({
+  username: v.optional(
+    v.pipe(
+      v.string("Le nom d'utilisateur est invalide"),
+      v.minLength(3, "Le nom d'utilisateur doit contenir au moins 3 caractères"),
+      v.maxLength(50, "Le nom d'utilisateur ne doit pas dépasser 50 caractères"),
+    ),
+  ),
+  email: v.optional(
+    v.pipe(v.string("L'adresse e-mail est invalide"), v.email('Adresse email invalide')),
+  ),
+  firstName: v.optional(
+    v.pipe(
+      v.string('Le prénom est invalide'),
+      v.maxLength(80, 'Le prénom ne doit pas dépasser 80 caractères'),
+    ),
+  ),
+  lastName: v.optional(
+    v.pipe(
+      v.string('Le nom est invalide'),
+      v.maxLength(80, 'Le nom ne doit pas dépasser 80 caractères'),
+    ),
+  ),
+  phone: v.optional(phoneSchema),
+})
+
+export type UpdateMeInput = v.InferInput<typeof updateMeSchema>

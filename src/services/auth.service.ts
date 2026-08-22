@@ -6,11 +6,13 @@ import {
   refreshTokenSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  updateMeSchema,
   type RegisterInput,
   type LoginInput,
   type RefreshTokenInput,
   type ForgotPasswordInput,
   type ResetPasswordInput,
+  type UpdateMeInput,
 } from '@/schema/auth.schema'
 import type { AuthResponse, User } from '@/types/auth'
 
@@ -56,5 +58,11 @@ export const authService = {
 
   me: (): Promise<User> => {
     return instance_api.get<User>('/auth/me').then((r) => r.data)
+  },
+
+  updateMe: (body: UpdateMeInput): Promise<User> => {
+    return instance_api
+      .patch<User>('/auth/me', v.parse(updateMeSchema, body))
+      .then((r) => r.data)
   },
 }

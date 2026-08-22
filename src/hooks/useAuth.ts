@@ -9,6 +9,7 @@ import type {
   RefreshTokenInput,
   ForgotPasswordInput,
   ResetPasswordInput,
+  UpdateMeInput,
 } from '@/schema/auth.schema'
 
 export const useMe = () =>
@@ -16,6 +17,17 @@ export const useMe = () =>
     queryKey: authKeys.me(),
     queryFn: () => authService.me(),
   })
+
+export const useUpdateMe = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (body: UpdateMeInput) => authService.updateMe(body),
+    onSuccess: (data) => {
+      queryClient.setQueryData(authKeys.me(), data)
+    },
+  })
+}
 
 export const useRegister = () => {
   const queryClient = useQueryClient()

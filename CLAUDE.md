@@ -9,7 +9,7 @@ This is the **frontend only** ("Rapid Response") of a two-repo system:
 | Repo | Role |
 | --- | --- |
 | This repo (`STAGE_2_eme_annee`) | Next.js 16 App Router frontend |
-| `D:\STAGE\APK_\backend\enamya-ticket-checker` (separate repo, not here) | NestJS backend API |
+| `D:\STAGE\APK_\enamya-ticket-checker` (separate repo, not here) | NestJS backend API |
 
 The browser never talks to PostgreSQL — only to the NestJS API at `NEXT_PUBLIC_API_URL` (typically `http://localhost:4000/api`). **Do not modify the backend repo unless explicitly asked.**
 
@@ -47,7 +47,7 @@ Then wire the hook into a page under `src/app/`. This stack was originally gener
 - `src/components/SessionTokenSync.tsx` copies those tokens out of the NextAuth session into the shared Axios instance (`src/services/http/axios.ts`) in memory.
 - Axios attaches `Authorization: Bearer <accessToken>` to every backend request; on a 401 it attempts `POST /auth/refresh` once, then calls `session.update(...)` to persist new tokens, or signs the user out if refresh fails.
 - `src/middleware.ts` (matcher: `/dashboard`, `/dashboard/*`) only checks "is there a session" and "is the role ADMIN for an admin-only path" (`src/lib/roles.ts` → `isAdminOnlyPath`/`ADMIN_ONLY_PREFIXES`). It does not call the backend.
-- There is no self-service password change and no `PATCH /auth/me` — only forgot/reset-password flows exist for CLIENT/TECHNICIAN. Only ADMIN can update a user via `PATCH /users/:id`.
+- There is still no self-service password change — only forgot/reset-password flows exist for every role. But any authenticated user (any role) can edit their own profile fields (username, email, firstName, lastName, phone — never role/isActive/password) via `PATCH /auth/me` (`useUpdateMe` in `src/hooks/useAuth.ts`, wired into `src/app/dashboard/parametres/page.tsx`). `PATCH /users/:id` remains ADMIN-only and is for managing *other* accounts (role/activation changes included) — it is no longer used for self-editing.
 
 ### Roles and business rules
 

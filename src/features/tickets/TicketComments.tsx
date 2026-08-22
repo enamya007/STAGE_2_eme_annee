@@ -39,11 +39,11 @@ export default function TicketComments({
   return (
     <div className="rounded-2xl border border-moon-abyss/15 bg-white p-5 shadow-sm">
       <h2 className="font-bold text-moon-violet-dark">Commentaires</h2>
-      <p className="text-xs text-moon-abyss/70">
-        {role === 'CLIENT'
-          ? 'Les notes internes des techniciens ne vous sont pas visibles.'
-          : 'Les commentaires internes ne sont pas visibles par le client.'}
-      </p>
+      {role !== 'CLIENT' && (
+        <p className="text-xs text-moon-abyss/70">
+          Les commentaires internes ne sont pas visibles par le client.
+        </p>
+      )}
 
       {commentsQuery.isLoading && (
         <p className="mt-3 text-sm text-moon-abyss/70">Chargement…</p>
